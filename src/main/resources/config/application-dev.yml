@@ -31,18 +31,18 @@ spring:
       maximum-pool-size: 50
   liquibase:
     enabled: false
-  mail:
-    host: REPLACE_WITH_YOUR_HOST_SMTP
-    port: REPLACE_WITH_YOUR_PORT_SMTP
-    username: REPLACE_WITH_YOUR_USERNAME_SMTP
-    password: REPLACE_WITH_YOUR_PASSWORD_SMTP
-    protocol: smtp
-    tls: true
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls.enable: true
+#  mail:
+#    host: REPLACE_WITH_YOUR_HOST_SMTP
+#    port: REPLACE_WITH_YOUR_PORT_SMTP
+#    username: REPLACE_WITH_YOUR_USERNAME_SMTP
+#    password: REPLACE_WITH_YOUR_PASSWORD_SMTP
+#    protocol: smtp
+#    tls: true
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          starttls.enable: true
 
 server:
   8080
