@@ -21,7 +21,7 @@ spring:
       enabled: false
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5434/REPLACE_WITH_YOUR_NAME_DATABASE
+    url: jdbc:postgresql://localhost:5432/REPLACE_WITH_YOUR_NAME_DATABASE
     username: REPLACE_WITH_YOUR_USERNAME_DATABASE
     password: REPLACE_WITH_YOUR_PASSWORD_DATABASE
     hikari:
