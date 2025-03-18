@@ -1,0 +1,31 @@
+# ===================================================================
+# Spring Boot configuration for the "dev" profile.
+#
+# This configuration overrides the application.yml file.
+# ===================================================================
+
+# ===================================================================
+# Standard Spring Boot properties.
+# Full reference is available at:
+# http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+# ===================================================================
+
+spring:
+  application:
+    name: "spring project"
+  profiles:
+    active: '@spring.profiles.active@'
+  jpa:
+    properties:
+      hibernate:
+        format-sql: true
+        show-sql: true
+        jdbc:
+          time_zone: UTC
+          batch_size: 25
+        type:
+          preferred_instant_jdbc_type: TIMESTAMP
+  thymeleaf:
+    mode: HTML
+  mail:
+    from: spring-project@localhost

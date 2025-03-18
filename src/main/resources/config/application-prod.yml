@@ -1,0 +1,49 @@
+# ===================================================================
+# Spring Boot configuration for the "dev" profile.
+#
+# This configuration overrides the application.yml file.
+# ===================================================================
+
+# ===================================================================
+# Standard Spring Boot properties.
+# Full reference is available at:
+# http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+# ===================================================================
+
+logging:
+  level:
+    ROOT: INFO
+
+spring:
+  devtools:
+    restart:
+      enabled: false
+    livereload:
+      enabled: false
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:postgresql://localhost:5434/REPLACE_WITH_YOUR_NAME_DATABASE
+    username: REPLACE_WITH_YOUR_USERNAME_DATABASE
+    password: REPLACE_WITH_YOUR_PASSWORD_DATABASE
+    hikari:
+      poolName: Hikari
+      auto-commit: false
+      minimum-idle: 10
+      maximum-pool-size: 50
+  jpa:
+    properties:
+      hibernate:
+        format-sql: true
+        show-sql: true
+  liquibase:
+    contexts: prod
+  thymeleaf:
+    cache: true
+
+server:
+  port: 8080
+  shutdown: graceful # see https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-graceful-shutdown
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,application/javascript,application/json,image/svg+xml
+    min-response-size: 1024
