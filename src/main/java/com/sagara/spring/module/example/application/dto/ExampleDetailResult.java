@@ -1,4 +1,4 @@
-package com.sagara.spring.module.example;
+package com.sagara.spring.module.example.application.dto;
 
 import java.io.Serializable;
 

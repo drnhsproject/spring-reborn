@@ -1,4 +1,4 @@
-package com.sagara.spring.module.example;
+package com.sagara.spring.module.example.application;
 
 import com.sagara.spring.services.SingleResponse;
 import org.springframework.http.ResponseEntity;
