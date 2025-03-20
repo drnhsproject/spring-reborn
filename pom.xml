@@ -227,9 +227,9 @@
 				<!-- default Spring profiles -->
 				<spring.profiles.active>dev</spring.profiles.active>
 				<profile.test>test-dev</profile.test>
-				<liquibase-plugin.url>jdbc:postgresql://localhost:5434/spring_reborn</liquibase-plugin.url>
-				<liquibase-plugin.username>vac</liquibase-plugin.username>
-				<liquibase-plugin.password>J!Nd4njun</liquibase-plugin.password>
+				<liquibase-plugin.url>jdbc:postgresql://localhost:5432/REPLACE_WITH_YOUR_NAME_DATABASE</liquibase-plugin.url>
+				<liquibase-plugin.username>REPLACE_WITH_YOUR_USERNAME_DATABASE</liquibase-plugin.username>
+				<liquibase-plugin.password>REPLACE_WITH_YOUR_PASSWORD_DATABASE</liquibase-plugin.password>
 			</properties>
 			<dependencies>
 				<dependency>
