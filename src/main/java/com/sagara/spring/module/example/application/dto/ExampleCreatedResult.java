@@ -1,2 +1,4 @@
-package com.sagara.spring.module.example.application.dto;public class ExampleCreatedResult {
+package com.sagara.spring.module.example.application.dto;
+
+public record ExampleCreatedResult(String code, String name, Integer age) {
 }

@@ -2,13 +2,17 @@ package com.sagara.spring.module.example.domain;
 
 import com.sagara.spring.services.BaseColumnEntity;
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "example")
 @Getter
 @Setter
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class Example extends BaseColumnEntity {
 
@@ -20,6 +24,7 @@ public class Example extends BaseColumnEntity {
     @Column(name = "code", unique = true)
     private String code;
 
-    @Column(name = "name")
     private String name;
+
+    private Integer age;
 }
