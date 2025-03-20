@@ -17,6 +17,7 @@ public class ExampleMapperImpl implements IExampleMapper {
         }
 
         Example entity = new Example();
+        entity.setId(dto.getId());
         entity.setCode(dto.getCode());
         entity.setName(dto.getName());
         entity.setAge(dto.getAge());

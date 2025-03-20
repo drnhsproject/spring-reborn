@@ -1,16 +1,14 @@
 package com.sagara.spring.module.example.application;
 
-import com.sagara.spring.exception.DomainException;
 import com.sagara.spring.module.example.application.dto.ExampleCommand;
 import com.sagara.spring.module.example.application.dto.ExampleCreatedResult;
-import com.sagara.spring.module.example.application.dto.ExampleDTO;
+import com.sagara.spring.module.example.application.dto.ExampleUpdatedResult;
+import com.sagara.spring.module.example.application.usecase.ChangeExampleDetail;
 import com.sagara.spring.module.example.application.usecase.CreateExample;
 import com.sagara.spring.module.example.domain.ExampleRepository;
-import com.sagara.spring.module.example.domain.service.ExampleService;
+import com.sagara.spring.services.IdValidationService;
 import com.sagara.spring.services.SingleResponse;
 import jakarta.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.http.HeaderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -27,22 +25,47 @@ public class ExampleResource {
 
     private final CreateExample createExample;
 
-    public ExampleResource(CreateExample createExample) {
+    private final ChangeExampleDetail changeExampleDetail;
+
+    private final ExampleRepository exampleRepository;
+
+    private final IdValidationService idValidationService;
+
+    public ExampleResource(
+            CreateExample createExample,
+            ChangeExampleDetail changeExampleDetail,
+            ExampleRepository exampleRepository,
+            IdValidationService idValidationService
+    ) {
         this.createExample = createExample;
+        this.changeExampleDetail = changeExampleDetail;
+        this.exampleRepository = exampleRepository;
+        this.idValidationService = idValidationService;
     }
 
     @PostMapping("")
-    public ResponseEntity<SingleResponse<ExampleCreatedResult>> createAssessorInfo(@Valid @RequestBody ExampleCommand command)
+    public ResponseEntity<SingleResponse<ExampleCreatedResult>> createExample(@Valid @RequestBody ExampleCommand command)
             throws URISyntaxException {
 
-        if (command.id() != null) {
-            throw new DomainException("id exists");
-        }
+        idValidationService.validateNotNull(command.id());
 
         ExampleCreatedResult result = createExample.handle(command);
         SingleResponse<ExampleCreatedResult> response = new SingleResponse<>("example created", result);
-        return ResponseEntity.created(new URI("/api/assessor-infos/"))
-                .body(response);
+
+        return ResponseEntity.created(new URI("/api/assessor-infos/")).body(response);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<SingleResponse<ExampleUpdatedResult>> updateExample(
+            @PathVariable(value = "id", required = false) final Long id,
+            @RequestBody ExampleCommand command
+    ) {
+        idValidationService.validateIdForUpdate(exampleRepository, id, command.id(), "example");
+
+        ExampleUpdatedResult result = changeExampleDetail.handle(command);
+        SingleResponse<ExampleUpdatedResult> response = new SingleResponse<>("example updated", result);
+
+        return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/{id}")

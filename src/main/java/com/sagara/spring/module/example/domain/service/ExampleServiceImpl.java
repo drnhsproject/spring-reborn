@@ -6,8 +6,11 @@ import com.sagara.spring.module.example.domain.ExampleRepository;
 import com.sagara.spring.module.example.domain.IExampleMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -25,10 +28,37 @@ public class ExampleServiceImpl implements ExampleService{
 
     @Override
     public ExampleDTO save(ExampleDTO exampleDTO) {
-        log.debug("Request to save example : {} ", exampleDTO);
         Example entity = exampleMapper.toEntity(exampleDTO);
         entity = exampleRepository.save(entity);
 
         return exampleMapper.toDTO(entity);
+    }
+
+    @Override
+    public ExampleDTO update(ExampleDTO exampleDTO) {
+        Example entity = exampleMapper.toEntity(exampleDTO);
+        entity = exampleRepository.save(entity);
+
+        return exampleMapper.toDTO(entity);
+    }
+
+    @Override
+    public Optional<ExampleDTO> partialUpdate(ExampleDTO exampleDTO) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Page<ExampleDTO> findAll(ExampleDTO exampleDTO) {
+        return null;
+    }
+
+    @Override
+    public Optional<ExampleDTO> findOne(Long id) {
+        return exampleRepository.findById(id).map(exampleMapper::toDTO);
+    }
+
+    @Override
+    public void delete(Long id) {
+
     }
 }
