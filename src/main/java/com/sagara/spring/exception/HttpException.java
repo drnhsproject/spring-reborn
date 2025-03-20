@@ -1,5 +1,8 @@
-package com.sagara.bkn.vac.assessment.exception;
+package com.sagara.spring.exception;
 
+import lombok.Getter;
+
+@Getter
 public class HttpException extends RuntimeException {
 
     private final Integer code;
@@ -9,7 +12,4 @@ public class HttpException extends RuntimeException {
         this.code = code;
     }
 
-    public Integer getCode() {
-        return code;
-    }
 }

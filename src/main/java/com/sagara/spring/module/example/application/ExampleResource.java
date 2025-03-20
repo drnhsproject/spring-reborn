@@ -1,5 +1,6 @@
 package com.sagara.spring.module.example.application;
 
+import com.sagara.spring.exception.DomainException;
 import com.sagara.spring.module.example.application.dto.ExampleCommand;
 import com.sagara.spring.module.example.application.dto.ExampleCreatedResult;
 import com.sagara.spring.module.example.application.dto.ExampleDTO;
@@ -35,7 +36,7 @@ public class ExampleResource {
             throws URISyntaxException {
 
         if (command.id() != null) {
-            throw new RuntimeException("id exists");
+            throw new DomainException("id exists");
         }
 
         ExampleCreatedResult result = createExample.handle(command);

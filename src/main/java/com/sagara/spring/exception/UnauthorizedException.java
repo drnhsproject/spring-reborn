@@ -1,4 +1,4 @@
-package com.sagara.bkn.vac.assessment.exception;
+package com.sagara.spring.exception;
 
 import org.springframework.http.HttpStatus;
 
