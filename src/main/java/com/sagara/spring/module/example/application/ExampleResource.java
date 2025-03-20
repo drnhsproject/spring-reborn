@@ -2,9 +2,11 @@ package com.sagara.spring.module.example.application;
 
 import com.sagara.spring.module.example.application.dto.ExampleCommand;
 import com.sagara.spring.module.example.application.dto.ExampleCreatedResult;
+import com.sagara.spring.module.example.application.dto.ExampleDetailResult;
 import com.sagara.spring.module.example.application.dto.ExampleUpdatedResult;
 import com.sagara.spring.module.example.application.usecase.ChangeExampleDetail;
 import com.sagara.spring.module.example.application.usecase.CreateExample;
+import com.sagara.spring.module.example.application.usecase.GetExampleDetailById;
 import com.sagara.spring.module.example.domain.ExampleRepository;
 import com.sagara.spring.services.IdValidationService;
 import com.sagara.spring.services.SingleResponse;
@@ -23,25 +25,30 @@ public class ExampleResource {
 
     private static final Logger log = LoggerFactory.getLogger(ExampleResource.class);
 
-    private final CreateExample createExample;
-
-    private final ChangeExampleDetail changeExampleDetail;
-
     private final ExampleRepository exampleRepository;
 
     private final IdValidationService idValidationService;
 
+    private final CreateExample createExample;
+
+    private final ChangeExampleDetail changeExampleDetail;
+
+    private final GetExampleDetailById getExampleDetailById;
+
     public ExampleResource(
+            ExampleRepository exampleRepository,
+            IdValidationService idValidationService,
             CreateExample createExample,
             ChangeExampleDetail changeExampleDetail,
-            ExampleRepository exampleRepository,
-            IdValidationService idValidationService
+            GetExampleDetailById getExampleDetailById
     ) {
-        this.createExample = createExample;
-        this.changeExampleDetail = changeExampleDetail;
         this.exampleRepository = exampleRepository;
         this.idValidationService = idValidationService;
+        this.createExample = createExample;
+        this.changeExampleDetail = changeExampleDetail;
+        this.getExampleDetailById = getExampleDetailById;
     }
+
 
     @PostMapping("")
     public ResponseEntity<SingleResponse<ExampleCreatedResult>> createExample(@Valid @RequestBody ExampleCommand command)
@@ -69,9 +76,10 @@ public class ExampleResource {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SingleResponse<String>> getExample(@PathVariable("id") Long id) {
-        String result = "This data example";
-        SingleResponse<String> response = new SingleResponse<>( "Example detail retrieved",result);
+    public ResponseEntity<SingleResponse<ExampleDetailResult>> getExampleDetail(@PathVariable("id") Long id) {
+        ExampleDetailResult result = getExampleDetailById.handle(id);
+        SingleResponse<ExampleDetailResult> response = new SingleResponse<>( "example detail retrieved", result);
+
         return ResponseEntity.ok().body(response);
     }
 }
