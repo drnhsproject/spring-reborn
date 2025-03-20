@@ -45,8 +45,7 @@ public class ExampleServiceImpl implements ExampleService{
 
     @Override
     public Page<ExampleDTO> findAll(Pageable pageable) {
-        exampleRepository.findAll(pageable).map(exampleMapper::toDTO);
-        return null;
+        return exampleRepository.findAll(pageable).map(exampleMapper::toDTO);
     }
 
     @Override
