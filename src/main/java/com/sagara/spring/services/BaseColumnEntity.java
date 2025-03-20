@@ -3,6 +3,7 @@ package com.sagara.spring.services;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;
@@ -45,4 +46,12 @@ public abstract class BaseColumnEntity implements Serializable {
 
     @Column(name = "status", nullable = false)
     private Integer status = 1;
+
+    @Size(max = 5000)
+    @Column(name = "value_1", length = 5000)
+    private String value1;
+
+    @Size(max = 5000)
+    @Column(name = "value_2", length = 5000)
+    private String value2;
 }
