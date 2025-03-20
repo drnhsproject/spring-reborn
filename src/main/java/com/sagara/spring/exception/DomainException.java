@@ -16,5 +16,4 @@ public class DomainException extends RuntimeException {
         super(message);
         this.status = (status != null) ? status : HttpStatus.INTERNAL_SERVER_ERROR;
     }
-
 }
