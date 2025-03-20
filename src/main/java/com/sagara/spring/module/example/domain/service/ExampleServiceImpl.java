@@ -59,6 +59,6 @@ public class ExampleServiceImpl implements ExampleService{
 
     @Override
     public void delete(Long id) {
-
+        exampleRepository.deleteById(id);
     }
 }

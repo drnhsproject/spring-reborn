@@ -1,9 +1,7 @@
 package com.sagara.spring.module.example.application;
 
-import com.sagara.spring.module.example.application.dto.ExampleCommand;
-import com.sagara.spring.module.example.application.dto.ExampleCreatedResult;
-import com.sagara.spring.module.example.application.dto.ExampleDetailResult;
-import com.sagara.spring.module.example.application.dto.ExampleUpdatedResult;
+import com.sagara.spring.module.example.application.dto.*;
+import com.sagara.spring.module.example.application.usecase.ArchiveExample;
 import com.sagara.spring.module.example.application.usecase.ChangeExampleDetail;
 import com.sagara.spring.module.example.application.usecase.CreateExample;
 import com.sagara.spring.module.example.application.usecase.GetExampleDetailById;
@@ -11,6 +9,7 @@ import com.sagara.spring.module.example.domain.ExampleRepository;
 import com.sagara.spring.services.IdValidationService;
 import com.sagara.spring.services.SingleResponse;
 import jakarta.validation.Valid;
+import org.apache.tomcat.util.http.HeaderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -35,18 +34,26 @@ public class ExampleResource {
 
     private final GetExampleDetailById getExampleDetailById;
 
+    private final ArchiveExample archiveExample;
+
+    private final RemoveExample removeExample;
+
     public ExampleResource(
             ExampleRepository exampleRepository,
             IdValidationService idValidationService,
             CreateExample createExample,
             ChangeExampleDetail changeExampleDetail,
-            GetExampleDetailById getExampleDetailById
+            GetExampleDetailById getExampleDetailById,
+            ArchiveExample archiveExample,
+            RemoveExample removeExample
     ) {
         this.exampleRepository = exampleRepository;
         this.idValidationService = idValidationService;
         this.createExample = createExample;
         this.changeExampleDetail = changeExampleDetail;
         this.getExampleDetailById = getExampleDetailById;
+        this.archiveExample = archiveExample;
+        this.removeExample = removeExample;
     }
 
 
@@ -81,5 +88,19 @@ public class ExampleResource {
         SingleResponse<ExampleDetailResult> response = new SingleResponse<>( "example detail retrieved", result);
 
         return ResponseEntity.ok().body(response);
+    }
+
+    @PutMapping("/{id}/delete")
+    public ResponseEntity<Void> softDeleteExample(@PathVariable("id") Long id) {
+        archiveExample.handle(id);
+        return ResponseEntity.noContent()
+                .build();
+    }
+
+    @DeleteMapping("/{id}/destroy")
+    public ResponseEntity<Void> deleteExample(@PathVariable("id") Long id) {
+        removeExample.handle(id);
+        return ResponseEntity.noContent()
+                .build();
     }
 }
