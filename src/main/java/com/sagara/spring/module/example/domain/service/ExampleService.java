@@ -2,6 +2,7 @@ package com.sagara.spring.module.example.domain.service;
 
 import com.sagara.spring.module.example.application.dto.ExampleDTO;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
@@ -11,9 +12,7 @@ public interface ExampleService {
 
     ExampleDTO update(ExampleDTO exampleDTO);
 
-    Optional<ExampleDTO> partialUpdate(ExampleDTO exampleDTO);
-
-    Page<ExampleDTO> findAll(ExampleDTO exampleDTO);
+    Page<ExampleDTO> findAll(Pageable pageable);
 
     Optional<ExampleDTO> findOne(Long id);
 

@@ -7,6 +7,7 @@ import com.sagara.spring.module.example.domain.IExampleMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,12 +44,8 @@ public class ExampleServiceImpl implements ExampleService{
     }
 
     @Override
-    public Optional<ExampleDTO> partialUpdate(ExampleDTO exampleDTO) {
-        return Optional.empty();
-    }
-
-    @Override
-    public Page<ExampleDTO> findAll(ExampleDTO exampleDTO) {
+    public Page<ExampleDTO> findAll(Pageable pageable) {
+        exampleRepository.findAll(pageable).map(exampleMapper::toDTO);
         return null;
     }
 

@@ -9,7 +9,6 @@ import com.sagara.spring.module.example.domain.ExampleRepository;
 import com.sagara.spring.services.IdValidationService;
 import com.sagara.spring.services.SingleResponse;
 import jakarta.validation.Valid;
-import org.apache.tomcat.util.http.HeaderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -55,7 +54,6 @@ public class ExampleResource {
         this.archiveExample = archiveExample;
         this.removeExample = removeExample;
     }
-
 
     @PostMapping("")
     public ResponseEntity<SingleResponse<ExampleCreatedResult>> createExample(@Valid @RequestBody ExampleCommand command)
