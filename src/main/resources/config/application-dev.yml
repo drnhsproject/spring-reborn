@@ -30,7 +30,7 @@ spring:
       minimum-idle: 10
       maximum-pool-size: 50
   liquibase:
-    enabled: false
+    contexts: dev
 #  mail:
 #    host: REPLACE_WITH_YOUR_HOST_SMTP
 #    port: REPLACE_WITH_YOUR_PORT_SMTP
