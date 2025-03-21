@@ -17,10 +17,10 @@ public class ChangeExampleDetail {
     }
 
     public ExampleUpdatedResult handle(ExampleCommand command) {
-        ExampleDTO example = exampleService.findOne(command.id())
+        ExampleDTO example = exampleService.findOne(command.getId())
                 .map(exists -> {
-                    exists.setName(command.name());
-                    exists.setAge(command.age());
+                    exists.setName(command.getName());
+                    exists.setAge(command.getAge());
 
                     return exists;
                 })

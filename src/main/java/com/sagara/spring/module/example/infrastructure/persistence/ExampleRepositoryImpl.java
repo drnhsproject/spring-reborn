@@ -1,6 +1,4 @@
-package com.sagara.spring.module.example.infrastructure;
-
-import com.sagara.spring.module.example.domain.ExampleRepository;
+package com.sagara.spring.module.example.infrastructure.persistence;
 
 public class ExampleRepositoryImpl {
 }

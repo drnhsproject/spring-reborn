@@ -1,4 +1,4 @@
-package com.sagara.spring.module.example.application;
+package com.sagara.spring.module.example.infrastructure.persistence;
 
 import com.sagara.spring.module.example.application.dto.ExampleCommand;
 import com.sagara.spring.module.example.application.dto.ExampleDTO;
@@ -58,8 +58,8 @@ public class ExampleMapperImpl implements IExampleMapper {
 
         ExampleDTO dto = new ExampleDTO();
         dto.setCode(new GenerateRandomCode().generate(prefix));
-        dto.setName(command.name());
-        dto.setAge(command.age());
+        dto.setName(command.getName());
+        dto.setAge(command.getAge());
         dto.setIsDeleted(false);
         dto.setStatus(1);
 
