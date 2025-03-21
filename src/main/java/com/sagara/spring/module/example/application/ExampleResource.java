@@ -1,10 +1,7 @@
 package com.sagara.spring.module.example.application;
 
 import com.sagara.spring.module.example.application.dto.*;
-import com.sagara.spring.module.example.application.usecase.ArchiveExample;
-import com.sagara.spring.module.example.application.usecase.ChangeExampleDetail;
-import com.sagara.spring.module.example.application.usecase.CreateExample;
-import com.sagara.spring.module.example.application.usecase.GetExampleDetailById;
+import com.sagara.spring.module.example.application.usecase.*;
 import com.sagara.spring.module.example.domain.ExampleRepository;
 import com.sagara.spring.services.IdValidationService;
 import com.sagara.spring.services.SingleResponse;

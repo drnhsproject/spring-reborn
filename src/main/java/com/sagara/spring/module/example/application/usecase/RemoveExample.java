@@ -1,4 +1,4 @@
-package com.sagara.spring.module.example.application.dto;
+package com.sagara.spring.module.example.application.usecase;
 
 import com.sagara.spring.UseCase;
 import com.sagara.spring.module.example.domain.service.ExampleService;

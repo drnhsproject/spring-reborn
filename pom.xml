@@ -141,6 +141,11 @@
 			<artifactId>jnanoid</artifactId>
 			<version>2.0.0</version>
 		</dependency>
+		<dependency>
+			<groupId>me.paulschwarz</groupId>
+			<artifactId>spring-dotenv</artifactId>
+			<version>4.0.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -227,9 +232,12 @@
 				<!-- default Spring profiles -->
 				<spring.profiles.active>dev</spring.profiles.active>
 				<profile.test>test-dev</profile.test>
-				<liquibase-plugin.url>jdbc:postgresql://localhost:5432/REPLACE_WITH_YOUR_NAME_DATABASE</liquibase-plugin.url>
-				<liquibase-plugin.username>REPLACE_WITH_YOUR_USERNAME_DATABASE</liquibase-plugin.username>
-				<liquibase-plugin.password>REPLACE_WITH_YOUR_PASSWORD_DATABASE</liquibase-plugin.password>
+				<!--suppress UnresolvedMavenProperty -->
+				<liquibase-plugin.url>${spring.datasource.url}</liquibase-plugin.url>
+				<!--suppress UnresolvedMavenProperty -->
+				<liquibase-plugin.username>${spring.datasource.username}</liquibase-plugin.username>
+				<!--suppress UnresolvedMavenProperty -->
+				<liquibase-plugin.password>${spring.datasource.password}</liquibase-plugin.password>
 			</properties>
 			<dependencies>
 				<dependency>
