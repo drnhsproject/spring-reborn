@@ -4,12 +4,17 @@ import com.sagara.spring.module.example.application.dto.*;
 import com.sagara.spring.module.example.application.usecase.*;
 import com.sagara.spring.module.example.domain.ExampleRepository;
 import com.sagara.spring.services.IdValidationService;
+import com.sagara.spring.services.ListResponse;
 import com.sagara.spring.services.SingleResponse;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -75,6 +80,19 @@ public class ExampleResource {
         SingleResponse<ExampleUpdatedResult> response = new SingleResponse<>("example updated", result);
 
         return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("")
+    public ResponseEntity<ListResponse<AssessmentResults>> getAllExample(
+            @RequestParam(value = "!search", required = false) String search,
+            @ModelAttribute AssessmentQuery queryParams,
+            @org.springdoc.core.annotations.ParameterObject Pageable pageable
+    ) {
+        queryParams.setSearch(search);
+        Page<AssessmentResults> results = getAssessments.handle(queryParams, pageable);
+        ResponseWeb<AssessmentResults> responseWeb = getAssessments.toResponseWeb(results);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), results);
+        return ResponseEntity.ok().headers(headers).body(responseWeb);
     }
 
     @GetMapping("/{id}")
