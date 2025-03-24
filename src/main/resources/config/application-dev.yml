@@ -32,17 +32,17 @@ spring:
   liquibase:
     contexts: dev
 #  mail:
-#    host: REPLACE_WITH_YOUR_HOST_SMTP
-#    port: REPLACE_WITH_YOUR_PORT_SMTP
-#    username: REPLACE_WITH_YOUR_USERNAME_SMTP
-#    password: REPLACE_WITH_YOUR_PASSWORD_SMTP
-#    protocol: smtp
-#    tls: true
+#    host: ${MAIL_HOST}
+#    port: ${MAIL_PORT}
+#    username: ${MAIL_USERNAME}
+#    password: ${MAIL_PASSWORD}
+#    protocol: ${MAIL_PROTOCOL}
+#    tls: ${MAIL_TLS}
 #    properties:
 #      mail:
 #        smtp:
-#          auth: true
-#          starttls.enable: true
+#          auth: ${MAIL_PROPERTIES_AUTH}
+#          starttls.enable: ${MAIL_PROPERTIES_STARTTLS_ENABLE}
 
 server:
   port: ${SERVER_PORT:8080}
