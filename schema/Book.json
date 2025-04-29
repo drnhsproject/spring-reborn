@@ -1,0 +1,33 @@
+{
+  "name": "Book",
+  "tableName": "book",
+  "fields": [
+    {
+      "name": "id",
+      "type": "Long",
+      "primaryKey": true,
+      "autoIncrement": true
+    },
+    {
+      "name": "name",
+      "type": "String",
+      "validations": {
+        "required": true,
+        "unique": true,
+        "maxLength": 100
+      }
+    },
+    {
+      "name": "price",
+      "type": "BigDecimal",
+      "validations": {
+        "min": 0
+      }
+    },
+    {
+      "name": "inStock",
+      "type": "Boolean",
+      "defaultValue": "false"
+    }
+  ]
+}

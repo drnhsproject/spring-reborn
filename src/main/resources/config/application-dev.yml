@@ -31,6 +31,7 @@ spring:
       maximum-pool-size: 50
   liquibase:
     contexts: dev
+
 #  mail:
 #    host: ${MAIL_HOST}
 #    port: ${MAIL_PORT}

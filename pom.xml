@@ -8,7 +8,7 @@
 		<version>3.4.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.sagara</groupId>
+	<groupId>id.co.xinix</groupId>
 	<artifactId>spring</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>spring</name>
@@ -146,6 +146,20 @@
 			<artifactId>spring-dotenv</artifactId>
 			<version>4.0.0</version>
 		</dependency>
+		<dependency>
+			<groupId>com.reborn</groupId>
+			<artifactId>media-upload-library</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.shell</groupId>
+			<artifactId>spring-shell-starter</artifactId>
+			<version>3.4.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-freemarker</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -218,6 +232,24 @@
 						<version>${spring-boot.version}</version>
 					</dependency>
 				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>3.5.0</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>java</goal>
+						</goals>
+						<configuration>
+							<mainClass>id.co.xinix.spring.application</mainClass>
+							<arguments>
+								<argument>/schema</argument>
+							</arguments>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
