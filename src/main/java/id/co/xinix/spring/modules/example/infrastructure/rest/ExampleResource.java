@@ -7,6 +7,7 @@ import id.co.xinix.spring.services.IdValidationService;
 import id.co.xinix.spring.services.ListResponse;
 import id.co.xinix.spring.services.SingleResponse;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,7 @@ import java.net.URISyntaxException;
 
 @RestController
 @RequestMapping("/api/v1/examples")
+@RequiredArgsConstructor
 public class ExampleResource {
 
     private static final Logger log = LoggerFactory.getLogger(ExampleResource.class);
@@ -38,26 +40,6 @@ public class ExampleResource {
     private final ArchiveExample archiveExample;
 
     private final RemoveExample removeExample;
-
-    public ExampleResource(
-            ExampleRepository exampleRepository,
-            IdValidationService idValidationService,
-            CreateExample createExample,
-            ChangeExampleDetail changeExampleDetail,
-            GetExampleDetailById getExampleDetailById,
-            GetList getList,
-            ArchiveExample archiveExample,
-            RemoveExample removeExample
-    ) {
-        this.exampleRepository = exampleRepository;
-        this.idValidationService = idValidationService;
-        this.createExample = createExample;
-        this.changeExampleDetail = changeExampleDetail;
-        this.getExampleDetailById = getExampleDetailById;
-        this.getList = getList;
-        this.archiveExample = archiveExample;
-        this.removeExample = removeExample;
-    }
 
     @PostMapping("")
     public ResponseEntity<SingleResponse<ExampleCreatedResult>> createExample(@Valid @RequestBody ExampleCommand command)

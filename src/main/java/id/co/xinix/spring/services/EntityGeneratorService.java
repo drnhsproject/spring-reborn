@@ -1,5 +1,6 @@
 package id.co.xinix.spring.services;
 
+import id.co.xinix.spring.Application;
 import id.co.xinix.spring.framework.Entity;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -29,11 +30,13 @@ public class EntityGeneratorService {
         Template dtoTemplate = cfg.getTemplate("Dto.ftl");
 
         String entityNameLower = entitySchema.getName().toLowerCase();
-        String basePackage = "id.co.xinix.spring.modules." + entityNameLower;
+        String basePackage = Application.class.getPackage().getName();
+        String modulePackage = basePackage + ".modules." + entityNameLower;
 
         Map<String, Object> data = new HashMap<>();
         data.put("entity", entitySchema);
         data.put("basePackage", basePackage);
+        data.put("modulePackage", modulePackage);
 
         String baseDir = getBaseDirModule(entityNameLower);
 

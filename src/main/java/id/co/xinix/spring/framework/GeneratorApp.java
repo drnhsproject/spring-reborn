@@ -13,7 +13,12 @@ public class GeneratorApp {
             return;
         }
 
-        File jsonFile = new File(args[0]);
+        String inputFile = args[0];
+        if (!inputFile.startsWith("schema/")) {
+            inputFile = "schema/" + inputFile;
+        }
+
+        File jsonFile = new File(inputFile);
 
         if (!jsonFile.exists()) {
             System.out.println("JSON file not found: " + jsonFile.getAbsolutePath());

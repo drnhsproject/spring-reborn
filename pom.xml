@@ -237,19 +237,9 @@
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
 				<version>3.5.0</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>java</goal>
-						</goals>
-						<configuration>
-							<mainClass>id.co.xinix.spring.application</mainClass>
-							<arguments>
-								<argument>/schema</argument>
-							</arguments>
-						</configuration>
-					</execution>
-				</executions>
+				<configuration>
+					<mainClass>id.co.xinix.spring.framework.GeneratorApp</mainClass>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

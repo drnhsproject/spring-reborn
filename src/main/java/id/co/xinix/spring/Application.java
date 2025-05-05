@@ -7,7 +7,6 @@ import org.springframework.shell.command.annotation.CommandScan;
 
 @SpringBootApplication
 @ComponentScan(basePackages = "id.co.xinix.spring")
-@CommandScan
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);

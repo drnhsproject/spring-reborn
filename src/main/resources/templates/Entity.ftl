@@ -1,6 +1,6 @@
-package ${basePackage}.domain;
+package ${modulePackage}.domain;
 
-import id.co.xinix.spring.services.BaseColumnEntity;
+import ${basePackage}.services.BaseColumnEntity;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -17,12 +17,16 @@ import java.math.BigDecimal;
 import java.time.Instant;
         <#break>
     </#if>
+    <#if field.type == "LocalDate">
+import java.time.LocalDate;
+         <#break>
+    </#if>
 </#list>
 
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "${entity.name?lower_case}")
+@Table(name = "${entity.tableName}")
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
@@ -44,11 +48,7 @@ public class ${entity.name} extends BaseColumnEntity {
         </#if>
         <#-- Check if unique or nullable attributes are needed -->
         <#if field.validations?? && (field.validations.unique?? && field.validations.unique || field.validations.required?? && field.validations.required)>
-    @Column(
-        name = "${columnName}",
-        <#if field.validations.unique?? && field.validations.unique>unique = true,</#if>
-        <#if field.validations.required?? && field.validations.required>nullable = false</#if>
-    )
+    @Column(name = "${columnName}", <#if field.validations.unique?? && field.validations.unique>unique = true, </#if><#if field.validations.required?? && field.validations.required>nullable = false</#if>)
         <#else>
     @Column(name = "${columnName}")
         </#if>

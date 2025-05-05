@@ -1,13 +1,18 @@
-package ${basePackage}.application.dto;
+package ${modulePackage}.application.dto;
 
 <#list entity.fields as field>
-<#if field.type == "BigDecimal">
+    <#if field.type == "BigDecimal">
 import java.math.BigDecimal;
-<#if field.type == "Instant">
+        <#break>
+    </#if>
+    <#if field.type == "Instant">
 import java.time.Instant;
-<#break>
-</#if>
-</#if>
+        <#break>
+    </#if>
+    <#if field.type == "LocalDate">
+import java.time.LocalDate;
+        <#break>
+    </#if>
 </#list>
 
 import jakarta.validation.constraints.*;
