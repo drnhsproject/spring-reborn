@@ -9,5 +9,4 @@
     <property name="datetimeType" value="datetime" dbms="postgresql"/>
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20250506112415_added_entity_UserInformation.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>

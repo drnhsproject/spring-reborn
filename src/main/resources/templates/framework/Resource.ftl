@@ -18,7 +18,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 @RestController
-@RequestMapping("/api/${entity.name?lower_case}s")
+@RequestMapping("/api/v1/${entityKebabCase}s")
 @RequiredArgsConstructor
 public class ${entity.name}Resource {
 
@@ -30,13 +30,13 @@ public class ${entity.name}Resource {
     ) throws URISyntaxException
     {
         ${entity.name}CreatedResult result = create.handle(command);
-        SingleResponse<${entity.name}CreatedResult> response = new SingleResponse<>("${entity.name?lower_case} created", result);
+        SingleResponse<${entity.name}CreatedResult> response = new SingleResponse<>("${entitySpacedLower} created", result);
 
-        return ResponseEntity.created(new URI("/api/${entity.name?lower_case}s/")).body(response);
+        return ResponseEntity.created(new URI("/api/v1/${entityKebabCase}s/")).body(response);
     }
 
     @GetMapping
-    public List<${entity.name}DTO> getAll${entity.name}s() {
+    public List<${entity.name}DTO> getAll${entity.name}() {
         return ${entity.name?uncap_first}UseCase.findAll();
     }
 

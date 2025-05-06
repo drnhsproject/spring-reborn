@@ -22,18 +22,22 @@ public class EntityGeneratorService {
 
     private final Configuration cfg;
 
+    private final FormatterString formatterString;
+
     public EntityGeneratorService() {
         cfg = new Configuration(Configuration.VERSION_2_3_32);
         cfg.setClassLoaderForTemplateLoading(
                 Thread.currentThread().getContextClassLoader(), "/templates/framework"
         );
+
+        formatterString = new FormatterString();
     }
 
     public void generate(Entity entitySchema) throws Exception {
         String timestamp = new GenerateTimestamp().generate();
 
         for (Field field : entitySchema.getFields()) {
-            String snakeCaseName = toSnakeCase(field.getName());
+            String snakeCaseName = formatterString.toSnakeCase(field.getName());
             field.setName(snakeCaseName);
 
             String sqlType = SqlTypeMapper.map(field.getType(), "mysql");
@@ -49,6 +53,7 @@ public class EntityGeneratorService {
         Template entityTemplate = cfg.getTemplate("Entity.ftl");
         Template repositoryTemplate = cfg.getTemplate("Repository.ftl");
         Template dtoTemplate = cfg.getTemplate("Dto.ftl");
+        Template resourceTemplate = cfg.getTemplate("Resource.ftl");
         Template changelogTemplate = cfg.getTemplate("Liquibase-changelog.ftl");
 
         String entityNameLower = entitySchema.getName().toLowerCase();
@@ -60,6 +65,8 @@ public class EntityGeneratorService {
         data.put("basePackage", basePackage);
         data.put("modulePackage", modulePackage);
         data.put("changelogId", timestamp + "-1");
+        data.put("entityKebabCase", formatterString.toKebabCase(entitySchema.getName()));
+        data.put("entitySpacedLower", formatterString.toSpacedLowerCase(entitySchema.getName()));
 
         String baseDir = getBaseDirModule(entityNameLower);
 
@@ -78,6 +85,10 @@ public class EntityGeneratorService {
         // Generate DTO
         String dtoOutputPath = baseDir + "application/dto/" + entitySchema.getName() + "DTO.java";
         generateFile(dtoTemplate, data, dtoOutputPath);
+
+        // Generate Resource
+        String resourceOutputPath = baseDir + "infrastructure/rest/" + entitySchema.getName() + "Resource.java";
+        generateFile(resourceTemplate, data, resourceOutputPath);
 
         // Generate Changelog
         String changelogName = timestamp + "_added_entity_" + entitySchema.getName() + ".xml";
@@ -121,14 +132,6 @@ public class EntityGeneratorService {
             System.err.println("Error generating " + outputPath);
             e.printStackTrace();
         }
-    }
-
-    private String toSnakeCase(String input) {
-        if (input == null) {
-            return null;
-        }
-
-        return input.replaceAll("([a-z])([A-Z])", "$1_$2").toLowerCase();
     }
 
     private void appendChangelogToMaster(String changelogFilename) throws IOException {
