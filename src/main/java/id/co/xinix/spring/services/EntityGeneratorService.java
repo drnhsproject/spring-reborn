@@ -42,6 +42,8 @@ public class EntityGeneratorService {
         Template dtoTemplate = cfg.getTemplate("Dto.ftl");
         Template resourceTemplate = cfg.getTemplate("Resource.ftl");
         Template createdResultTemplate = cfg.getTemplate("Created-result.ftl");
+        Template commandTemplate = cfg.getTemplate("Command.ftl");
+        Template useCaseCreateTemplate = cfg.getTemplate("UseCase-create.ftl");
         Template changelogTemplate = cfg.getTemplate("Liquibase-changelog.ftl");
 
         String entityNameLower = entitySchema.getName().toLowerCase();
@@ -78,10 +80,18 @@ public class EntityGeneratorService {
         String resourceOutputPath = baseDir + "infrastructure/rest/" + entitySchema.getName() + "Resource.java";
         generateFile(resourceTemplate, data, resourceOutputPath);
 
-        // Generate Resource
+        // Generate Created Result
         String createdResultOutputPath = baseDir + "application/dto/" + entitySchema.getName() + "CreatedResult.java";
         generateFile(createdResultTemplate, data, createdResultOutputPath);
 
+        // Generate Command
+        String commandOutputPath = baseDir + "application/dto/" + entitySchema.getName() + "Command.java";
+        generateFile(commandTemplate, data, commandOutputPath);
+
+        // Generate Command
+        String useCasePath = "application/usecase/";
+        String useCaseCreateOutputPath = baseDir + useCasePath + "Create" + entitySchema.getName() + ".java";
+        generateFile(useCaseCreateTemplate, data, useCaseCreateOutputPath);
 
         for (Field field : entitySchema.getFields()) {
             String snakeCaseName = formatterString.toSnakeCase(field.getName());

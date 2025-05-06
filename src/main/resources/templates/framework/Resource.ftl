@@ -34,29 +34,4 @@ public class ${entity.name}Resource {
 
         return ResponseEntity.created(new URI("/api/v1/${entityKebabCase}s/")).body(response);
     }
-
-    @GetMapping
-    public List<${entity.name}DTO> getAll${entity.name}() {
-        return ${entity.name?uncap_first}UseCase.findAll();
-    }
-
-    @GetMapping("/{id}")
-    public ${entity.name}DTO get${entity.name}(@PathVariable Long id) {
-        return ${entity.name?uncap_first}UseCase.findById(id);
-    }
-
-    @PostMapping
-    public ${entity.name}DTO create${entity.name}(@RequestBody ${entity.name}DTO ${entity.name?uncap_first}DTO) {
-        return ${entity.name?uncap_first}UseCase.create(${entity.name?uncap_first}DTO);
-    }
-
-    @PutMapping("/{id}")
-    public ${entity.name}DTO update${entity.name}(@PathVariable Long id, @RequestBody ${entity.name}DTO ${entity.name?uncap_first}DTO) {
-        return ${entity.name?uncap_first}UseCase.update(id, ${entity.name?uncap_first}DTO);
-    }
-
-    @DeleteMapping("/{id}")
-    public void delete${entity.name}(@PathVariable Long id) {
-        ${entity.name?uncap_first}UseCase.delete(id);
-    }
 }
