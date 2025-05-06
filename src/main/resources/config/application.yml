@@ -32,3 +32,6 @@ spring:
     mode: HTML
   mail:
     from: spring-project@localhost
+dotenv:
+  directory: .
+  filename: .env

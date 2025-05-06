@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20250506112415-1" author="generator-spring">
+        <createTable tableName="user_information">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="first_name" type="varchar(255)" >
+                <constraints/>
+            </column>
+            <column name="last_name" type="varchar(255)" >
+                <constraints/>
+            </column>
+            <column name="gender" type="varchar(255)" >
+                <constraints/>
+            </column>
+            <column name="phone_number" type="varchar(255)" >
+                <constraints/>
+            </column>
+            <column name="birth_date" type="date" >
+                <constraints/>
+            </column>
+            <column name="age" type="int" >
+                <constraints/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

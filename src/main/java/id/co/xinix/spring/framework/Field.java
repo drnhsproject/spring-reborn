@@ -14,4 +14,5 @@ public class Field {
     private Boolean autoIncrement;
     private Object defaultValue;
     private FieldsValidation validations;
+    private String sqlType;
 }
