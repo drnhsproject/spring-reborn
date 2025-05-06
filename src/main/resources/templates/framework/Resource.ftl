@@ -22,7 +22,7 @@ import java.net.URISyntaxException;
 @RequiredArgsConstructor
 public class ${entity.name}Resource {
 
-    private final Create create;
+    private final Create${entity.name} create;
 
     @PostMapping("")
     public ResponseEntity<SingleResponse<${entity.name}CreatedResult>> create${entity.name}(

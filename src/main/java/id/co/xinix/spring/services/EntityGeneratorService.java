@@ -36,24 +36,12 @@ public class EntityGeneratorService {
     public void generate(Entity entitySchema) throws Exception {
         String timestamp = new GenerateTimestamp().generate();
 
-        for (Field field : entitySchema.getFields()) {
-            String snakeCaseName = formatterString.toSnakeCase(field.getName());
-            field.setName(snakeCaseName);
-
-            String sqlType = SqlTypeMapper.map(field.getType(), "mysql");
-            field.setSqlType(sqlType);
-
-            if ("id".equalsIgnoreCase(snakeCaseName) && "Long".equals(field.getType())) {
-                field.setPrimaryKey(true);
-                field.setAutoIncrement(true);
-            }
-        }
-
         // Load templates
         Template entityTemplate = cfg.getTemplate("Entity.ftl");
         Template repositoryTemplate = cfg.getTemplate("Repository.ftl");
         Template dtoTemplate = cfg.getTemplate("Dto.ftl");
         Template resourceTemplate = cfg.getTemplate("Resource.ftl");
+        Template createdResultTemplate = cfg.getTemplate("Created-result.ftl");
         Template changelogTemplate = cfg.getTemplate("Liquibase-changelog.ftl");
 
         String entityNameLower = entitySchema.getName().toLowerCase();
@@ -89,6 +77,24 @@ public class EntityGeneratorService {
         // Generate Resource
         String resourceOutputPath = baseDir + "infrastructure/rest/" + entitySchema.getName() + "Resource.java";
         generateFile(resourceTemplate, data, resourceOutputPath);
+
+        // Generate Resource
+        String createdResultOutputPath = baseDir + "application/dto/" + entitySchema.getName() + "CreatedResult.java";
+        generateFile(createdResultTemplate, data, createdResultOutputPath);
+
+
+        for (Field field : entitySchema.getFields()) {
+            String snakeCaseName = formatterString.toSnakeCase(field.getName());
+            field.setName(snakeCaseName);
+
+            String sqlType = SqlTypeMapper.map(field.getType(), "mysql");
+            field.setSqlType(sqlType);
+
+            if ("id".equalsIgnoreCase(snakeCaseName) && "Long".equals(field.getType())) {
+                field.setPrimaryKey(true);
+                field.setAutoIncrement(true);
+            }
+        }
 
         // Generate Changelog
         String changelogName = timestamp + "_added_entity_" + entitySchema.getName() + ".xml";
