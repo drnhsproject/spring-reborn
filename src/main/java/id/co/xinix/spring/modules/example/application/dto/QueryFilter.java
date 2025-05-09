@@ -20,7 +20,7 @@ public class QueryFilter {
         StringJoiner whereClause = new StringJoiner("", " WHERE is_deleted is false", "");
 
         if (search != null && !search.isEmpty()) {
-            whereClause.add(" AND (name iLIKE :search OR code iLIKE :search)");
+            whereClause.add(" AND (name LIKE :search OR code LIKE :search)");
         }
 
         if (status != null) {

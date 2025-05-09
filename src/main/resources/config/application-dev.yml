@@ -13,6 +13,13 @@ logging:
   level:
     root: DEBUG
 
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html # alias URL
+    operations-sorter: method
+  api-docs:
+    path: /v3/api-docs
+
 spring:
   devtools:
     restart:

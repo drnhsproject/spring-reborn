@@ -1,6 +1,7 @@
 package id.co.xinix.spring.modules.media;
 
 import com.reborn.media_upload_library.modules.MediaFile;
+import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

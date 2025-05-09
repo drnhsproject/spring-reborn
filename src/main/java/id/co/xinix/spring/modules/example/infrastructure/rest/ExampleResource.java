@@ -6,6 +6,8 @@ import id.co.xinix.spring.modules.example.domain.ExampleRepository;
 import id.co.xinix.spring.services.IdValidationService;
 import id.co.xinix.spring.services.ListResponse;
 import id.co.xinix.spring.services.SingleResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -20,6 +22,7 @@ import java.net.URISyntaxException;
 
 @RestController
 @RequestMapping("/api/v1/examples")
+@Tag(name = "Example API", description = "Operation example")
 @RequiredArgsConstructor
 public class ExampleResource {
 
@@ -41,10 +44,10 @@ public class ExampleResource {
 
     private final RemoveExample removeExample;
 
+    @Operation(summary = "Create Example", description = "Create new example")
     @PostMapping("")
     public ResponseEntity<SingleResponse<ExampleCreatedResult>> createExample(@Valid @RequestBody ExampleCommand command)
             throws URISyntaxException {
-
         idValidationService.validateNotNull(command.getId());
 
         ExampleCreatedResult result = createExample.handle(command);
