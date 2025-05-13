@@ -22,7 +22,7 @@ public class ExampleDTO implements Serializable {
 
     private Integer age;
 
-    private Boolean isDeleted;
+    private Boolean isActive;
 
     private String createdBy;
 

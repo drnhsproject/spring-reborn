@@ -1,4 +1,4 @@
-package id.co.xinix.spring.modules.example.domain;
+package id.co.xinix.spring.modules.book.domain;
 
 import id.co.xinix.spring.services.BaseColumnEntity;
 import jakarta.persistence.*;
@@ -7,24 +7,32 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.math.BigDecimal;
+
+import jakarta.validation.constraints.NotNull;
+
 @Entity
-@Table(name = "example")
+@Table(name = "book")
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class Example extends BaseColumnEntity {
+public class Book extends BaseColumnEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "code", unique = true, nullable = false)
-    private String code;
-
+    @NotNull
+    @Column(name = "name", unique = true, nullable = false)
     private String name;
 
-    private Integer age;
+    @Column(name = "price")
+    private BigDecimal price;
+
+    @Column(name = "in_stock")
+    private Boolean inStock;
+
 }

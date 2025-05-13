@@ -151,11 +151,6 @@
 			<version>4.0.0</version>
 		</dependency>
 		<dependency>
-			<groupId>com.reborn</groupId>
-			<artifactId>media-upload-library</artifactId>
-			<version>1.0.0</version>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework.shell</groupId>
 			<artifactId>spring-shell-starter</artifactId>
 			<version>3.4.0</version>

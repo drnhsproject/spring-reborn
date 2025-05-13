@@ -17,7 +17,7 @@ public class ArchiveExample {
     public void handle(Long id) {
         ExampleDTO example = exampleService.findOne(id)
                 .map(exists -> {
-                    exists.setIsDeleted(true);
+                    exists.setIsActive(true);
                     exists.setStatus(0);
 
                     return exists;

@@ -8,5 +8,14 @@
     <property name="uuidType" value="uuid" dbms="postgresql"/>
     <property name="datetimeType" value="datetime" dbms="postgresql"/>
 
+    <!-- MySQL -->
+    <property name="datetimeType" value="timestamp" dbms="mysql"/>
+    <property name="floatType" value="float" dbms="mysql"/>
+    <property name="clobType" value="text" dbms="mysql"/>
+    <property name="blobType" value="blob" dbms="mysql"/>
+    <property name="uuidType" value="varchar(36)" dbms="mysql"/>
+
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250513090615_added_entity_Example.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250513090412_added_entity_Book.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>

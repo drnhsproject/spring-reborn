@@ -21,7 +21,7 @@ public class ExampleMapperImpl implements IExampleMapper {
         entity.setCode(dto.getCode());
         entity.setName(dto.getName());
         entity.setAge(dto.getAge());
-        entity.setIsDeleted(dto.getIsDeleted());
+        entity.setIsActive(dto.getIsActive());
         entity.setStatus(dto.getStatus());
 
         return entity;
@@ -38,7 +38,7 @@ public class ExampleMapperImpl implements IExampleMapper {
         dto.setCode(entity.getCode());
         dto.setName(entity.getName());
         dto.setAge(entity.getAge());
-        dto.setIsDeleted(entity.getIsDeleted());
+        dto.setIsActive(entity.getIsActive());
         dto.setStatus(entity.getStatus());
         dto.setCreatedBy(entity.getCreatedBy());
         dto.setCreatedTime(entity.getCreatedTime());
@@ -60,7 +60,7 @@ public class ExampleMapperImpl implements IExampleMapper {
         dto.setCode(new GenerateRandomCode().generate(prefix));
         dto.setName(command.getName());
         dto.setAge(command.getAge());
-        dto.setIsDeleted(false);
+        dto.setIsActive(false);
         dto.setStatus(1);
 
         return dto;

@@ -17,7 +17,7 @@ public class QueryFilter {
     private Integer status;
 
     public String buildWhereClause() {
-        StringJoiner whereClause = new StringJoiner("", " WHERE is_deleted is false", "");
+        StringJoiner whereClause = new StringJoiner("", " WHERE is_active is false", "");
 
         if (search != null && !search.isEmpty()) {
             whereClause.add(" AND (name LIKE :search OR code LIKE :search)");
