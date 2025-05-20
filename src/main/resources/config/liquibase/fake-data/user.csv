@@ -1,0 +1,2 @@
+username;password;email;is_verified;role_code;tag;activation_key;reset_key;reset_date;is_active;created_by;updated_by;created_time;updated_time;status;value_1;value_2
+superadmin;$2a$10$TArf3Zji2LIrlNo9BQ9kb.cBBTxl/.7i8SKY4Fu0EAr84b7uCPjaa;superadmin@mail.id;true;superadmin;superadmin;null;null;null;true;SYSTEM;SYSTEM;2025-05-16T16:56:59;2025-05-16T16:56:59;1;null;null

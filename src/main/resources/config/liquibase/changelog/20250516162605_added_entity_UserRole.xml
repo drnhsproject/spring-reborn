@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20250516162605-1" author="generator-spring">
+        <createTable tableName="user_role">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="role_code" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="role_name" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="is_active" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="created_by" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="updated_by" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="created_time" type="${datetimeType}">
+                <constraints nullable="true" />
+            </column>
+            <column name="updated_time" type="${datetimeType}">
+                <constraints nullable="true" />
+            </column>
+            <column name="status" type="integer">
+                <constraints nullable="true" />
+            </column>
+            <column name="value_1" type="varchar(5000)">
+                <constraints nullable="true" />
+            </column>
+            <column name="value_2" type="varchar(5000)">
+                <constraints nullable="true" />
+            </column>
+        </createTable>
+        <dropDefaultValue tableName="user_role" columnName="created_time" columnDataType="${datetimeType}"/>
+        <dropDefaultValue tableName="user_role" columnName="updated_time" columnDataType="${datetimeType}"/>
+    </changeSet>
+
+    <!--
+        Load sample data generated with Faker.js
+        - This data can be easily edited using a CSV editor (or even MS Excel) and
+          is located in the 'src/main/resources/config/liquibase/fake-data' directory
+        - By default this data is applied when running with the JHipster 'dev' profile.
+          This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
+          Spring Boot configuration key.
+    -->
+    <changeSet id="20240807020805-1-data" author="generator-spring" context="faker">
+        <loadData
+                  file="config/liquibase/fake-data/user_role.csv"
+                  separator=";"
+                  tableName="user_role"
+                  usePreparedStatements="true">
+            <column name="id" type="numeric"/>
+            <column name="user_code" type="string"/>
+            <column name="authority_code" type="string"/>
+            <column name="authority_name" type="string"/>
+            <column name="is_deleted" type="boolean"/>
+            <column name="created_by" type="string"/>
+            <column name="updated_by" type="string"/>
+            <column name="created_time" type="date"/>
+            <column name="updated_time" type="date"/>
+            <column name="status" type="numeric"/>
+            <column name="value_1" type="string"/>
+            <column name="value_2" type="string"/>
+        </loadData>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,2 @@
+role_code;uri;method;is_active;created_by;updated_by;created_time;updated_time;status;value_1;value_2
+superadmin;*;All Access;true;SYSTEM;SYSTEM;2025-06-16T16:44:01;2025-06-16T16:44:01;1;null;null

@@ -16,6 +16,11 @@
     <property name="uuidType" value="varchar(36)" dbms="mysql"/>
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250516151440_added_entity_User.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250516160610_added_entity_Role.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250516161433_added_entity_Privilege.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250516162605_added_entity_UserRole.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250516161358_added_entity_RolePrivilege.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250513090615_added_entity_Example.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250513090412_added_entity_Book.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>
