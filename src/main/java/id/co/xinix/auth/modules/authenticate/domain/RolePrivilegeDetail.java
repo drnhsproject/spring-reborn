@@ -1,4 +1,4 @@
-package id.co.xinix.auth.modules.authenticate;
+package id.co.xinix.auth.modules.authenticate.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

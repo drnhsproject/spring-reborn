@@ -1,8 +1,14 @@
-package id.co.xinix.auth.modules.authenticate;
+package id.co.xinix.auth.modules.authenticate.application.usecase;
 
 import id.co.xinix.auth.UseCase;
 import id.co.xinix.auth.exception.BadRequestException;
 import id.co.xinix.auth.exception.UnauthorizedException;
+import id.co.xinix.auth.modules.authenticate.application.dto.SignInCommand;
+import id.co.xinix.auth.modules.authenticate.application.dto.SignInResult;
+import id.co.xinix.auth.modules.authenticate.domain.PrivilegeDetail;
+import id.co.xinix.auth.modules.authenticate.domain.RoleDetail;
+import id.co.xinix.auth.modules.authenticate.domain.RolePrivilegeDetail;
+import id.co.xinix.auth.modules.authenticate.domain.UserDetail;
 import id.co.xinix.auth.modules.role.domain.Role;
 import id.co.xinix.auth.modules.role.domain.RoleRepository;
 import id.co.xinix.auth.modules.roleprivilege.domain.RolePrivilege;

@@ -1,5 +1,8 @@
-package id.co.xinix.auth.modules.authenticate;
+package id.co.xinix.auth.modules.authenticate.infrastructure.rest;
 
+import id.co.xinix.auth.modules.authenticate.application.dto.SignInCommand;
+import id.co.xinix.auth.modules.authenticate.application.dto.SignInResult;
+import id.co.xinix.auth.modules.authenticate.application.usecase.SignInUser;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;

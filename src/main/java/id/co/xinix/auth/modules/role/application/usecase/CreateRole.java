@@ -1,4 +1,4 @@
-package id.co.xinix.auth.modules.role.application;
+package id.co.xinix.auth.modules.role.application.usecase;
 
 import id.co.xinix.auth.UseCase;
 import id.co.xinix.auth.exception.DomainException;

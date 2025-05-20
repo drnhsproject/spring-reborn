@@ -1,4 +1,4 @@
-package id.co.xinix.auth.modules.authenticate;
+package id.co.xinix.auth.modules.authenticate.application.dto;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
