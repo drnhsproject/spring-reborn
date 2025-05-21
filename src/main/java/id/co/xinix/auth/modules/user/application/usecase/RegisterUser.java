@@ -5,7 +5,7 @@ import id.co.xinix.auth.modules.role.domain.Role;
 import id.co.xinix.auth.modules.role.domain.RoleRepository;
 import id.co.xinix.auth.modules.user.application.dto.UserCommand;
 import id.co.xinix.auth.modules.user.application.dto.UserRegisteredResult;
-import id.co.xinix.auth.modules.user.application.event.UserRegisteredEvent;
+import id.co.xinix.auth.modules.user.domain.UserRegisteredEvent;
 import id.co.xinix.auth.modules.user.domain.User;
 import id.co.xinix.auth.modules.user.domain.UserRepository;
 import id.co.xinix.auth.UseCase;

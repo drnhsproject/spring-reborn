@@ -40,20 +40,20 @@ spring:
       maximum-pool-size: 50
   liquibase:
     contexts: dev, faker
-  cors:
-    allowed-origins: 'http://localhost:9000,https://localhost:9000,http://localhost:5173'
-    allowed-methods: '*'
-    allowed-headers: '*'
-    exposed-headers: 'Authorization,Link,X-Total-Count,X-${jhipster.clientApp.name}-alert,X-${jhipster.clientApp.name}-error,X-${jhipster.clientApp.name}-params'
-    allow-credentials: true
-    max-age: 1800
   security:
     authentication:
       jwt:
         # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
-        base64-secret: MTRjZGVhZjJiNjRmMzA1ZTRmNGJkNDU0NDc5ZjI0ZDI3MWQxOGUxZmJjMWUyMjg4MzQ2MDE1MzY3N2FmMGVjZTRhYzNkNTk1NjhkMmM0NzMxOTI3MTdiMGU3MDU5NDc5NWI5ZmY0OTkyNzMzMjdhNDNhYTE2YjI1YzllMDg5OTE=
+        base64-secret: MTRjZGVhZjJiNjRmMzA1ZTRmNGJkNDU0NDc5ZjI0ZDI3MWQxOGUxZmJjMWUyMjg4MzQ2MDE1MzY3N2FmMGVjZTRhYzNkNTk1NjhkMmM0NzMxOTI3MTdiHDR3B0RNNDc5NWI5ZmY0OTkyNzMzMjdhNDNhYTE2YjI1YzllMDg5OTE=
         token-validity-in-seconds: 43200
         token-validity-in-seconds-for-remember-me: 2592000
+        cors:
+          allowed-origins: 'http://localhost:9000,https://localhost:9000,http://localhost:5173,https://localhost:5173'
+          allowed-methods: '*'
+          allowed-headers: '*'
+          exposed-headers: 'Authorization,Link,X-Total-Count,X-${spring.application.name}-alert,X-${spring.application.name}-error,X-${spring.application.name}-params'
+          allow-credentials: true
+          max-age: 1800
 #  mail:
 #    host: ${MAIL_HOST}
 #    port: ${MAIL_PORT}

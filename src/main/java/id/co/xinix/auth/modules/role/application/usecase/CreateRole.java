@@ -4,7 +4,7 @@ import id.co.xinix.auth.UseCase;
 import id.co.xinix.auth.exception.DomainException;
 import id.co.xinix.auth.modules.role.application.dto.RoleCommand;
 import id.co.xinix.auth.modules.role.application.dto.RoleCreatedResult;
-import id.co.xinix.auth.modules.role.application.event.RoleCreatedEvent;
+import id.co.xinix.auth.modules.role.domain.RoleCreatedEvent;
 import id.co.xinix.auth.modules.role.domain.Role;
 import id.co.xinix.auth.modules.role.domain.RoleRepository;
 import lombok.AllArgsConstructor;

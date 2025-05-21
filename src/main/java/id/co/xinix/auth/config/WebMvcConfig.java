@@ -1,6 +1,6 @@
 package id.co.xinix.auth.config;
 
-import id.co.xinix.spring.services.CustomPageableResolver;
+import id.co.xinix.auth.services.CustomPageableResolver;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;

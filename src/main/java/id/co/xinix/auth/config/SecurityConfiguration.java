@@ -75,9 +75,7 @@ public class SecurityConfiguration {
                     // prettier-ignore
                 authz
                         .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/auth/signin")).permitAll()
-                        .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/authenticate/user")).permitAll()
-                        .requestMatchers(mvc.pattern(HttpMethod.GET, "/api/authenticate")).permitAll()
-                        .requestMatchers(mvc.pattern(HttpMethod.GET, "/api/authenticate/user")).permitAll()
+                        .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/auth/refresh")).permitAll()
                         .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/account/forgot-password")).permitAll()
                         .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/account/reset-password")).permitAll()
                         .requestMatchers(mvc.pattern("/api/v1/users/**")).authenticated()

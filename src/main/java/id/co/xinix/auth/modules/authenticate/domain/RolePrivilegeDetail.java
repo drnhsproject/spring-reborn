@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class RolePrivilegeDetail {
 
-    private List<RoleDetail> roles = new ArrayList<>();
+    private List<RoleDetail> role = new ArrayList<>();
 
     private List<PrivilegeDetail> privileges = new ArrayList<>();
 }

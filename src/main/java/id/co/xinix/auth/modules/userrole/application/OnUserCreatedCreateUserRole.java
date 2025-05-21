@@ -1,7 +1,7 @@
 package id.co.xinix.auth.modules.userrole.application;
 
 import id.co.xinix.auth.modules.role.domain.Role;
-import id.co.xinix.auth.modules.user.application.event.UserRegisteredEvent;
+import id.co.xinix.auth.modules.user.domain.UserRegisteredEvent;
 import id.co.xinix.auth.modules.userrole.domain.UserRole;
 import id.co.xinix.auth.modules.userrole.domain.UserRoleRepository;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Component
 @AllArgsConstructor
 @Transactional
-public class CreateUserRole {
+public class OnUserCreatedCreateUserRole {
 
     private final UserRoleRepository userRoleRepository;
 

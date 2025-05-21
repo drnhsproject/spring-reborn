@@ -1,4 +1,4 @@
-package id.co.xinix.auth.modules.user.application.event;
+package id.co.xinix.auth.modules.user.domain;
 
 import id.co.xinix.auth.modules.role.domain.Role;
 import lombok.Getter;

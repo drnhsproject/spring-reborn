@@ -91,7 +91,7 @@ public class SignInUser {
                 .toList();
 
         RolePrivilegeDetail rolePrivilegeDetail = new RolePrivilegeDetail();
-        rolePrivilegeDetail.setRoles(dataUserRoleDetail);
+        rolePrivilegeDetail.setRole(dataUserRoleDetail);
         rolePrivilegeDetail.setPrivileges(dataPrivilegeDetail);
 
         SignInResult signInResult = new SignInResult();

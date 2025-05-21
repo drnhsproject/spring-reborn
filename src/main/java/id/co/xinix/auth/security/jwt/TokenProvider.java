@@ -107,17 +107,14 @@ public class TokenProvider {
     public String getRefreshToken(String token) {
         Jwt jwt = jwtDecoder.decode(token);
 
-        if (jwt.getIssuedAt() != null) {
-            throw new UnauthorizedException("refresh token invalid due to password change");
-        }
-
         Long id = Long.parseLong(jwt.getClaimAsString("id"));
+        Integer status = ((Long) jwt.getClaim("status")).intValue();
 
         UserDetail userDetail = new UserDetail(
                 id,
                 jwt.getClaimAsString("username"),
                 jwt.getClaimAsString("email"),
-                jwt.getClaim("status")
+                status
         );
 
         return generateToken(getAuthentication(token), false, userDetail);

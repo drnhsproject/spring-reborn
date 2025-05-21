@@ -1,7 +1,7 @@
 package id.co.xinix.auth.modules.roleprivilege.application;
 
 import id.co.xinix.auth.modules.privilege.domain.Privilege;
-import id.co.xinix.auth.modules.role.application.event.RoleCreatedEvent;
+import id.co.xinix.auth.modules.role.domain.RoleCreatedEvent;
 import id.co.xinix.auth.modules.roleprivilege.domain.RolePrivilege;
 import id.co.xinix.auth.modules.roleprivilege.domain.RolePrivilegeRepository;
 import lombok.AllArgsConstructor;
@@ -14,7 +14,7 @@ import java.util.List;
 @Component
 @AllArgsConstructor
 @Transactional
-public class CreateRolePrivilege {
+public class OnRoleCreatedCreateRolePrivilege {
 
     private final RolePrivilegeRepository rolePrivilegeRepository;
 
