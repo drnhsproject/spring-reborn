@@ -6,7 +6,10 @@
       "name": "id",
       "type": "Long",
       "primaryKey": true,
-      "autoIncrement": true
+      "autoIncrement": true,
+      "validations": {
+        "required": true
+      }
     },
     {
       "name": "firstName",

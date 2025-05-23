@@ -1,6 +1,6 @@
 {
-  "name": "Book",
-  "tableName": "book",
+  "name": "Product",
+  "tableName": "products",
   "fields": [
     {
       "name": "id",

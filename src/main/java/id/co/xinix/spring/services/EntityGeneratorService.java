@@ -2,11 +2,9 @@ package id.co.xinix.spring.services;
 
 import freemarker.template.TemplateException;
 import id.co.xinix.spring.Application;
-import id.co.xinix.spring.framework.Entity;
+import id.co.xinix.spring.framework.*;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
-import id.co.xinix.spring.framework.Field;
-import id.co.xinix.spring.framework.SqlTypeMapper;
 import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileWriter;
@@ -93,11 +91,14 @@ public class EntityGeneratorService {
         String useCaseCreateOutputPath = baseDir + useCasePath + "Create" + entitySchema.getName() + ".java";
         generateFile(useCaseCreateTemplate, data, useCaseCreateOutputPath);
 
+        String jdbcUrl = EnvConfigReader.getDatasourceUrl();
+        String dbType = DatabaseTypeDetector.detectDatabaseType(jdbcUrl);
+
         for (Field field : entitySchema.getFields()) {
             String snakeCaseName = formatterString.toSnakeCase(field.getName());
             field.setName(snakeCaseName);
 
-            String sqlType = SqlTypeMapper.map(field.getType(), "mysql");
+            String sqlType = SqlTypeMapper.map(field.getType(), dbType);
             field.setSqlType(sqlType);
 
             if ("id".equalsIgnoreCase(snakeCaseName) && "Long".equals(field.getType())) {
