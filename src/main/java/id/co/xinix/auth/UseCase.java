@@ -1,5 +1,6 @@
 package id.co.xinix.auth;
 
+import org.springframework.core.annotation.AliasFor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -13,4 +14,6 @@ import java.lang.annotation.Target;
 @Service
 @Validated
 public @interface UseCase {
+    @AliasFor(annotation = Service.class)
+    String value() default "";
 }
