@@ -1,10 +1,8 @@
 package id.co.xinix.auth.modules.user.infrastructure.rest;
 
-import id.co.xinix.auth.modules.user.application.dto.PagedResult;
-import id.co.xinix.auth.modules.user.application.dto.QueryFilter;
-import id.co.xinix.auth.modules.user.application.dto.UserCommand;
-import id.co.xinix.auth.modules.user.application.dto.UserRegisteredResult;
+import id.co.xinix.auth.modules.user.application.dto.*;
 import id.co.xinix.auth.modules.user.application.usecase.GetList;
+import id.co.xinix.auth.modules.user.application.usecase.GetUserDetailById;
 import id.co.xinix.auth.modules.user.application.usecase.RegisterUser;
 import id.co.xinix.auth.services.ListResponse;
 import id.co.xinix.auth.services.SingleResponse;
@@ -30,6 +28,8 @@ public class UserResource {
 
     private final GetList getList;
 
+    private final GetUserDetailById getUserDetailById;
+
     @Operation(summary = "Register User", description = "Create new user")
     @PostMapping("")
     public ResponseEntity<SingleResponse<UserRegisteredResult>> registerUser(
@@ -54,6 +54,14 @@ public class UserResource {
             results.getContent(),
             results.getTotalElements()
         );
+
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<SingleResponse<UserDetailResult>> getExampleData(@PathVariable("id") Long id) {
+        UserDetailResult result = getUserDetailById.handle(id);
+        SingleResponse<UserDetailResult> response = new SingleResponse<>("user detail retrieved", result);
 
         return ResponseEntity.ok().body(response);
     }
