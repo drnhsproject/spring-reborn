@@ -19,7 +19,6 @@ public class UserMapperImpl implements IUserMapper {
         entity.setId(dto.getId());
         entity.setUsername(dto.getUsername());
         entity.setEmail(dto.getEmail());
-        entity.setStatus(dto.getStatus());
 
         return entity;
     }
@@ -34,7 +33,6 @@ public class UserMapperImpl implements IUserMapper {
         dto.setId(entity.getId());
         dto.setUsername(entity.getUsername());
         dto.setEmail(entity.getEmail());
-        dto.setStatus(entity.getStatus());
 
         return dto;
     }
@@ -48,7 +46,6 @@ public class UserMapperImpl implements IUserMapper {
         UserDTO dto = new UserDTO();
         dto.setUsername(command.getUsername());
         dto.setEmail(command.getEmail());
-        dto.setStatus(1);
 
         return dto;
     }

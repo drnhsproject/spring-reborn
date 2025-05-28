@@ -28,7 +28,6 @@ public class User extends BaseColumnEntity {
     @Column(name = "username", nullable = false, unique = true)
     private String username;
 
-    @NotNull
     @Column(name = "password", nullable = false)
     private String password;
 

@@ -2,7 +2,10 @@ package id.co.xinix.auth.modules.user.domain.service;
 
 import id.co.xinix.auth.modules.user.application.IUserMapper;
 import id.co.xinix.auth.modules.user.application.dto.UserDTO;
+import id.co.xinix.auth.modules.user.domain.User;
 import id.co.xinix.auth.modules.user.domain.UserRepository;
+import id.co.xinix.spring.modules.example.application.dto.ExampleDTO;
+import id.co.xinix.spring.modules.example.domain.Example;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -22,6 +25,22 @@ public class UserServiceImpl implements UserService {
     public UserServiceImpl(UserRepository userRepository, IUserMapper userMapper) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+    }
+
+    @Override
+    public UserDTO update(UserDTO userDTO) {
+        User existing = userRepository.findById(userDTO.getId())
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        existing.setUsername(userDTO.getUsername());
+        existing.setEmail(userDTO.getEmail());
+
+        if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
+            existing.setPassword(userDTO.getPassword());
+        }
+
+        User saved = userRepository.save(existing);
+        return userMapper.toDTO(saved);
     }
 
     @Override
