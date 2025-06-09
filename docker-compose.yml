@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3'
 
 services:
   springapp:
@@ -17,6 +17,10 @@ services:
       - DATABASE_TYPE=${DATABASE_TYPE:-mysql}
       - SERVER_PORT=${SERVER_PORT:-8080}
       - SPRING_LIQUIBASE_ENABLED=${SPRING_LIQUIBASE_ENABLED:-true}
+    networks:
+      - sagara
 
     
-
+networks:
+  sagara:
+    external: true
