@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  springapp:
+    build: 
+      context: .
+      args:
+        - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE:-prod}
+    ports:
+      - "8080:8080"
+    container_name: spring_app
+    environment:
+      - DATASOURCE_URL=jdbc:mysql://195.35.6.227:3306/java_backend
+      - DATASOURCE_USERNAME=java_backend
+      - DATASOURCE_PASSWORD=password123
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE:-prod}
+      - DATABASE_TYPE=mysql
+      - SERVER_PORT=8080
+    
+
