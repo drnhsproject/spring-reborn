@@ -5,7 +5,16 @@ WORKDIR /app
 ARG SPRING_PROFILES_ACTIVE
 
 # Copy everything and build with Maven
-COPY . .
+# COPY . .
+
+COPY pom.xml .
+COPY mvnw .
+COPY .mvn/ .mvn/
+
+RUN ./mvnw dependency:go-offline -B
+
+COPY src ./src
+
 RUN ./mvnw clean package -DskipTests -P ${SPRING_PROFILES_ACTIVE}
 
 # -------- Runtime Stage (JRE only) --------

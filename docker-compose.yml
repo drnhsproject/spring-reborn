@@ -10,11 +10,13 @@ services:
       - "8080:8080"
     container_name: spring_app
     environment:
-      - DATASOURCE_URL=jdbc:mysql://195.35.6.227:3306/java_backend
-      - DATASOURCE_USERNAME=java_backend
-      - DATASOURCE_PASSWORD=password123
+      - DATASOURCE_URL=${DATASOURCE_URL:-jdbc:mysql://195.35.6.227:3306/java_backend}
+      - DATASOURCE_USERNAME=${DATASOURCE_USERNAME:-java_backend}
+      - DATASOURCE_PASSWORD=${DATASOURCE_PASSWORD:-password123}
       - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE:-prod}
-      - DATABASE_TYPE=mysql
-      - SERVER_PORT=8080
+      - DATABASE_TYPE=${DATABASE_TYPE:-mysql}
+      - SERVER_PORT=${SERVER_PORT:-8080}
+      - SPRING_LIQUIBASE_ENABLED=${SPRING_LIQUIBASE_ENABLED:-true}
+
     
 

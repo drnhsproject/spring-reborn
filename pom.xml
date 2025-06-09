@@ -392,9 +392,6 @@
 		</profile>
 		<profile>
 			<id>prod</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
 			<properties>
 				<!-- default Spring profiles -->
 				<spring.profiles.active>prod</spring.profiles.active>
