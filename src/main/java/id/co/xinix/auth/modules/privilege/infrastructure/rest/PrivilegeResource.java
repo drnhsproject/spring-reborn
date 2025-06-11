@@ -1,11 +1,9 @@
 package id.co.xinix.auth.modules.privilege.infrastructure.rest;
 
-import id.co.xinix.auth.modules.privilege.application.dto.PagedResult;
-import id.co.xinix.auth.modules.privilege.application.dto.PrivilegeCommand;
-import id.co.xinix.auth.modules.privilege.application.dto.PrivilegeCreatedResult;
-import id.co.xinix.auth.modules.privilege.application.dto.QueryFilter;
+import id.co.xinix.auth.modules.privilege.application.dto.*;
 import id.co.xinix.auth.modules.privilege.application.usecase.CreatePrivilege;
 import id.co.xinix.auth.modules.privilege.application.usecase.GetList;
+import id.co.xinix.auth.modules.privilege.application.usecase.GetPrivilegeDetailById;
 import id.co.xinix.auth.services.ListResponse;
 import id.co.xinix.auth.services.SingleResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,6 +27,8 @@ public class PrivilegeResource {
     private final CreatePrivilege createPrivilege;
 
     private final GetList getList;
+
+    private final GetPrivilegeDetailById getPrivilegeDetailById;
 
     @Operation(summary = "Create User", description = "Create new privilege")
     @PostMapping("")
@@ -54,6 +54,14 @@ public class PrivilegeResource {
           results.getContent(),
           results.getTotalElements()
         );
+
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<SingleResponse<PrivilegeDetailResult>> getUserDetail(@PathVariable("id") Long id) {
+        PrivilegeDetailResult result = getPrivilegeDetailById.handle(id);
+        SingleResponse<PrivilegeDetailResult> response = new SingleResponse<>("privilege detail retrieved", result);
 
         return ResponseEntity.ok().body(response);
     }
