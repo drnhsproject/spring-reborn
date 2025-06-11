@@ -1,9 +1,12 @@
 package id.co.xinix.auth.modules.privilege.infrastructure.rest;
 
 import id.co.xinix.auth.modules.privilege.application.dto.*;
+import id.co.xinix.auth.modules.privilege.application.usecase.ChangePrivilegeDetail;
 import id.co.xinix.auth.modules.privilege.application.usecase.CreatePrivilege;
 import id.co.xinix.auth.modules.privilege.application.usecase.GetList;
 import id.co.xinix.auth.modules.privilege.application.usecase.GetPrivilegeDetailById;
+import id.co.xinix.auth.modules.privilege.domain.PrivilegeRepository;
+import id.co.xinix.auth.services.IdValidationService;
 import id.co.xinix.auth.services.ListResponse;
 import id.co.xinix.auth.services.SingleResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,6 +33,12 @@ public class PrivilegeResource {
 
     private final GetPrivilegeDetailById getPrivilegeDetailById;
 
+    private final IdValidationService idValidationService;
+
+    private final PrivilegeRepository privilegeRepository;
+
+    private final ChangePrivilegeDetail changePrivilegeDetail;
+
     @Operation(summary = "Create User", description = "Create new privilege")
     @PostMapping("")
     public ResponseEntity<SingleResponse<PrivilegeCreatedResult>> createUser(
@@ -39,6 +48,18 @@ public class PrivilegeResource {
         SingleResponse<PrivilegeCreatedResult> response = new SingleResponse<>("privilege created", result);
 
         return ResponseEntity.created(new URI("/api/privileges/")).body(response);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<SingleResponse<PrivilegeUpdatedResult>> updatePrivilege(
+        @PathVariable(value = "id", required = false) final Long id,
+        @RequestBody PrivilegeCommand command
+    ) {
+        idValidationService.validateIdForUpdate(privilegeRepository, id, command.getId(), "privilege");
+        PrivilegeUpdatedResult result = changePrivilegeDetail.handle(command);
+        SingleResponse<PrivilegeUpdatedResult> response = new SingleResponse<>("privilege updated", result);
+
+        return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("")
