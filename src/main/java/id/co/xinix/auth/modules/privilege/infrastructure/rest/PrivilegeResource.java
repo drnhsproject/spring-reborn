@@ -1,10 +1,7 @@
 package id.co.xinix.auth.modules.privilege.infrastructure.rest;
 
 import id.co.xinix.auth.modules.privilege.application.dto.*;
-import id.co.xinix.auth.modules.privilege.application.usecase.ChangePrivilegeDetail;
-import id.co.xinix.auth.modules.privilege.application.usecase.CreatePrivilege;
-import id.co.xinix.auth.modules.privilege.application.usecase.GetList;
-import id.co.xinix.auth.modules.privilege.application.usecase.GetPrivilegeDetailById;
+import id.co.xinix.auth.modules.privilege.application.usecase.*;
 import id.co.xinix.auth.modules.privilege.domain.PrivilegeRepository;
 import id.co.xinix.auth.services.IdValidationService;
 import id.co.xinix.auth.services.ListResponse;
@@ -39,9 +36,11 @@ public class PrivilegeResource {
 
     private final ChangePrivilegeDetail changePrivilegeDetail;
 
-    @Operation(summary = "Create User", description = "Create new privilege")
+    private final ArchivePrivilege archivePrivilege;
+
+    @Operation(summary = "Create Privilege", description = "Create new privilege")
     @PostMapping("")
-    public ResponseEntity<SingleResponse<PrivilegeCreatedResult>> createUser(
+    public ResponseEntity<SingleResponse<PrivilegeCreatedResult>> createPrivilege(
         @Valid @RequestBody PrivilegeCommand command
     ) throws URISyntaxException {
         PrivilegeCreatedResult result = createPrivilege.handle(command);
@@ -80,10 +79,16 @@ public class PrivilegeResource {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SingleResponse<PrivilegeDetailResult>> getUserDetail(@PathVariable("id") Long id) {
+    public ResponseEntity<SingleResponse<PrivilegeDetailResult>> getPrivilegeDetail(@PathVariable("id") Long id) {
         PrivilegeDetailResult result = getPrivilegeDetailById.handle(id);
         SingleResponse<PrivilegeDetailResult> response = new SingleResponse<>("privilege detail retrieved", result);
 
         return ResponseEntity.ok().body(response);
+    }
+
+    @PutMapping("/{id}/delete")
+    public ResponseEntity<Void> softDeletePrivilege(@PathVariable("id") Long id) {
+        archivePrivilege.handle(id);
+        return ResponseEntity.noContent().build();
     }
 }
