@@ -1,26 +1,32 @@
 package id.co.xinix.auth.modules.user.application.usecase;
 
 import id.co.xinix.auth.UseCase;
-import id.co.xinix.auth.exception.NotFoundException;
 import id.co.xinix.auth.modules.user.application.dto.UserDetailResult;
-import id.co.xinix.auth.modules.user.domain.service.UserService;
+import id.co.xinix.auth.modules.user.domain.User;
+import id.co.xinix.auth.modules.user.domain.UserRepository;
+import id.co.xinix.spring.exception.NotFoundException;
 
-@UseCase("getUserDetail")
+@UseCase()
 public class GetUserDetailById {
 
-    private final UserService userService;
+    private final UserRepository userRepository;
 
-    public GetUserDetailById(UserService userService) {
-        this.userService = userService;
+    public GetUserDetailById(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     public UserDetailResult handle(Long id) {
-        return userService.findOne(id)
-            .map(exists -> new UserDetailResult(
-                exists.getId(),
-                exists.getUsername(),
-                exists.getEmail()
-            ))
+        User user = userRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("user not found"));
+
+        return mapToDto(user);
+    }
+
+    private UserDetailResult mapToDto(User user) {
+        return new UserDetailResult(
+            user.getId(),
+            user.getUsername(),
+            user.getEmail()
+        );
     }
 }

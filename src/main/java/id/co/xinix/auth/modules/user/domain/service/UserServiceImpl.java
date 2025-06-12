@@ -4,8 +4,6 @@ import id.co.xinix.auth.modules.user.application.IUserMapper;
 import id.co.xinix.auth.modules.user.application.dto.UserDTO;
 import id.co.xinix.auth.modules.user.domain.User;
 import id.co.xinix.auth.modules.user.domain.UserRepository;
-import id.co.xinix.spring.modules.example.application.dto.ExampleDTO;
-import id.co.xinix.spring.modules.example.domain.Example;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
