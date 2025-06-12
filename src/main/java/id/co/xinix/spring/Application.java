@@ -10,15 +10,18 @@ import org.springframework.shell.command.annotation.CommandScan;
 @SpringBootApplication
 @ComponentScan(basePackages = {
         "id.co.xinix.spring",
-        "id.co.xinix.auth"
+        "id.co.xinix.auth",
+        "id.co.xinix.media"
 })
 @EntityScan(basePackages = {
         "id.co.xinix.auth.modules",
-        "id.co.xinix.spring.modules"
+        "id.co.xinix.spring.modules",
+        "id.co.xinix.media.modules"
 })
 @EnableJpaRepositories(basePackages = {
         "id.co.xinix.auth.modules",
-        "id.co.xinix.spring.modules"
+        "id.co.xinix.spring.modules",
+        "id.co.xinix.media.modules"
 })
 public class Application {
     public static void main(String[] args) {

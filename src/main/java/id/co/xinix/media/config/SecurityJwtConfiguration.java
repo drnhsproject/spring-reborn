@@ -1,4 +1,4 @@
-package id.co.xinix.auth.config;
+package id.co.xinix.media.config;
 
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import com.nimbusds.jose.util.Base64;
@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
@@ -19,8 +18,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import static id.co.xinix.auth.security.SecurityUtils.JWT_ALGORITHM;
 
-@Primary
-@Configuration
+@Configuration("mediaSecurityJwtConfiguration")
 public class SecurityJwtConfiguration {
 
     private static final Logger log = LoggerFactory.getLogger(SecurityJwtConfiguration.class);
@@ -28,8 +26,7 @@ public class SecurityJwtConfiguration {
     @Value("${spring.security.authentication.jwt.base64-secret}")
     private String jwtKey;
 
-    @Primary
-    @Bean
+    @Bean(name = "mediaJwtDecoder")
     public JwtDecoder jwtDecoder(SecurityMetersService metersService) {
         NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withSecretKey(getSecretKey()).macAlgorithm(JWT_ALGORITHM).build();
         return token -> {
@@ -54,8 +51,7 @@ public class SecurityJwtConfiguration {
         };
     }
 
-    @Primary
-    @Bean
+    @Bean(name = "mediaJwtEncoder")
     public JwtEncoder jwtEncoder() {
         return new NimbusJwtEncoder(new ImmutableSecret<>(getSecretKey()));
     }
