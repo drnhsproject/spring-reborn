@@ -403,7 +403,5 @@
 				<liquibase-plugin.password>${spring.datasource.password}</liquibase-plugin.password>
 			</properties>
 		</profile>
-		
 	</profiles>
-
 </project>

@@ -36,7 +36,7 @@ spring:
         format-sql: false
         show-sql: false
   liquibase:
-    contexts: prod
+    contexts: prod, faker
   thymeleaf:
     cache: true
   security:
