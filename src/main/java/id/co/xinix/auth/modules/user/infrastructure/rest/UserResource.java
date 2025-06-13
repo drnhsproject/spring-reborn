@@ -1,10 +1,7 @@
 package id.co.xinix.auth.modules.user.infrastructure.rest;
 
 import id.co.xinix.auth.modules.user.application.dto.*;
-import id.co.xinix.auth.modules.user.application.usecase.ChangeUserDetail;
-import id.co.xinix.auth.modules.user.application.usecase.GetList;
-import id.co.xinix.auth.modules.user.application.usecase.GetUserDetailById;
-import id.co.xinix.auth.modules.user.application.usecase.RegisterUser;
+import id.co.xinix.auth.modules.user.application.usecase.*;
 import id.co.xinix.auth.modules.user.domain.UserRepository;
 import id.co.xinix.auth.services.IdValidationService;
 import id.co.xinix.auth.services.ListResponse;
@@ -38,6 +35,8 @@ public class UserResource {
     private final UserRepository userRepository;
 
     private final ChangeUserDetail changeUserDetail;
+
+    private final ArchiveUser archiveUser;
 
     @Operation(summary = "Register User", description = "Create new user")
     @PostMapping("")
@@ -86,5 +85,12 @@ public class UserResource {
         SingleResponse<UserDetailResult> response = new SingleResponse<>( "user detail retrieved", result);
 
         return ResponseEntity.ok().body(response);
+    }
+
+    @PutMapping("/{id}/delete")
+    public ResponseEntity<Void> softDeleteUser(@PathVariable("id") Long id) {
+        archiveUser.handle(id);
+        return ResponseEntity.noContent()
+            .build();
     }
 }
