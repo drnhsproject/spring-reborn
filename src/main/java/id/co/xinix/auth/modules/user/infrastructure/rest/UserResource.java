@@ -1,9 +1,12 @@
 package id.co.xinix.auth.modules.user.infrastructure.rest;
 
 import id.co.xinix.auth.modules.user.application.dto.*;
+import id.co.xinix.auth.modules.user.application.usecase.ChangeUserDetail;
 import id.co.xinix.auth.modules.user.application.usecase.GetList;
 import id.co.xinix.auth.modules.user.application.usecase.GetUserDetailById;
 import id.co.xinix.auth.modules.user.application.usecase.RegisterUser;
+import id.co.xinix.auth.modules.user.domain.UserRepository;
+import id.co.xinix.auth.services.IdValidationService;
 import id.co.xinix.auth.services.ListResponse;
 import id.co.xinix.auth.services.SingleResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,6 +33,12 @@ public class UserResource {
 
     private final GetList getList;
 
+    private final IdValidationService idValidationService;
+
+    private final UserRepository userRepository;
+
+    private final ChangeUserDetail changeUserDetail;
+
     @Operation(summary = "Register User", description = "Create new user")
     @PostMapping("")
     public ResponseEntity<SingleResponse<UserRegisteredResult>> registerUser(
@@ -39,6 +48,19 @@ public class UserResource {
         SingleResponse<UserRegisteredResult> response = new SingleResponse<>("user registered", result);
 
         return ResponseEntity.created(new URI("/api/users/")).body(response);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<SingleResponse<UserUpdatedResult>> updateUser(
+        @PathVariable(value = "id", required = false) final Long id,
+        @RequestBody UserUpdateCommand command
+    ) {
+        idValidationService.validateIdForUpdate(userRepository, id, command.getId(), "user");
+
+        UserUpdatedResult result = changeUserDetail.handle(command);
+        SingleResponse<UserUpdatedResult> response = new SingleResponse<>("user updated", result);
+
+        return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("")
