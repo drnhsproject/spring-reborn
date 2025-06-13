@@ -38,6 +38,8 @@ public class UserResource {
 
     private final ArchiveUser archiveUser;
 
+    private final RemoveUser removeUser;
+
     @Operation(summary = "Register User", description = "Create new user")
     @PostMapping("")
     public ResponseEntity<SingleResponse<UserRegisteredResult>> registerUser(
@@ -90,6 +92,13 @@ public class UserResource {
     @PutMapping("/{id}/delete")
     public ResponseEntity<Void> softDeleteUser(@PathVariable("id") Long id) {
         archiveUser.handle(id);
+        return ResponseEntity.noContent()
+            .build();
+    }
+
+    @DeleteMapping("/{id}/destroy")
+    public ResponseEntity<Void> deleteUser(@PathVariable("id") Long id) {
+        removeUser.handle(id);
         return ResponseEntity.noContent()
             .build();
     }
