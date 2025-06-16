@@ -1,0 +1,28 @@
+{
+  "name": "Sysparam",
+  "tableName": "sysparams",
+  "fields": [
+    {
+      "name": "id",
+      "type": "Long",
+      "primaryKey": true,
+      "autoIncrement": true
+    },
+    {
+      "name": "group",
+      "type": "String"
+    },
+    {
+      "name": "key",
+      "type": "String"
+    },
+    {
+      "name": "value",
+      "type": "String"
+    },
+    {
+      "name": "longValue",
+      "type": "String"
+    }
+  ]
+}
