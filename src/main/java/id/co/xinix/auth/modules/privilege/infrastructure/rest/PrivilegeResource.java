@@ -1,10 +1,7 @@
 package id.co.xinix.auth.modules.privilege.infrastructure.rest;
 
 import id.co.xinix.auth.modules.privilege.application.dto.*;
-import id.co.xinix.auth.modules.privilege.application.usecase.ChangePrivilegeDetail;
-import id.co.xinix.auth.modules.privilege.application.usecase.CreatePrivilege;
-import id.co.xinix.auth.modules.privilege.application.usecase.GetListPrivilege;
-import id.co.xinix.auth.modules.privilege.application.usecase.GetPrivilegeDetailById;
+import id.co.xinix.auth.modules.privilege.application.usecase.*;
 import id.co.xinix.auth.modules.privilege.domain.PrivilegeRepository;
 import id.co.xinix.auth.services.IdValidationService;
 import id.co.xinix.auth.services.ListResponse;
@@ -38,6 +35,8 @@ public class PrivilegeResource {
     private final GetListPrivilege getListPrivilege;
 
     private final GetPrivilegeDetailById getPrivilegeDetailById;
+
+    private final ArchivePrivilege archivePrivilege;
 
     @Operation(summary = "Create Privilege", description = "Create new privilege")
     @PostMapping("")
@@ -86,5 +85,12 @@ public class PrivilegeResource {
         SingleResponse<PrivilegeDetailResult> response = new SingleResponse<>("privilege detail retrieved", result);
 
         return ResponseEntity.ok().body(response);
+    }
+
+    @PutMapping("/{id}/delete")
+    public ResponseEntity<Void> softDeletePrivilege(@PathVariable("id") Long id) {
+        archivePrivilege.handle(id);
+        return ResponseEntity.noContent()
+            .build();
     }
 }
