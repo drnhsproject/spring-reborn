@@ -6,6 +6,7 @@ import id.co.xinix.spring.security.jwt.JwtTokenFilter;
 import id.co.xinix.spring.security.jwt.TokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -67,6 +68,11 @@ public class SecurityConfiguration {
                         authz ->
                                 // prettier-ignore
                                 authz
+                                        .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/auth/signin")).permitAll()
+                                        .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/auth/refresh")).permitAll()
+                                        .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/account/forgot-password")).permitAll()
+                                        .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/account/reset-password")).permitAll()
+                                        .requestMatchers(mvc.pattern("/api/v1/users/**")).authenticated()
                                         .requestMatchers(mvc.pattern("/api/v1/**")).authenticated()
                                         .requestMatchers(mvc.pattern("/api/admin/**")).hasAuthority(AuthoritiesConstants.ADMIN)
                                         .requestMatchers(mvc.pattern("/api/**")).authenticated()
