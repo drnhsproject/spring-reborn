@@ -51,6 +51,7 @@ public class SecurityConfiguration {
                 .securityMatcher(new OrRequestMatcher(
                         new AntPathRequestMatcher("/api/v1/**"),
                         new AntPathRequestMatcher("/api/admin/**"),
+                        new AntPathRequestMatcher("/api/sysparams/**"),
                         new AntPathRequestMatcher("/management/**")
                 ))
                 .cors(withDefaults())
@@ -69,6 +70,7 @@ public class SecurityConfiguration {
                                 // prettier-ignore
                                 authz
                                         .requestMatchers(mvc.pattern("/api/v1/**")).authenticated()
+                                        .requestMatchers(mvc.pattern("/api/sysparams/**")).authenticated()
                                         .requestMatchers(mvc.pattern("/api/admin/**")).hasAuthority(AuthoritiesConstants.ADMIN)
                                         .requestMatchers(mvc.pattern("/v3/api-docs/**")).hasAuthority(AuthoritiesConstants.ADMIN)
                                         .requestMatchers(mvc.pattern("/management/health")).permitAll()

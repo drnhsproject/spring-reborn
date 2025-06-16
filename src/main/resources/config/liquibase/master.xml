@@ -23,4 +23,5 @@
     <include file="config/liquibase/changelog/20250516161358_added_entity_RolePrivilege.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250513090615_added_entity_Example.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250513090412_added_entity_Book.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250616160521_added_entity_Sysparam.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>

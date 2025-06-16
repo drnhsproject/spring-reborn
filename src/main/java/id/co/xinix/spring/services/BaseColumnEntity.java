@@ -26,7 +26,7 @@ public abstract class BaseColumnEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Column(name = "is_active", nullable = false)
-    private Boolean isActive = false;
+    private Boolean isActive = true;
 
     @CreatedBy
     @Column(name = "created_by", updatable = false)
