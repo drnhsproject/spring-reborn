@@ -1,17 +1,23 @@
 package id.co.xinix.auth.modules.privilege.infrastructure.rest;
 
+import id.co.xinix.auth.modules.privilege.application.dto.PagedResult;
 import id.co.xinix.auth.modules.privilege.application.dto.PrivilegeCommand;
 import id.co.xinix.auth.modules.privilege.application.dto.PrivilegeCreatedResult;
 import id.co.xinix.auth.modules.privilege.application.dto.PrivilegeUpdatedResult;
 import id.co.xinix.auth.modules.privilege.application.usecase.ChangePrivilegeDetail;
 import id.co.xinix.auth.modules.privilege.application.usecase.CreatePrivilege;
+import id.co.xinix.auth.modules.privilege.application.usecase.GetListPrivilege;
 import id.co.xinix.auth.modules.privilege.domain.PrivilegeRepository;
+import id.co.xinix.auth.modules.privilege.application.dto.QueryFilter;
 import id.co.xinix.auth.services.IdValidationService;
+import id.co.xinix.auth.services.ListResponse;
 import id.co.xinix.auth.services.SingleResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +37,8 @@ public class PrivilegeResource {
     private final PrivilegeRepository privilegeRepository;
 
     private final ChangePrivilegeDetail changePrivilegeDetail;
+
+    private final GetListPrivilege getListPrivilege;
 
     @Operation(summary = "Create Privilege", description = "Create new privilege")
     @PostMapping("")
@@ -52,6 +60,23 @@ public class PrivilegeResource {
 
         PrivilegeUpdatedResult result = changePrivilegeDetail.handle(command);
         SingleResponse<PrivilegeUpdatedResult> response = new SingleResponse<>("privilege updated", result);
+
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("")
+    public ResponseEntity<ListResponse<PagedResult>> getAllPrivilege(
+        @RequestParam(value = "!search", required = false) String search,
+        @ModelAttribute QueryFilter queryFilter,
+        Pageable pageable
+    ) {
+        queryFilter.setSearch(search);
+        Page<PagedResult> results = getListPrivilege.handle(queryFilter, pageable);
+        ListResponse<PagedResult> response = new ListResponse<>(
+            "privilege retrieved",
+            results.getContent(),
+            results.getTotalElements()
+        );
 
         return ResponseEntity.ok().body(response);
     }
