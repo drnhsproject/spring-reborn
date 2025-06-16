@@ -1,9 +1,12 @@
 package id.co.xinix.auth.services;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public record ListResponse<D>(
         String message,
-        List<D> data,
-        Long count
-) {}
+        DataResponse<D> data
+) {
+    public static <D> ListResponse<D> fromPage(String message, Page<D> page) {
+        return new ListResponse<>(message, new DataResponse<>(page.getContent(), page.getTotalElements()));
+    }
+}

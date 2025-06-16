@@ -72,11 +72,7 @@ public class UserResource {
     ) {
         queryFilter.setSearch(search);
         Page<PagedResult> results = getList.handle(queryFilter, pageable);
-        ListResponse<PagedResult> response = new ListResponse<>(
-            "user retrieved",
-            results.getContent(),
-            results.getTotalElements()
-        );
+        ListResponse<PagedResult> response = ListResponse.fromPage("user retrieved", results);
 
         return ResponseEntity.ok().body(response);
     }
