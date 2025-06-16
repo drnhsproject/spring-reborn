@@ -1,12 +1,11 @@
 package id.co.xinix.spring.config;
 
+import id.co.xinix.auth.security.jwt.JwtProperties;
+import id.co.xinix.auth.security.jwt.JwtTokenFilter;
+import id.co.xinix.auth.security.jwt.TokenProvider;
 import id.co.xinix.spring.security.AuthoritiesConstants;
-import id.co.xinix.spring.security.jwt.JwtProperties;
-import id.co.xinix.spring.security.jwt.JwtTokenFilter;
-import id.co.xinix.spring.security.jwt.TokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -50,8 +49,9 @@ public class SecurityConfiguration {
     public SecurityFilterChain authFilterChain(HttpSecurity http, MvcRequestMatcher.Builder mvc) throws Exception {
         http
                 .securityMatcher(new OrRequestMatcher(
-                        new AntPathRequestMatcher("/api/auth/**"),
-                        new AntPathRequestMatcher("/api/v1/users/**")
+                        new AntPathRequestMatcher("/api/v1/**"),
+                        new AntPathRequestMatcher("/api/admin/**"),
+                        new AntPathRequestMatcher("/management/**")
                 ))
                 .cors(withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
@@ -68,14 +68,8 @@ public class SecurityConfiguration {
                         authz ->
                                 // prettier-ignore
                                 authz
-                                        .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/auth/signin")).permitAll()
-                                        .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/auth/refresh")).permitAll()
-                                        .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/account/forgot-password")).permitAll()
-                                        .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/account/reset-password")).permitAll()
-                                        .requestMatchers(mvc.pattern("/api/v1/users/**")).authenticated()
                                         .requestMatchers(mvc.pattern("/api/v1/**")).authenticated()
                                         .requestMatchers(mvc.pattern("/api/admin/**")).hasAuthority(AuthoritiesConstants.ADMIN)
-                                        .requestMatchers(mvc.pattern("/api/**")).authenticated()
                                         .requestMatchers(mvc.pattern("/v3/api-docs/**")).hasAuthority(AuthoritiesConstants.ADMIN)
                                         .requestMatchers(mvc.pattern("/management/health")).permitAll()
                                         .requestMatchers(mvc.pattern("/management/health/**")).permitAll()
