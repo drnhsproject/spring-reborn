@@ -70,11 +70,7 @@ public class PrivilegeResource {
     ) {
         queryFilter.setSearch(search);
         Page<PagedResult> results = getListPrivilege.handle(queryFilter, pageable);
-        ListResponse<PagedResult> response = new ListResponse<>(
-            "privilege retrieved",
-            results.getContent(),
-            results.getTotalElements()
-        );
+        ListResponse<PagedResult> response = ListResponse.fromPage("privilege retrieved", results);
 
         return ResponseEntity.ok().body(response);
     }
