@@ -1,11 +1,9 @@
 package id.co.xinix.auth.modules.role.infrastructure.rest;
 
-import id.co.xinix.auth.modules.role.application.dto.PagedResult;
-import id.co.xinix.auth.modules.role.application.dto.QueryFilter;
-import id.co.xinix.auth.modules.role.application.dto.RoleCommand;
-import id.co.xinix.auth.modules.role.application.dto.RoleCreatedResult;
+import id.co.xinix.auth.modules.role.application.dto.*;
 import id.co.xinix.auth.modules.role.application.usecase.CreateRole;
 import id.co.xinix.auth.modules.role.application.usecase.GetListRole;
+import id.co.xinix.auth.modules.role.application.usecase.GetRoleDetailById;
 import id.co.xinix.auth.services.ListResponse;
 import id.co.xinix.auth.services.SingleResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,6 +28,8 @@ public class RoleResource {
 
     private final GetListRole getListRole;
 
+    private final GetRoleDetailById getRoleDetailById;
+
     @Operation(summary = "Create Role", description = "Create new role")
     @PostMapping("")
     public ResponseEntity<SingleResponse<RoleCreatedResult>> createRole(
@@ -50,6 +50,14 @@ public class RoleResource {
         queryFilter.setSearch(search);
         Page<PagedResult> results = getListRole.handle(queryFilter, pageable);
         ListResponse<PagedResult> response = ListResponse.fromPage("role retrieved", results);
+
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<SingleResponse<RoleDetailResult>> getRoleDetail(@PathVariable("id") Long id) {
+        RoleDetailResult result = getRoleDetailById.handle(id);
+        SingleResponse<RoleDetailResult> response = new SingleResponse<>("role detail retrieved", result);
 
         return ResponseEntity.ok().body(response);
     }
