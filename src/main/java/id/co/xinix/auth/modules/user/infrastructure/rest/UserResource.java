@@ -19,7 +19,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("/api/users")
 @Tag(name = "User API", description = "Operation user")
 @AllArgsConstructor
 public class UserResource {
