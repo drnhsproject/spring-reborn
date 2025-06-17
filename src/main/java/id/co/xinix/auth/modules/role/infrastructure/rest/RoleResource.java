@@ -1,10 +1,7 @@
 package id.co.xinix.auth.modules.role.infrastructure.rest;
 
 import id.co.xinix.auth.modules.role.application.dto.*;
-import id.co.xinix.auth.modules.role.application.usecase.ChangeRoleDetail;
-import id.co.xinix.auth.modules.role.application.usecase.CreateRole;
-import id.co.xinix.auth.modules.role.application.usecase.GetListRole;
-import id.co.xinix.auth.modules.role.application.usecase.GetRoleDetailById;
+import id.co.xinix.auth.modules.role.application.usecase.*;
 import id.co.xinix.auth.modules.role.domain.RoleRepository;
 import id.co.xinix.auth.services.IdValidationService;
 import id.co.xinix.auth.services.ListResponse;
@@ -38,6 +35,10 @@ public class RoleResource {
     private final RoleRepository roleRepository;
 
     private final ChangeRoleDetail changeRoleDetail;
+
+    private final ArchiveRole archiveRole;
+
+    private final RemoveRole removeRole;
 
     @Operation(summary = "Create Role", description = "Create new role")
     @PostMapping("")
@@ -82,5 +83,19 @@ public class RoleResource {
         SingleResponse<RoleDetailResult> response = new SingleResponse<>("role detail retrieved", result);
 
         return ResponseEntity.ok().body(response);
+    }
+
+    @PutMapping("/{id}/delete")
+    public ResponseEntity<Void> softDeleteRole(@PathVariable("id") Long id) {
+        archiveRole.handle(id);
+        return ResponseEntity.noContent()
+            .build();
+    }
+
+    @DeleteMapping("/{id}/destroy")
+    public ResponseEntity<Void> deleteRole(@PathVariable("id") Long id) {
+        removeRole.handle(id);
+        return ResponseEntity.noContent()
+            .build();
     }
 }

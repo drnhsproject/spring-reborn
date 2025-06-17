@@ -17,5 +17,7 @@ public class RemovePrivilege {
         if (!privilegeRepository.existsById(id)) {
             throw new NotFoundException("privilege not found");
         }
+
+        privilegeRepository.deleteById(id);
     }
 }
