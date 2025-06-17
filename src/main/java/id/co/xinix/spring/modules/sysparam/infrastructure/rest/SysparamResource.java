@@ -33,6 +33,10 @@ public class SysparamResource {
 
     private final GetSysparamDetailById getSysparamDetailById;
 
+    private final ArchiveSysparam archiveSysparam;
+
+    private final RemoveSysparam removeSysparam;
+
     @Operation(summary = "Create Sysparams", description = "Create new sysparams")
     @PostMapping("")
     public ResponseEntity<SingleResponse<SysparamCreatedResult>> createSysparam(
@@ -64,5 +68,18 @@ public class SysparamResource {
         SingleResponse<SysparamDetailResult> response = new SingleResponse<>("sysparam detail retrieved", result);
 
         return ResponseEntity.ok().body(response);
+    }
+
+    @PutMapping("/{id}/delete")
+    public ResponseEntity<Void> softDeleteSysparam(@PathVariable("id") Long id) {
+        archiveSysparam.handle(id);
+        return ResponseEntity.noContent()
+            .build();
+    }
+
+    @DeleteMapping("/{id}/destroy")
+    public ResponseEntity<Void> deleteSysparam(@PathVariable("id") Long id) {
+        removeSysparam.handle(id);
+        return ResponseEntity.noContent().build();
     }
 }
