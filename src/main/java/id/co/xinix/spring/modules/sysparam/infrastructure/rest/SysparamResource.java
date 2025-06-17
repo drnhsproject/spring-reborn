@@ -2,6 +2,8 @@ package id.co.xinix.spring.modules.sysparam.infrastructure.rest;
 
 import id.co.xinix.spring.modules.sysparam.application.dto.*;
 import id.co.xinix.spring.modules.sysparam.application.usecase.*;
+import id.co.xinix.spring.modules.sysparam.domain.SysparamRepository;
+import id.co.xinix.spring.services.IdValidationService;
 import id.co.xinix.spring.services.ListResponse;
 import id.co.xinix.spring.services.SingleResponse;
 
@@ -37,6 +39,12 @@ public class SysparamResource {
 
     private final RemoveSysparam removeSysparam;
 
+    private final IdValidationService idValidationService;
+
+    private final SysparamRepository sysparamRepository;
+
+    private final ChangeSysparamDetail changeSysparamDetail;
+
     @Operation(summary = "Create Sysparams", description = "Create new sysparams")
     @PostMapping("")
     public ResponseEntity<SingleResponse<SysparamCreatedResult>> createSysparam(
@@ -47,6 +55,19 @@ public class SysparamResource {
         SingleResponse<SysparamCreatedResult> response = new SingleResponse<>("sysparam created", result);
 
         return ResponseEntity.created(new URI("/api/sysparams/")).body(response);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<SingleResponse<SysparamUpdatedResult>> updateSysparam(
+        @PathVariable(value = "id", required = false) final Long id,
+        @RequestBody SysparamCommand command
+    ) {
+        idValidationService.validateIdForUpdate(sysparamRepository, id, command.getId(), "sysparam");
+
+        SysparamUpdatedResult result = changeSysparamDetail.handle(command);
+        SingleResponse<SysparamUpdatedResult> response = new SingleResponse<>("sysparam updated", result);
+
+        return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("")
