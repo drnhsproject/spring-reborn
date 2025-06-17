@@ -7,11 +7,13 @@ import id.co.xinix.auth.services.IdValidationService;
 import id.co.xinix.auth.services.ListResponse;
 import id.co.xinix.auth.services.SingleResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,9 +21,11 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 @RestController
-@RequestMapping("/api/v1/privileges")
+@RequestMapping("/api/privileges")
 @Tag(name = "Privilege API", description = "Operation privilege")
 @AllArgsConstructor
+@RepositoryRestResource(exported = false)
+@SecurityRequirement(name = "bearerAuth")
 public class PrivilegeResource {
 
     private final CreatePrivilege createPrivilege;

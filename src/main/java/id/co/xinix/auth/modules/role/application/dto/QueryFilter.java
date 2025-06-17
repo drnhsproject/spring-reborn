@@ -1,4 +1,4 @@
-package id.co.xinix.auth.modules.privilege.application.dto;
+package id.co.xinix.auth.modules.role.application.dto;
 
 import jakarta.persistence.Query;
 import lombok.AllArgsConstructor;
@@ -20,7 +20,7 @@ public class QueryFilter {
         StringJoiner whereClause = new StringJoiner("", " WHERE is_active is true", "");
 
         if (search != null && !search.isEmpty()) {
-            whereClause.add(" AND (module LIKE :search OR submodule LIKE :search OR ordering LIKE :search OR action LIKE :search OR method LIKE :search OR uri LIKE :search)");
+            whereClause.add(" AND (code LIKE :search OR name LIKE :search)");
         }
 
         if (status != null) {
