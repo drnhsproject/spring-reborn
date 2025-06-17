@@ -31,6 +31,8 @@ public class SysparamResource {
 
     private final GetListSysparam getListSysparam;
 
+    private final GetSysparamDetailById getSysparamDetailById;
+
     @Operation(summary = "Create Sysparams", description = "Create new sysparams")
     @PostMapping("")
     public ResponseEntity<SingleResponse<SysparamCreatedResult>> createSysparam(
@@ -52,6 +54,14 @@ public class SysparamResource {
         queryFilter.setSearch(search);
         Page<PagedResult> results = getListSysparam.handle(queryFilter, pageable);
         ListResponse<PagedResult> response = ListResponse.fromPage("sysparam retrieved", results);
+
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<SingleResponse<SysparamDetailResult>> getSysparamDetail(@PathVariable("id") Long id) {
+        SysparamDetailResult result = getSysparamDetailById.handle(id);
+        SingleResponse<SysparamDetailResult> response = new SingleResponse<>("sysparam detail retrieved", result);
 
         return ResponseEntity.ok().body(response);
     }
