@@ -1,9 +1,12 @@
 package id.co.xinix.auth.modules.role.infrastructure.rest;
 
 import id.co.xinix.auth.modules.role.application.dto.*;
+import id.co.xinix.auth.modules.role.application.usecase.ChangeRoleDetail;
 import id.co.xinix.auth.modules.role.application.usecase.CreateRole;
 import id.co.xinix.auth.modules.role.application.usecase.GetListRole;
 import id.co.xinix.auth.modules.role.application.usecase.GetRoleDetailById;
+import id.co.xinix.auth.modules.role.domain.RoleRepository;
+import id.co.xinix.auth.services.IdValidationService;
 import id.co.xinix.auth.services.ListResponse;
 import id.co.xinix.auth.services.SingleResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,6 +33,12 @@ public class RoleResource {
 
     private final GetRoleDetailById getRoleDetailById;
 
+    private final IdValidationService idValidationService;
+
+    private final RoleRepository roleRepository;
+
+    private final ChangeRoleDetail changeRoleDetail;
+
     @Operation(summary = "Create Role", description = "Create new role")
     @PostMapping("")
     public ResponseEntity<SingleResponse<RoleCreatedResult>> createRole(
@@ -39,6 +48,19 @@ public class RoleResource {
         SingleResponse<RoleCreatedResult> response = new SingleResponse<>("role created", result);
 
         return ResponseEntity.created(new URI("/api/roles/")).body(response);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<SingleResponse<RoleUpdatedResult>> updateRole(
+        @PathVariable(value = "id", required = false) final Long id,
+        @RequestBody RoleCommand command
+    ) {
+        idValidationService.validateIdForUpdate(roleRepository, id, command.getId(), "role");
+
+        RoleUpdatedResult result = changeRoleDetail.handle(id, command);
+        SingleResponse<RoleUpdatedResult> response = new SingleResponse<>("role updated", result);
+
+        return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("")
