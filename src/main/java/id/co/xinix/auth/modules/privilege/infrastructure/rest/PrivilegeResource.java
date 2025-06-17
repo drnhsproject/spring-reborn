@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +23,7 @@ import java.net.URISyntaxException;
 @RequestMapping("/api/v1/privileges")
 @Tag(name = "Privilege API", description = "Operation privilege")
 @AllArgsConstructor
+@RepositoryRestResource(exported = false)
 public class PrivilegeResource {
 
     private final CreatePrivilege createPrivilege;
