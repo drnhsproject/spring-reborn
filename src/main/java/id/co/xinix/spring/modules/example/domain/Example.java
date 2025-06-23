@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 @Entity
 @Table(name = "example")
 @Getter
@@ -26,5 +29,29 @@ public class Example extends BaseColumnEntity {
 
     private String name;
 
+    private String nik;
+
+    private String hobbies;
+
+    private Integer citizen;
+
+    private String phone;
+
     private Integer age;
+
+    private String taxpayerNumber;
+
+    private LocalDate dob;
+
+    private Boolean marriedStatus;
+
+    private String gender;
+
+    private String checkbox;
+
+    private String inputDateYear;
+
+    private LocalTime inputTime;
+
+    private String address;
 }

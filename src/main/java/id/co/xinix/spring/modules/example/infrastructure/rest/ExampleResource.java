@@ -22,7 +22,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 @RestController
-@RequestMapping("/api/v1/examples")
+@RequestMapping("/api/examples")
 @Tag(name = "Example API", description = "Operation example")
 @RequiredArgsConstructor
 public class ExampleResource {
