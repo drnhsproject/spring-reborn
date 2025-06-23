@@ -16,8 +16,44 @@
             <column name="name" type="varchar(255)" >
                 <constraints nullable="false"/>
             </column>
+            <column name="nik" type="varchar(255)" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="hobbies" type="varchar(255)" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="citizen" type="integer" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone" type="varchar(255)" >
+                <constraints nullable="false"/>
+            </column>
             <column name="age" type="integer" >
                 <constraints/>
+            </column>
+            <column name="taxpayer_number" type="varchar(255)" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="dob" type="date" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="married_status" type="boolean" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="gender" type="varchar(255)" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="checkbox" type="varchar(255)" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="input_date_year" type="varchar(255)" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="input_time" type="time" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="address" type="text" >
+                <constraints nullable="false"/>
             </column>
             <column name="is_active" type="boolean">
                 <constraints nullable="true" />
