@@ -6,7 +6,7 @@
         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
     <changeSet id="20250513090615-1" author="generator-spring">
-        <createTable tableName="example">
+        <createTable tableName="examples">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
@@ -53,6 +53,18 @@
                 <constraints nullable="false"/>
             </column>
             <column name="address" type="text" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="profile_picture" type="text" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="multiple_image" type="text" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="supporting_document" type="text" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="multiple_file" type="text" >
                 <constraints nullable="false"/>
             </column>
             <column name="is_active" type="boolean">

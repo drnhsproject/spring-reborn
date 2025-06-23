@@ -1,5 +1,6 @@
 package id.co.xinix.spring.modules.example.application.dto;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -71,4 +72,12 @@ public class ExampleCommand {
     @NotNull(message = "cannot be null")
     @NotBlank(message = "must not be blank")
     private String address;
+
+    private String profile_picture;
+
+    private String multiple_image;
+
+    private String supporting_document;
+
+    private String multiple_file;
 }

@@ -54,7 +54,7 @@ public class CreateExample {
 
     private String joinHobbies(ExampleCommand command) {
         return command.getHobbies().stream()
-            .map(ExampleHobbiesDTO::value) // pakai .value() karena itu nama field-nya
+            .map(ExampleHobbiesDTO::value)
             .collect(Collectors.joining(","));
     }
 

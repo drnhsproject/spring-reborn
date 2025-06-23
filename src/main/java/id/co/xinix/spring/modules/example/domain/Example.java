@@ -39,19 +39,35 @@ public class Example extends BaseColumnEntity {
 
     private Integer age;
 
+    @Column(name = "taxpayer_number")
     private String taxpayerNumber;
 
     private LocalDate dob;
 
+    @Column(name = "married_status")
     private Boolean marriedStatus;
 
     private String gender;
 
     private String checkbox;
 
+    @Column(name = "input_date_year")
     private String inputDateYear;
 
+    @Column(name = "input_time")
     private LocalTime inputTime;
 
     private String address;
+
+    @Column(name = "profile_picture")
+    private String profilePicture;
+
+    @Column(name = "multiple_image")
+    private String multipleImage;
+
+    @Column(name = "supporting_document")
+    private String supportingDocument;
+
+    @Column(name = "multiple_file")
+    private String multipleFile;
 }
