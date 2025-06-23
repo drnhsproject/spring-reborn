@@ -5,5 +5,5 @@ public record PagedResult(
    String group,
    String key,
    String value,
-   String longValue
+   String long_value
 ) {}
