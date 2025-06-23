@@ -17,7 +17,7 @@ public class CreateSysparam {
         sysparam.setGroup(command.getGroup());
         sysparam.setKey(command.getKey());
         sysparam.setValue(command.getValue());
-        sysparam.setLongValue(command.getLongValue());
+        sysparam.setLongValue(command.getLong_value());
 
         Sysparam savedSysparam = sysparamRepository.save(sysparam);
 
