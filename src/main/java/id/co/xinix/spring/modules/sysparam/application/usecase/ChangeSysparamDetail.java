@@ -30,7 +30,7 @@ public class ChangeSysparamDetail {
         sysparam.setGroup(command.getGroup());
         sysparam.setKey(command.getKey());
         sysparam.setValue(command.getValue());
-        sysparam.setLongValue(command.getLongValue());
+        sysparam.setLongValue(command.getLong_value());
     }
 
     private SysparamUpdatedResult mapToUpdatedResult(Sysparam sysparam) {

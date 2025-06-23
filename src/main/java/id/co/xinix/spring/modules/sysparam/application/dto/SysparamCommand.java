@@ -14,6 +14,6 @@ public class SysparamCommand {
     private String group;
     private String key;
     private String value;
-    private String longValue;
+    private String long_value;
 
 }

@@ -5,5 +5,5 @@ public record SysparamDetailResult(
    String group,
    String key,
    String value,
-   String longValue
+   String long_value
 ) {}
