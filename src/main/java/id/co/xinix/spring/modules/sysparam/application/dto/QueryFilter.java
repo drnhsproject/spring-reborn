@@ -20,7 +20,7 @@ public class QueryFilter {
         StringJoiner whereClause = new StringJoiner("", " WHERE is_active is true", "");
 
         if (search != null && !search.isEmpty()) {
-            whereClause.add(" AND (\"group\" LIKE :search OR \"key\" LIKE :search OR value LIKE :search OR long_value LIKE :search)");
+            whereClause.add(" AND (`group` LIKE :search OR `key` LIKE :search OR `value` LIKE :search OR long_value LIKE :search)");
         }
 
         if (status != null) {
