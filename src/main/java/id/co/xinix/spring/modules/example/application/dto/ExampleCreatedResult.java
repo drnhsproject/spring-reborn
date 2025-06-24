@@ -18,5 +18,9 @@ public record ExampleCreatedResult(
     String checkbox,
     String inputDateYear,
     LocalTime inputDate,
-    String address
+    String address,
+    String ProfilePicture,
+    String MultipleImage,
+    String SupportingDocument,
+    String MultipleFile
 ) {}

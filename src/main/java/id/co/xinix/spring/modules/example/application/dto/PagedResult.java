@@ -4,6 +4,7 @@ public record PagedResult(
         Long id,
         String code,
         String name,
+        String nik,
         Integer age
 ) {
 }

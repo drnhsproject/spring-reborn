@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
-@Table(name = "example")
+@Table(name = "examples")
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)

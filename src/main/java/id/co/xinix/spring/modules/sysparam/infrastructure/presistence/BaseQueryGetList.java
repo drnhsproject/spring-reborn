@@ -22,9 +22,9 @@ public class BaseQueryGetList {
         String baseSql = """
                 SELECT
                     id,
-                    `group`,
-                    `key`,
-                    `value`,
+                    "group",
+                    "key",
+                    "value",
                     long_value
                 FROM
                     sysparams

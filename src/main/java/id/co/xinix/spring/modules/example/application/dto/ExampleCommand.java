@@ -1,5 +1,6 @@
 package id.co.xinix.spring.modules.example.application.dto;
 
+import id.co.xinix.media.modules.MediaDataResult;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -32,7 +33,7 @@ public class ExampleCommand {
 
     @NotNull(message = "cannot be null")
     @Size(min = 1, message = "must not be empty")
-    private List<ExampleHobbiesDTO> hobbies;
+    private List<String> hobbies;
 
     @Min(value = 0, message = "must be positive")
     private Integer citizen;
@@ -73,11 +74,11 @@ public class ExampleCommand {
     @NotBlank(message = "must not be blank")
     private String address;
 
-    private String profile_picture;
+    private MediaDataResult profile_picture;
 
-    private String multiple_image;
+    private List<MediaDataResult> multiple_image;
 
-    private String supporting_document;
+    private MediaDataResult supporting_document;
 
-    private String multiple_file;
+    private List<MediaDataResult> multiple_file;
 }
