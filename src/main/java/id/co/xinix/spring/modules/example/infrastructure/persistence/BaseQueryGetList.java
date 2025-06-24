@@ -27,7 +27,7 @@ public class BaseQueryGetList {
                         name,
                         age
                     FROM
-                        example
+                        examples
                 """;
 
         String whereClause = queryFilter.buildWhereClause();
@@ -49,7 +49,7 @@ public class BaseQueryGetList {
                     SELECT
                         COUNT(1)
                     FROM
-                        example
+                        examples
                 """;
 
         String whereClause = queryFilter.buildWhereClause();
