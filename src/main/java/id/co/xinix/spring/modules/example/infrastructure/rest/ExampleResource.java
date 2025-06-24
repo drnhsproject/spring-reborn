@@ -8,6 +8,7 @@ import id.co.xinix.spring.services.IdValidationService;
 import id.co.xinix.spring.services.ListResponse;
 import id.co.xinix.spring.services.SingleResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ import java.net.URISyntaxException;
 @RestController
 @RequestMapping("/api/examples")
 @Tag(name = "Example API", description = "Operation example")
+@SecurityRequirement(name = "bearerAuth")
 @RequiredArgsConstructor
 public class ExampleResource {
 

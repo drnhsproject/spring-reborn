@@ -1,5 +1,6 @@
 package id.co.xinix.spring.modules.sysparam.application.dto;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,7 +10,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class SysparamCommand {
-
     private Long id;
     private String group;
     private String key;

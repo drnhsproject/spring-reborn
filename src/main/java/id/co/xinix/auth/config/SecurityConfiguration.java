@@ -57,7 +57,11 @@ public class SecurityConfiguration {
         http
                 .securityMatcher(new OrRequestMatcher(
                         new AntPathRequestMatcher("/api/auth/**"),
-                        new AntPathRequestMatcher("/api/v1/users/**")
+                        new AntPathRequestMatcher("/api/v1/users/**"),
+                        new AntPathRequestMatcher("/api/auth/signin"),
+                        new AntPathRequestMatcher("/api/auth/refresh"),
+                        new AntPathRequestMatcher("/api/account/forgot-password"),
+                        new AntPathRequestMatcher("/api/account/reset-password")
                 ))
             .cors(withDefaults())
             .csrf(AbstractHttpConfigurer::disable)
@@ -79,8 +83,6 @@ public class SecurityConfiguration {
                         .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/account/forgot-password")).permitAll()
                         .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/account/reset-password")).permitAll()
                         .requestMatchers(mvc.pattern("/api/v1/users/**")).authenticated()
-                        .requestMatchers(mvc.pattern("/api/admin/**")).hasAuthority(AuthoritiesConstants.ADMIN)
-                        .requestMatchers(mvc.pattern("/api/**")).authenticated()
                         .requestMatchers(mvc.pattern("/v3/api-docs/**")).hasAuthority(AuthoritiesConstants.ADMIN)
                         .requestMatchers(mvc.pattern("/management/health")).permitAll()
                         .requestMatchers(mvc.pattern("/management/health/**")).permitAll()

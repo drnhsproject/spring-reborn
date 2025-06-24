@@ -5,6 +5,9 @@ import id.co.xinix.spring.modules.book.application.usecase.*;
 import id.co.xinix.spring.services.ListResponse;
 import id.co.xinix.spring.services.SingleResponse;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
@@ -19,11 +22,14 @@ import java.net.URISyntaxException;
 
 @RestController
 @RequestMapping("/api/v1/books")
+@Tag(name = "Book API", description = "Operation book")
+@SecurityRequirement(name = "bearerAuth")
 @RequiredArgsConstructor
 public class BookResource {
 
     private final CreateBook create;
 
+    @Operation(summary = "Create Book", description = "create new book")
     @PostMapping("")
     public ResponseEntity<SingleResponse<BookCreatedResult>> createBook(
         @Valid @RequestBody BookCommand command

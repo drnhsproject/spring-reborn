@@ -7,6 +7,7 @@ import id.co.xinix.auth.services.IdValidationService;
 import id.co.xinix.auth.services.ListResponse;
 import id.co.xinix.auth.services.SingleResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -21,6 +22,7 @@ import java.net.URISyntaxException;
 @RestController
 @RequestMapping("/api/users")
 @Tag(name = "User API", description = "Operation user")
+@SecurityRequirement(name = "bearerAuth")
 @AllArgsConstructor
 public class UserResource {
 
