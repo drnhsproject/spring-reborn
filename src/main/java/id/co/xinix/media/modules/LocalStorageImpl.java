@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 
 @Service
 @Qualifier("localStorage")
@@ -21,28 +22,35 @@ public class LocalStorageImpl implements FileStorage{
     private final Path root = Paths.get("uploads");
 
     @Override
-    public MediaDataResult upload(String bucket, String path, MultipartFile file) {
+    public List<MediaDataResult> upload(String bucket, String path, List<MultipartFile> files) {
+        return files.stream()
+            .map(file -> handleSingle(bucket, path, file))
+            .toList();
+    }
+
+    private MediaDataResult handleSingle(String bucket, String path, MultipartFile file) {
         try {
             String randomId = NanoIdUtils.randomNanoId();
             String originalFilename = file.getOriginalFilename();
             assert originalFilename != null;
-            String safeOriginalFilename = originalFilename
-                    .trim()
-                    .replaceAll("\\s+", "_")
-                    .replaceAll("[^a-zA-Z0-9._-]", "");
 
-            String filename = randomId+ "_" + safeOriginalFilename;
+            String safeOriginalFilename = originalFilename
+                .trim()
+                .replaceAll("\\s+", "_")
+                .replaceAll("[^a-zA-Z0-9._-]", "");
+
+            String filename = randomId + "_" + safeOriginalFilename;
             Path targetPath = root.resolve(Paths.get(bucket, path, filename)).normalize();
 
             Files.createDirectories(targetPath.getParent());
             Files.copy(file.getInputStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
 
             return new MediaDataResult(
-                    bucket,
-                    path,
-                    file.getContentType(),
-                    filename,
-                    originalFilename
+                bucket,
+                path,
+                file.getContentType(),
+                filename,
+                originalFilename
             );
         } catch (IOException e) {
             throw new RuntimeException("Failed to store file", e);
