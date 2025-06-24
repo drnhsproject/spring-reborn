@@ -21,7 +21,7 @@ public class CreatePrivilege {
         privilege.setUri(command.getUri());
         privilege.setMethod(command.getMethod());
         privilege.setModule(command.getModule());
-        privilege.setSubmodule(command.getSubModule());
+        privilege.setSubmodule(command.getSubmodule());
         privilege.setAction(command.getAction());
         privilege.setMethod(command.getMethod());
         privilege.setOrdering(command.getOrdering());

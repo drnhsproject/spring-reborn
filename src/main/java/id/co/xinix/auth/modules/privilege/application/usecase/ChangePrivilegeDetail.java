@@ -30,7 +30,7 @@ public class ChangePrivilegeDetail {
 
     private void updatedPrivilegeFromCommand(Privilege privilege, PrivilegeCommand command) {
         privilege.setModule(command.getModule());
-        privilege.setSubmodule(command.getModule());
+        privilege.setSubmodule(command.getSubmodule());
         privilege.setOrdering(command.getOrdering());
         privilege.setAction(command.getAction());
         privilege.setMethod(command.getMethod());

@@ -11,7 +11,7 @@ public class PrivilegeCommand {
     private Long id;
     private String uri;
     private String module;
-    private String subModule;
+    private String submodule;
     private String action;
     private String method;
     private String ordering;

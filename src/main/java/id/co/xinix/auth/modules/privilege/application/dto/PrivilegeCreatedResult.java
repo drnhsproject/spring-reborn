@@ -4,7 +4,7 @@ public record PrivilegeCreatedResult(
         Long id,
         String uri,
         String module,
-        String subModule,
+        String submodule,
         String action,
         String method,
         String ordering
