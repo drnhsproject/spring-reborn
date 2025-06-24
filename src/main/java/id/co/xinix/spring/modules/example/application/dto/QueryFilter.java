@@ -17,10 +17,10 @@ public class QueryFilter {
     private Integer status;
 
     public String buildWhereClause() {
-        StringJoiner whereClause = new StringJoiner("", " WHERE is_active is false", "");
+        StringJoiner whereClause = new StringJoiner("", " WHERE is_active is true", "");
 
         if (search != null && !search.isEmpty()) {
-            whereClause.add(" AND (name LIKE :search OR code LIKE :search)");
+            whereClause.add(" AND (name LIKE :search OR nik LIKE :search OR code LIKE :search)");
         }
 
         if (status != null) {

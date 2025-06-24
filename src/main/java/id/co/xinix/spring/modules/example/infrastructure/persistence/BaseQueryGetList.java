@@ -25,6 +25,7 @@ public class BaseQueryGetList {
                         id,
                         code,
                         name,
+                        nik,
                         age
                     FROM
                         examples
