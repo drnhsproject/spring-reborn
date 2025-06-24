@@ -1,9 +1,10 @@
 package id.co.xinix.spring.modules.example.application.usecase;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import id.co.xinix.spring.UseCase;
 import id.co.xinix.spring.modules.example.application.dto.ExampleCommand;
 import id.co.xinix.spring.modules.example.application.dto.ExampleCreatedResult;
-import id.co.xinix.spring.modules.example.application.dto.ExampleHobbiesDTO;
 import id.co.xinix.spring.modules.example.domain.Example;
 import id.co.xinix.spring.modules.example.domain.ExampleRepository;
 import id.co.xinix.spring.services.GenerateRandomCode;
@@ -17,13 +18,11 @@ public class CreateExample {
 
     private final ExampleRepository exampleRepository;
 
+    private final ObjectMapper objectMapper;
+
     public ExampleCreatedResult handle(ExampleCommand command) {
         Example example = buildExampleFromCommand(command);
         Example savedExample = exampleRepository.save(example);
-
-        if (savedExample == null) {
-            throw new IllegalStateException("failed to save example");
-        }
 
         return buildResultFromExample(savedExample);
     }
@@ -45,6 +44,10 @@ public class CreateExample {
         example.setInputDateYear(command.getInput_date_year());
         example.setInputTime(command.getInput_time());
         example.setAddress(command.getAddress());
+        example.setProfilePicture(stringify(command.getProfile_picture()));
+        example.setMultipleImage(stringify(command.getMultiple_image()));
+        example.setSupportingDocument(stringify(command.getSupporting_document()));
+        example.setMultipleFile(stringify(command.getMultiple_file()));
         return example;
     }
 
@@ -54,7 +57,7 @@ public class CreateExample {
 
     private String joinHobbies(ExampleCommand command) {
         return command.getHobbies().stream()
-            .map(ExampleHobbiesDTO::value)
+            .map(String::valueOf)
             .collect(Collectors.joining(","));
     }
 
@@ -62,6 +65,14 @@ public class CreateExample {
         return command.getCheckbox().stream()
             .map(String::valueOf)
             .collect(Collectors.joining(","));
+    }
+
+    private String stringify(Object value) {
+        try {
+            return objectMapper.writeValueAsString(value);
+        } catch (JsonProcessingException e) {
+            throw new IllegalStateException("Failed to stringify object: " + value, e);
+        }
     }
 
     private ExampleCreatedResult buildResultFromExample(Example example) {
@@ -80,7 +91,11 @@ public class CreateExample {
             example.getCheckbox(),
             example.getInputDateYear(),
             example.getInputTime(),
-            example.getAddress()
+            example.getAddress(),
+            example.getProfilePicture(),
+            example.getMultipleImage(),
+            example.getSupportingDocument(),
+            example.getMultipleFile()
         );
     }
 }
