@@ -26,7 +26,7 @@ public class ChangeRoleDetail {
             .orElseThrow(() -> new NotFoundException("role not found"));
 
         role.setName(command.getName().toUpperCase());
-        role.setCode(command.getCode());
+        role.setCode(role.getCode());
         Role updatedRole = roleRepository.save(role);
 
         rolePrivilegeRepository.deleteByRoleCode(updatedRole.getCode());

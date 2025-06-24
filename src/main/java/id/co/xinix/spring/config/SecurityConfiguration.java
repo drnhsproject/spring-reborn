@@ -1,11 +1,16 @@
 package id.co.xinix.spring.config;
 
+import id.co.xinix.auth.config.UserDetailServiceImpl;
 import id.co.xinix.auth.security.jwt.JwtProperties;
 import id.co.xinix.auth.security.jwt.JwtTokenFilter;
 import id.co.xinix.auth.security.jwt.TokenProvider;
 import id.co.xinix.spring.security.AuthoritiesConstants;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -29,79 +34,80 @@ import java.util.List;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
-@Configuration("coreSecurityConfiguration")
-@EnableMethodSecurity(securedEnabled = true)
+@Configuration
+@EnableMethodSecurity
+@AllArgsConstructor
 public class SecurityConfiguration {
 
-    private final JwtProperties jwtProperties;
-
     private final TokenProvider tokenProvider;
+    private final JwtProperties jwtProperties;
+    private final UserDetailServiceImpl userDetailService;
 
-    public SecurityConfiguration(
-            JwtProperties jwtProperties,
-            TokenProvider tokenProvider
-    ) {
-        this.jwtProperties = jwtProperties;
-        this.tokenProvider = tokenProvider;
-    }
-
-    @Bean(name = "coreFilterChain")
-    public SecurityFilterChain authFilterChain(HttpSecurity http, MvcRequestMatcher.Builder mvc) throws Exception {
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, MvcRequestMatcher.Builder mvc) throws Exception {
         http
                 .securityMatcher(new OrRequestMatcher(
-                        new AntPathRequestMatcher("/api/v1/**"),
-                        new AntPathRequestMatcher("/api/admin/**"),
-                        new AntPathRequestMatcher("/api/sysparams/**"),
+                        new AntPathRequestMatcher("/api/**"),
                         new AntPathRequestMatcher("/management/**")
                 ))
                 .cors(withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
-                .headers(
-                        headers ->
-                                headers
-                                        .contentSecurityPolicy(csp -> csp.policyDirectives(jwtProperties.getContentSecurityPolicy()))
-                                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
-                                        .referrerPolicy(
-                                                referrer -> referrer.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
-                                        )
+                .headers(headers -> headers
+                        .contentSecurityPolicy(csp -> csp.policyDirectives(jwtProperties.getContentSecurityPolicy()))
+                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
+                        .referrerPolicy(ref -> ref.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN))
                 )
-                .authorizeHttpRequests(
-                        authz ->
-                                // prettier-ignore
-                                authz
-                                        .requestMatchers(mvc.pattern("/api/v1/**")).authenticated()
-                                        .requestMatchers(mvc.pattern("/api/sysparams/**")).authenticated()
-                                        .requestMatchers(mvc.pattern("/api/admin/**")).hasAuthority(AuthoritiesConstants.ADMIN)
-                                        .requestMatchers(mvc.pattern("/v3/api-docs/**")).hasAuthority(AuthoritiesConstants.ADMIN)
-                                        .requestMatchers(mvc.pattern("/management/health")).permitAll()
-                                        .requestMatchers(mvc.pattern("/management/health/**")).permitAll()
-                                        .requestMatchers(mvc.pattern("/management/info")).permitAll()
-                                        .requestMatchers(mvc.pattern("/management/prometheus")).permitAll()
-                                        .requestMatchers(mvc.pattern("/management/**")).hasAuthority(AuthoritiesConstants.ADMIN)
+                .authorizeHttpRequests(authz -> authz
+                        // Public endpoints
+                        .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/auth/signin")).permitAll()
+                        .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/auth/refresh")).permitAll()
+                        .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/account/forgot-password")).permitAll()
+                        .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/account/reset-password")).permitAll()
+                        .requestMatchers(mvc.pattern("/management/health/**")).permitAll()
+                        .requestMatchers(mvc.pattern("/management/info")).permitAll()
+                        .requestMatchers(mvc.pattern("/management/prometheus")).permitAll()
+
+                        // Admin-only
+                        .requestMatchers(mvc.pattern("/api/admin/**")).hasAuthority(AuthoritiesConstants.ADMIN)
+                        .requestMatchers(mvc.pattern("/v3/api-docs/**")).hasAuthority(AuthoritiesConstants.ADMIN)
+                        .requestMatchers(mvc.pattern("/management/**")).hasAuthority(AuthoritiesConstants.ADMIN)
+
+                        // Everything else under /api/** requires authentication
+                        .requestMatchers(mvc.pattern("/api/**")).authenticated()
                 )
-                .addFilterBefore(new JwtTokenFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtTokenFilter(tokenProvider),
+                        UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .exceptionHandling(
-                        exceptions ->
-                                exceptions
-                                        .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
-                                        .accessDeniedHandler(new BearerTokenAccessDeniedHandler())
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
+                        .accessDeniedHandler(new BearerTokenAccessDeniedHandler())
                 )
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())));
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
+                );
+
+
         return http.build();
     }
 
-    @Bean(name = "corePasswordEncoder")
+    @Bean()
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean(name = "coreMvcMatcher")
+    @Bean()
     MvcRequestMatcher.Builder mvc(HandlerMappingIntrospector introspector) {
         return new MvcRequestMatcher.Builder(introspector);
     }
 
-    @Bean(name = "coreJwtConverter")
+    @Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        authenticationManagerBuilder.userDetailsService(userDetailService).passwordEncoder(passwordEncoder());
+        return authenticationManagerBuilder.build();
+    }
+
+    @Bean()
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
         converter.setJwtGrantedAuthoritiesConverter(jwt -> {

@@ -27,11 +27,6 @@ import org.springframework.shell.command.annotation.CommandScan;
         "id.co.xinix.spring.modules",
         "id.co.xinix.media.modules"
 })
-@EnableJpaRepositories(basePackages = {
-        "id.co.xinix.auth.modules",
-        "id.co.xinix.spring.modules",
-        "id.co.xinix.media.modules"
-})
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);

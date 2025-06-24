@@ -7,6 +7,7 @@ import id.co.xinix.auth.modules.role.application.dto.RoleCreatedResult;
 import id.co.xinix.auth.modules.role.domain.RoleCreatedEvent;
 import id.co.xinix.auth.modules.role.domain.Role;
 import id.co.xinix.auth.modules.role.domain.RoleRepository;
+import id.co.xinix.auth.services.GenerateRandomCode;
 import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,10 +23,14 @@ public class CreateRole {
 
     public RoleCreatedResult handle(RoleCommand command) {
         validateRoleId(command.getId());
-        validateUniqueNameAndCode(command.getName(), command.getCode());
+
+        String prefix = "ROLE_";
+        String generatedCode = new GenerateRandomCode().generate(prefix);
+
+        validateUniqueNameAndCode(command.getName(), generatedCode);
 
         Role role = new Role();
-        role.setCode(command.getCode());
+        role.setCode(generatedCode);
         role.setName(command.getName());
 
         Role savedRole = roleRepository.save(role);

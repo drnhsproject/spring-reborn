@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/privileges")
@@ -43,6 +46,8 @@ public class PrivilegeResource {
     private final ArchivePrivilege archivePrivilege;
 
     private final RemovePrivilege removePrivilege;
+
+    private final GetPrivilegesFormatted getPrivilegesFormatted;
 
     @Operation(summary = "Create Privilege", description = "Create new privilege")
     @PostMapping("")
@@ -101,5 +106,15 @@ public class PrivilegeResource {
         removePrivilege.handle(id);
         return ResponseEntity.noContent()
             .build();
+    }
+
+    @GetMapping("/fetch/format")
+    public ResponseEntity<Map<String, Object>> formatPrivileges() {
+        List<Map<String, Object>> data = getPrivilegesFormatted.fetchGroupedPrivileges();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("data", data);
+
+        return ResponseEntity.ok(response);
     }
 }
