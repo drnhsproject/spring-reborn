@@ -1,26 +1,37 @@
 package id.co.xinix.spring.modules.sysparam.application.dto;
 
+import id.co.xinix.spring.services.LikeOperatorResolver;
+import id.co.xinix.spring.services.SqlQuoter;
 import jakarta.persistence.Query;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.StringJoiner;
 
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class QueryFilter {
 
     private String search;
-
     private Integer status;
+    private LikeOperatorResolver likeOperator;
+    private SqlQuoter quoter;
 
     public String buildWhereClause() {
         StringJoiner whereClause = new StringJoiner("", " WHERE is_active is true", "");
 
         if (search != null && !search.isEmpty()) {
-            whereClause.add(" AND (`group` LIKE :search OR `key` LIKE :search OR `value` LIKE :search OR long_value LIKE :search)");
+            String like = likeOperator.get();
+            whereClause.add(" AND (" +
+                    quoter.quote("group") + " " + like + " :search OR " +
+                    quoter.quote("key") + " " + like + " :search OR " +
+                    quoter.quote("value") + " " + like + " :search OR " +
+                    "long_value " + like + " :search)");
         }
 
         if (status != null) {

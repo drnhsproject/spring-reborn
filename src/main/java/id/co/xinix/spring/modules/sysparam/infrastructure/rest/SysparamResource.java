@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.sql.SQLException;
 
 @RestController
 @RequestMapping("/api/sysparams")
@@ -75,7 +76,7 @@ public class SysparamResource {
         @RequestParam(value = "!search", required = false) String search,
         @ModelAttribute QueryFilter queryFilter,
         Pageable pageable
-    ) {
+    ) throws SQLException {
         queryFilter.setSearch(search);
         Page<PagedResult> results = getListSysparam.handle(queryFilter, pageable);
         ListResponse<PagedResult> response = ListResponse.fromPage("sysparam retrieved", results);

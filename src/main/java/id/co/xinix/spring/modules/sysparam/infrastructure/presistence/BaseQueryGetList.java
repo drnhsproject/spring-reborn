@@ -3,32 +3,36 @@ package id.co.xinix.spring.modules.sysparam.infrastructure.presistence;
 import id.co.xinix.spring.modules.sysparam.application.dto.BaseQueryResult;
 import id.co.xinix.spring.modules.sysparam.application.dto.PagedResult;
 import id.co.xinix.spring.modules.sysparam.application.dto.QueryFilter;
+import id.co.xinix.spring.services.LikeOperatorResolver;
 import id.co.xinix.spring.services.SortBuilder;
+import id.co.xinix.spring.services.SqlQuoter;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.sql.SQLException;
+
 @Repository("sysparamBaseQueryGetList")
+@AllArgsConstructor
 public class BaseQueryGetList {
 
     private final EntityManager entityManager;
+    private final SqlQuoter quoter;
+    private LikeOperatorResolver likeOperator;
 
-    public BaseQueryGetList(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
+    public BaseQueryResult execute(QueryFilter queryFilter, Pageable pageable) throws SQLException {
+        queryFilter.setQuoter(quoter);
+        queryFilter.setLikeOperator(likeOperator);
 
-    public BaseQueryResult execute(QueryFilter queryFilter, Pageable pageable) {
         String baseSql = """
-                SELECT
-                    id,
-                    "group",
-                    "key",
-                    "value",
-                    long_value
-                FROM
-                    sysparams
-            """;
+            SELECT id, %s, %s, %s, long_value FROM sysparams
+        """.formatted(
+                quoter.quote("group"),
+                quoter.quote("key"),
+                quoter.quote("value")
+        );
 
         String whereClause = queryFilter.buildWhereClause();
         String sort = SortBuilder.buildOrderByClause(pageable);
