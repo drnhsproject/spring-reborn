@@ -50,8 +50,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain authFilterChain(HttpSecurity http, MvcRequestMatcher.Builder mvc) throws Exception {
         http
                 .securityMatcher(new OrRequestMatcher(
-                        new AntPathRequestMatcher("/api/auth/**"),
-                        new AntPathRequestMatcher("/api/v1/users/**")
+                        new AntPathRequestMatcher("/api/file/**")
                 ))
             .cors(withDefaults())
             .csrf(AbstractHttpConfigurer::disable)
@@ -68,14 +67,7 @@ public class SecurityConfiguration {
                 authz ->
                     // prettier-ignore
                 authz
-                        .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/auth/signin")).permitAll()
-                        .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/auth/refresh")).permitAll()
-                        .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/account/forgot-password")).permitAll()
-                        .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/account/reset-password")).permitAll()
-                        .requestMatchers(mvc.pattern("/api/v1/users/**")).authenticated()
-                        .requestMatchers(mvc.pattern("/api/v1/file/**")).authenticated()
-                        .requestMatchers(mvc.pattern("/api/admin/**")).hasAuthority(AuthoritiesConstants.ADMIN)
-                        .requestMatchers(mvc.pattern("/api/**")).authenticated()
+                        .requestMatchers(mvc.pattern("/api/file/**")).authenticated()
                         .requestMatchers(mvc.pattern("/v3/api-docs/**")).hasAuthority(AuthoritiesConstants.ADMIN)
                         .requestMatchers(mvc.pattern("/management/health")).permitAll()
                         .requestMatchers(mvc.pattern("/management/health/**")).permitAll()

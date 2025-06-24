@@ -1,8 +1,15 @@
 package id.co.xinix.media.modules;
 
 import id.co.xinix.media.services.SingleResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -10,11 +17,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/file")
+@Tag(name = "Media API", description = "Operation media")
+@SecurityRequirement(name = "bearerAuth")
+@RepositoryRestResource(exported = false)
 @RequiredArgsConstructor
 public class MediaResource {
 
@@ -22,14 +32,31 @@ public class MediaResource {
 
     private final UploadMediaHandler uploadMediaHandler;
 
-    @PostMapping("/upload")
+    @Operation(summary = "Upload file(s)", description = "Upload single (file) or multiple files (file[])")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Uploaded successfully")
+    })
+    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<SingleResponse<?>> createMedia(
-        @RequestParam(value = "file", required = false) MultipartFile file,
-        @RequestParam(value = "file[]", required = false) List<MultipartFile> files,
-        @RequestParam("bucket") String bucket,
-        @RequestParam("path") String path
+            @Parameter(description = "Single file", required = false)
+            @RequestParam(value = "file", required = false) MultipartFile file,
+
+            @Parameter(description = "Multiple files", required = false)
+            @RequestParam(value = "file[]", required = false) List<MultipartFile> files,
+
+            @RequestParam("bucket") String bucket,
+            @RequestParam("path") String path
     ) throws IOException {
-        MediaUploadResult result = uploadMediaHandler.handle(bucket, path, file, files);
+        List<MultipartFile> allFiles = new ArrayList<>();
+        if (file != null && !file.isEmpty()) {
+            allFiles.add(file);
+        }
+
+        if (files != null && !files.isEmpty()) {
+            allFiles.addAll(files);
+        }
+
+        MediaUploadResult result = uploadMediaHandler.handle(bucket, path, file, allFiles);
         if (result.multiple()) {
             return ResponseEntity.ok(new SingleResponse<>("file uploaded", result.results()));
         } else {
@@ -37,6 +64,7 @@ public class MediaResource {
         }
     }
 
+    @Operation(summary = "Download File", description = "use for download file")
     @GetMapping("/download")
     public ResponseEntity<Resource> downloadMediaFromOS(
             @RequestParam("bucket") String bucket,
