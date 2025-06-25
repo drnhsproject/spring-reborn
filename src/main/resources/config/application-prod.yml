@@ -19,6 +19,7 @@ springdoc:
     enabled: true
     path: /swagger-ui.html
     operations-sorter: method
+    url: /backend/v3/api-docs
   api-docs:
     enabled: true
     path: /v3/api-docs
