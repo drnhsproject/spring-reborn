@@ -28,6 +28,7 @@ import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWrite
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
+import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 import java.util.List;
@@ -44,7 +45,7 @@ public class SecurityConfiguration {
     private final UserDetailServiceImpl userDetailService;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, MvcRequestMatcher.Builder mvc) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, MvcRequestMatcher.Builder mvc, SecurityProperties securityProperties) throws Exception {
         http
                 .securityMatcher(new OrRequestMatcher(
                         new AntPathRequestMatcher("/api/**"),
@@ -57,24 +58,29 @@ public class SecurityConfiguration {
                         .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
                         .referrerPolicy(ref -> ref.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN))
                 )
-                .authorizeHttpRequests(authz -> authz
-                        // Public endpoints
-                        .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/auth/signin")).permitAll()
-                        .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/auth/refresh")).permitAll()
-                        .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/account/forgot-password")).permitAll()
-                        .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/account/reset-password")).permitAll()
-                        .requestMatchers(mvc.pattern("/management/health/**")).permitAll()
-                        .requestMatchers(mvc.pattern("/management/info")).permitAll()
-                        .requestMatchers(mvc.pattern("/management/prometheus")).permitAll()
+                .authorizeHttpRequests(authz -> {
+                    for (String path : securityProperties.getPublicPaths()) {
+                        if (StringUtils.hasText(path) && !"none".equalsIgnoreCase(path.trim())) {
+                            authz.requestMatchers(mvc.pattern(path)).permitAll();
+                        }
+                    }
+                    authz
+                            .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/auth/signin")).permitAll()
+                            .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/auth/refresh")).permitAll()
+                            .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/account/forgot-password")).permitAll()
+                            .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/account/reset-password")).permitAll()
+                            .requestMatchers(mvc.pattern("/management/health/**")).permitAll()
+                            .requestMatchers(mvc.pattern("/management/info")).permitAll()
+                            .requestMatchers(mvc.pattern("/management/prometheus")).permitAll()
 
-                        // Admin-only
-                        .requestMatchers(mvc.pattern("/api/admin/**")).hasAuthority(AuthoritiesConstants.ADMIN)
-                        .requestMatchers(mvc.pattern("/v3/api-docs/**")).hasAuthority(AuthoritiesConstants.ADMIN)
-                        .requestMatchers(mvc.pattern("/management/**")).hasAuthority(AuthoritiesConstants.ADMIN)
+                            // Admin
+                            .requestMatchers(mvc.pattern("/api/admin/**")).hasAuthority(AuthoritiesConstants.ADMIN)
+                            .requestMatchers(mvc.pattern("/v3/api-docs/**")).hasAuthority(AuthoritiesConstants.ADMIN)
+                            .requestMatchers(mvc.pattern("/management/**")).hasAuthority(AuthoritiesConstants.ADMIN)
 
-                        // Everything else under /api/** requires authentication
-                        .requestMatchers(mvc.pattern("/api/**")).authenticated()
-                )
+                            // Authenticated for all other /api/**
+                            .requestMatchers(mvc.pattern("/api/**")).authenticated();
+                })
                 .addFilterBefore(new JwtTokenFilter(tokenProvider),
                         UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

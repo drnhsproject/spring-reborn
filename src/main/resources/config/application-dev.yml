@@ -12,7 +12,6 @@
 logging:
   level:
     root: INFO
-    org.springframework.security: DEBUG
     org.hibernate.SQL: DEBUG
 
 springdoc:
@@ -41,6 +40,8 @@ spring:
   liquibase:
     contexts: dev, faker
   security:
+    public-paths:
+     - none
     authentication:
       jwt:
         # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
