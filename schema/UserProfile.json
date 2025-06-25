@@ -1,0 +1,61 @@
+{
+  "name": "UserProfile",
+  "tableName": "user_profile",
+  "fields": [
+    {
+      "name": "id",
+      "type": "Long",
+      "primaryKey": true,
+      "autoIncrement": true
+    },
+    {
+      "name": "code",
+      "type": "String",
+      "validations": {
+        "required": true,
+        "unique": true
+      }
+    },
+    {
+      "name": "firstName",
+      "type": "String",
+      "validations": {
+        "required": true,
+        "maxLength": 255
+      }
+    },
+    {
+      "name": "lastName",
+      "type": "String"
+    },
+    {
+      "name": "identityNumber",
+      "type": "String"
+    },
+    {
+      "name": "phoneNumber",
+      "type": "String"
+    },
+    {
+      "name": "photo",
+      "type": "String",
+      "validations": {
+        "maxLength": 5000
+      }
+    },
+    {
+      "name": "address",
+      "type": "String",
+      "validations": {
+        "maxLength": 5000
+      }
+    },
+    {
+      "name": "userId",
+      "type": "Long",
+      "validations": {
+        "required": true
+      }
+    }
+  ]
+}

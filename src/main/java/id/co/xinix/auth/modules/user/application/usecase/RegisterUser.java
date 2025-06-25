@@ -33,7 +33,7 @@ public class RegisterUser {
     public UserRegisteredResult handle(UserCommand command) {
         String encodedPassword = passwordEncoder.encode(command.getPassword());
 
-        List<Role> roles = roleRepository.findByIdIn(command.getRoles());
+        List<Role> roles = roleRepository.findByCodeIn(command.getRole());
 
         User user = new User();
         user.setEmail(command.getEmail());
@@ -47,7 +47,7 @@ public class RegisterUser {
         validateUserExistence(user);
 
         User savedUser = userRepository.save(user);
-        eventPublisher.publishEvent(new UserRegisteredEvent(this, roles, savedUser.getId()));
+        eventPublisher.publishEvent(new UserRegisteredEvent(this, roles, savedUser.getId(), command.getFirst_name(), command.getLast_name()));
 
         return new UserRegisteredResult(
                 savedUser.getId(),
