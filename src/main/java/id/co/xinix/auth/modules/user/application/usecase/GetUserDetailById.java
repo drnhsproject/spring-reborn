@@ -7,6 +7,8 @@ import id.co.xinix.auth.modules.user.domain.User;
 import id.co.xinix.auth.modules.user.domain.UserRepository;
 import id.co.xinix.auth.modules.userrole.domain.UserRole;
 import id.co.xinix.auth.modules.userrole.domain.UserRoleRepository;
+import id.co.xinix.spring.modules.userprofile.domain.UserProfile;
+import id.co.xinix.spring.modules.userprofile.domain.UserProfileRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 
@@ -22,11 +24,16 @@ public class GetUserDetailById {
 
     private final UserRoleRepository userRoleRepository;
 
+    private final UserProfileRepository userProfileRepository;
+
     public UserDetailResult handle(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("user not found"));
 
         Set<UserRole> userRoles = userRoleRepository.findByUserId(user.getId());
+
+        UserProfile userProfile = userProfileRepository.findByUserId(user.getId())
+            .orElseThrow(() -> new NotFoundException("user profile not found"));
 
         if (userRoles.isEmpty()) {
             throw new NotFoundException("user roles not found");
@@ -37,12 +44,14 @@ public class GetUserDetailById {
                 .map(UserRole::getRoleCode)
                 .toList();
 
-        return mapToDto(user, roleIds);
+        return mapToDto(user, roleIds, userProfile);
     }
 
-    private UserDetailResult mapToDto(User user, List<String> roleIds) {
+    private UserDetailResult mapToDto(User user, List<String> roleIds, UserProfile userProfile) {
         return new UserDetailResult(
                 user.getId(),
+                userProfile.getFirstName(),
+                userProfile.getLastName(),
                 user.getUsername(),
                 user.getEmail(),
                 roleIds,
