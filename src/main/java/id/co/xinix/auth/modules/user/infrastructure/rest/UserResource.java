@@ -58,9 +58,10 @@ public class UserResource {
         @PathVariable(value = "id", required = false) final Long id,
         @RequestBody UserUpdateCommand command
     ) {
+        command.setId(id);
         idValidationService.validateIdForUpdate(userRepository, id, command.getId(), "user");
 
-        UserUpdatedResult result = changeUserDetail.handle(command);
+        UserUpdatedResult result = changeUserDetail.handle(id, command);
         SingleResponse<UserUpdatedResult> response = new SingleResponse<>("user updated", result);
 
         return ResponseEntity.ok().body(response);

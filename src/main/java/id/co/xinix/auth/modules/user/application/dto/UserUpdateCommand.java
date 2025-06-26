@@ -17,11 +17,17 @@ public class UserUpdateCommand {
 
     @NotBlank(message = "must be not blank")
     @NotNull(message = "must be not null")
+    private String first_name;
+
+    private String last_name;
+
+    @NotBlank(message = "must be not blank")
+    @NotNull(message = "must be not null")
     private String email;
 
     @NotBlank(message = "must be not blank")
     @NotNull(message = "must be not null")
     private String username;
 
-    private List<String> roles;
+    private List<String> role;
 }
