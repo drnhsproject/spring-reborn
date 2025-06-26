@@ -1,6 +1,7 @@
 package id.co.xinix.spring.modules.userprofile.application.usecase;
 
 import id.co.xinix.spring.UseCase;
+import id.co.xinix.spring.exception.NotFoundException;
 import id.co.xinix.spring.modules.userprofile.domain.UserProfile;
 import id.co.xinix.spring.modules.userprofile.domain.UserProfileRepository;
 import id.co.xinix.spring.services.GenerateRandomCode;
@@ -14,12 +15,7 @@ public class CreateUserProfileFromUserRegisteredEvent {
 
     public void handle(Long userId, String firstName, String lastName) {
         UserProfile userProfile = userProfileRepository.findByUserId(userId)
-            .orElseGet(() -> {
-                UserProfile profile = new UserProfile();
-                profile.setUserId(userId);
-                profile.setCode(generateCode());
-                return profile;
-            });
+            .orElseThrow(() -> new NotFoundException("user profile not found"));
 
         userProfile.setFirstName(firstName);
         userProfile.setLastName(lastName);
