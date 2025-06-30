@@ -1,4 +1,4 @@
-package id.co.xinix.spring.modules.userprofile.application.dto;
+package id.co.xinix.auth.modules.userprofile.application.dto;
 
 
 public record UserProfileCreatedResult(

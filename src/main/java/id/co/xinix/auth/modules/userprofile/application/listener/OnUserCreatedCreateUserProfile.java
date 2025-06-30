@@ -1,7 +1,7 @@
-package id.co.xinix.spring.modules.userprofile.application.listener;
+package id.co.xinix.auth.modules.userprofile.application.listener;
 
 import id.co.xinix.auth.modules.user.domain.UserRegisteredEvent;
-import id.co.xinix.spring.modules.userprofile.application.usecase.CreateUserProfileFromUserRegisteredEvent;
+import id.co.xinix.auth.modules.userprofile.application.usecase.CreateUserProfileFromUserRegisteredEvent;
 import lombok.AllArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;

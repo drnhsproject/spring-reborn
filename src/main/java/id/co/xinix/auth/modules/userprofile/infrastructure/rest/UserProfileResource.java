@@ -1,18 +1,14 @@
-package id.co.xinix.spring.modules.userprofile.infrastructure.rest;
+package id.co.xinix.auth.modules.userprofile.infrastructure.rest;
 
-import id.co.xinix.spring.modules.userprofile.application.dto.*;
-import id.co.xinix.spring.modules.userprofile.application.usecase.*;
-import id.co.xinix.spring.services.ListResponse;
+import id.co.xinix.auth.modules.userprofile.application.dto.UserProfileCommand;
+import id.co.xinix.auth.modules.userprofile.application.dto.UserProfileCreatedResult;
+import id.co.xinix.auth.modules.userprofile.application.usecase.CreateUserProfile;
 import id.co.xinix.spring.services.SingleResponse;
 
 import lombok.RequiredArgsConstructor;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
-import java.util.List;
 
 import java.net.URI;
 import java.net.URISyntaxException;

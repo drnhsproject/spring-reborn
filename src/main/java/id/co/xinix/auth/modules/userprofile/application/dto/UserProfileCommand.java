@@ -1,4 +1,4 @@
-package id.co.xinix.spring.modules.userprofile.application.dto;
+package id.co.xinix.auth.modules.userprofile.application.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -10,14 +10,12 @@ import id.co.xinix.auth.modules.user.domain.User;
 import id.co.xinix.auth.modules.user.domain.UserRepository;
 import id.co.xinix.auth.modules.userrole.domain.UserRole;
 import id.co.xinix.auth.modules.userrole.domain.UserRoleRepository;
-import id.co.xinix.spring.modules.userprofile.domain.UserProfile;
-import id.co.xinix.spring.modules.userprofile.domain.UserProfileRepository;
+import id.co.xinix.auth.modules.userprofile.domain.UserProfile;
+import id.co.xinix.auth.modules.userprofile.domain.UserProfileRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @UseCase
 @AllArgsConstructor

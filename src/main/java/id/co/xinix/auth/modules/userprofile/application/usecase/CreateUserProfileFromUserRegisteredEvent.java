@@ -1,9 +1,8 @@
-package id.co.xinix.spring.modules.userprofile.application.usecase;
+package id.co.xinix.auth.modules.userprofile.application.usecase;
 
 import id.co.xinix.spring.UseCase;
-import id.co.xinix.spring.exception.NotFoundException;
-import id.co.xinix.spring.modules.userprofile.domain.UserProfile;
-import id.co.xinix.spring.modules.userprofile.domain.UserProfileRepository;
+import id.co.xinix.auth.modules.userprofile.domain.UserProfile;
+import id.co.xinix.auth.modules.userprofile.domain.UserProfileRepository;
 import id.co.xinix.spring.services.GenerateRandomCode;
 import lombok.AllArgsConstructor;
 

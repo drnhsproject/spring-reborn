@@ -1,4 +1,4 @@
-package id.co.xinix.spring.modules.userprofile.domain;
+package id.co.xinix.auth.modules.userprofile.domain;
 
 import id.co.xinix.spring.services.BaseColumnEntity;
 import jakarta.persistence.*;
