@@ -4,6 +4,9 @@ public record UserDetail(
         Long id,
         String username,
         String email,
-        Integer status
+        Integer status,
+        String first_name,
+        String last_name,
+        String photo
 ) {
 }

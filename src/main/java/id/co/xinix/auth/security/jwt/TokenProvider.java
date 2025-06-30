@@ -1,9 +1,12 @@
 package id.co.xinix.auth.security.jwt;
 
+import id.co.xinix.auth.exception.NotFoundException;
 import id.co.xinix.auth.management.SecurityMetersService;
 import id.co.xinix.auth.modules.authenticate.domain.UserDetail;
 import id.co.xinix.auth.modules.user.domain.User;
 import id.co.xinix.auth.modules.user.domain.UserRepository;
+import id.co.xinix.auth.modules.userprofile.domain.UserProfile;
+import id.co.xinix.auth.modules.userprofile.domain.UserProfileRepository;
 import id.co.xinix.auth.modules.userrole.domain.UserRole;
 import id.co.xinix.auth.modules.userrole.domain.UserRoleRepository;
 import org.slf4j.Logger;
@@ -34,6 +37,7 @@ public class TokenProvider {
     private final JwtDecoder jwtDecoder;
     private final UserRepository userRepository;
     private final UserRoleRepository userRoleRepository;
+    private final UserProfileRepository userProfileRepository;
     private final SecurityMetersService securityMetersService;
 
     private final long tokenValidityInMilliseconds;
@@ -45,12 +49,14 @@ public class TokenProvider {
             JwtDecoder jwtDecoder,
             UserRepository userRepository,
             UserRoleRepository userRoleRepository,
+            UserProfileRepository userProfileRepository,
             SecurityMetersService securityMetersService
     ) {
         this.jwtEncoder = jwtEncoder;
         this.jwtDecoder = jwtDecoder;
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
+        this.userProfileRepository = userProfileRepository;
         this.securityMetersService = securityMetersService;
 
         this.tokenValidityInMilliseconds = jwtProperties.getTokenValidityInSeconds();
@@ -73,6 +79,10 @@ public class TokenProvider {
                 .map(UserRole::getRoleName)
                 .collect(Collectors.joining(","));
 
+        UserProfile userProfile = userProfileRepository
+                .findByUserId(user.getId())
+                .orElseThrow(() -> new NotFoundException("user not found"));
+
         Instant now = Instant.now();
 
         Instant validity = rememberMe
@@ -89,6 +99,9 @@ public class TokenProvider {
                 .claim("email", userDetail.email())
                 .claim("status", userDetail.status())
                 .claim("role", userRole)
+                .claim("first_name", userProfile.getFirstName() != null ? userProfile.getFirstName() : "")
+                .claim("last_name", userProfile.getLastName() != null ? userProfile.getLastName() : "")
+                .claim("photo", userProfile.getPhoto() != null ? userProfile.getPhoto() : "")
                 .build();
 
         JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
@@ -113,7 +126,10 @@ public class TokenProvider {
                 id,
                 jwt.getClaimAsString("username"),
                 jwt.getClaimAsString("email"),
-                status
+                status,
+                jwt.getClaimAsString("first_name"),
+                jwt.getClaimAsString("last_name"),
+                jwt.getClaimAsString("photo")
         );
 
         return generateToken(getAuthentication(token), false, userDetail);

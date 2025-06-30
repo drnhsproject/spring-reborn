@@ -2,6 +2,7 @@ package id.co.xinix.auth.modules.authenticate.application.usecase;
 
 import id.co.xinix.auth.UseCase;
 import id.co.xinix.auth.exception.BadRequestException;
+import id.co.xinix.auth.exception.NotFoundException;
 import id.co.xinix.auth.exception.UnauthorizedException;
 import id.co.xinix.auth.modules.authenticate.application.dto.SignInCommand;
 import id.co.xinix.auth.modules.authenticate.application.dto.SignInResult;
@@ -14,6 +15,8 @@ import id.co.xinix.auth.modules.role.domain.RoleRepository;
 import id.co.xinix.auth.modules.roleprivilege.domain.RolePrivilege;
 import id.co.xinix.auth.modules.roleprivilege.domain.RolePrivilegeRepository;
 import id.co.xinix.auth.modules.user.domain.UserRepository;
+import id.co.xinix.auth.modules.userprofile.domain.UserProfile;
+import id.co.xinix.auth.modules.userprofile.domain.UserProfileRepository;
 import id.co.xinix.auth.modules.userrole.domain.UserRole;
 import id.co.xinix.auth.modules.userrole.domain.UserRoleRepository;
 import id.co.xinix.auth.security.jwt.TokenProvider;
@@ -46,6 +49,8 @@ public class SignInUser {
 
     private final TokenProvider tokenProvider;
 
+    private final UserProfileRepository userProfileRepository;
+
     public SignInResult handle(SignInCommand command) {
         var user = userRepository.findByUsername(command.getUsername())
                 .orElseThrow(() -> new UnauthorizedException("username or password is incorrect"));
@@ -54,11 +59,18 @@ public class SignInUser {
             throw new UnauthorizedException("username or password is incorrect");
         }
 
+        UserProfile userProfile = userProfileRepository
+                .findByUserId(user.getId())
+                .orElseThrow(() -> new NotFoundException("user not found"));
+
         UserDetail userDetail = new UserDetail(
                 user.getId(),
                 user.getUsername(),
                 user.getEmail(),
-                user.getStatus()
+                user.getStatus(),
+                userProfile.getFirstName(),
+                userProfile.getLastName(),
+                userProfile.getPhoto()
         );
 
         Authentication authentication = authenticateUser(command);
