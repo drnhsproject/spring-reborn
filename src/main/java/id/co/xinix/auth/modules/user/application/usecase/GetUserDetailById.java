@@ -1,7 +1,10 @@
 package id.co.xinix.auth.modules.user.application.usecase;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import id.co.xinix.auth.UseCase;
 import id.co.xinix.auth.exception.NotFoundException;
+import id.co.xinix.auth.modules.user.application.dto.PhotoProfile;
 import id.co.xinix.auth.modules.user.application.dto.UserDetailResult;
 import id.co.xinix.auth.modules.user.domain.User;
 import id.co.xinix.auth.modules.user.domain.UserRepository;
@@ -26,7 +29,7 @@ public class GetUserDetailById {
 
     private final UserProfileRepository userProfileRepository;
 
-    public UserDetailResult handle(Long id) {
+    public UserDetailResult handle(Long id) throws JsonProcessingException {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("user not found"));
 
@@ -47,9 +50,17 @@ public class GetUserDetailById {
         return mapToDto(user, roleIds, userProfile);
     }
 
-    private UserDetailResult mapToDto(User user, List<String> roleIds, UserProfile userProfile) {
+    private UserDetailResult mapToDto(User user, List<String> roleIds, UserProfile userProfile) throws JsonProcessingException {
         String firstName = userProfile != null ? userProfile.getFirstName() : "";
         String lastName = userProfile != null ? userProfile.getLastName() : "";
+        String photo = userProfile != null ? userProfile.getPhoto() : null;
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        PhotoProfile photoProfile = null;
+        if (photo != null && !photo.isBlank()) {
+            photoProfile = objectMapper.readValue(photo, PhotoProfile.class);
+        }
 
         return new UserDetailResult(
                 user.getId(),
@@ -58,7 +69,8 @@ public class GetUserDetailById {
                 user.getUsername(),
                 user.getEmail(),
                 roleIds,
-                user.getStatus()
+                user.getStatus(),
+                photoProfile
         );
     }
 }

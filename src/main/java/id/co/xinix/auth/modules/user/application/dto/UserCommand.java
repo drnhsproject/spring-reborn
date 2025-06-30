@@ -34,4 +34,17 @@ public class UserCommand {
     private String password;
 
     private List<String> role;
+
+    private PhotoDTO photo;
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class PhotoDTO {
+        private String bucket;
+        private String path;
+        private String mime;
+        private String filename;
+        private String originalFilename;
+    }
 }

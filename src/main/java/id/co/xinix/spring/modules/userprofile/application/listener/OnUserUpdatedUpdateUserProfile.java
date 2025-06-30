@@ -19,7 +19,8 @@ public class OnUserUpdatedUpdateUserProfile {
         Long userId = event.getUserId();
         String firstName = event.getFirstName();
         String lastName = event.getLastName();
+        String photo = event.getPhoto();
 
-        updateUserProfileFromUserUpdatedEvent.handle(userId, firstName, lastName);
+        updateUserProfileFromUserUpdatedEvent.handle(userId, firstName, lastName, photo);
     }
 }

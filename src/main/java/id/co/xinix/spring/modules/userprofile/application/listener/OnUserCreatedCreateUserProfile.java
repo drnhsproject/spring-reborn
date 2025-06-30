@@ -19,7 +19,8 @@ public class OnUserCreatedCreateUserProfile {
         Long userId = event.getUserId();
         String firstName = event.getFirstName();
         String lastName = event.getLastName();
+        String photo = event.getPhoto();
 
-        createUserProfileFromUserRegisteredEvent.handle(userId, firstName, lastName);
+        createUserProfileFromUserRegisteredEvent.handle(userId, firstName, lastName, photo);
     }
 }

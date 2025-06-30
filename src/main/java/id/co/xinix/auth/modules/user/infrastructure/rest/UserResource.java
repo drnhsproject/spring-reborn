@@ -1,5 +1,6 @@
 package id.co.xinix.auth.modules.user.infrastructure.rest;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import id.co.xinix.auth.modules.user.application.dto.*;
 import id.co.xinix.auth.modules.user.application.usecase.*;
 import id.co.xinix.auth.modules.user.domain.UserRepository;
@@ -46,7 +47,7 @@ public class UserResource {
     @PostMapping("")
     public ResponseEntity<SingleResponse<UserRegisteredResult>> registerUser(
             @Valid @RequestBody UserCommand command
-    ) throws URISyntaxException {
+    ) throws URISyntaxException, JsonProcessingException {
         UserRegisteredResult result = registerUser.handle(command);
         SingleResponse<UserRegisteredResult> response = new SingleResponse<>("user registered", result);
 
@@ -57,7 +58,7 @@ public class UserResource {
     public ResponseEntity<SingleResponse<UserUpdatedResult>> updateUser(
         @PathVariable(value = "id", required = false) final Long id,
         @RequestBody UserUpdateCommand command
-    ) {
+    ) throws JsonProcessingException {
         command.setId(id);
         idValidationService.validateIdForUpdate(userRepository, id, command.getId(), "user");
 
@@ -81,7 +82,7 @@ public class UserResource {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SingleResponse<UserDetailResult>> getUserDetail(@PathVariable("id") Long id) {
+    public ResponseEntity<SingleResponse<UserDetailResult>> getUserDetail(@PathVariable("id") Long id) throws JsonProcessingException {
         UserDetailResult result = getUserDetailById.handle(id);
         SingleResponse<UserDetailResult> response = new SingleResponse<>( "user detail retrieved", result);
 

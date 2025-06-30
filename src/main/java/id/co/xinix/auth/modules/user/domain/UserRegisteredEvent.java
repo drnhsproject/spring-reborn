@@ -16,17 +16,20 @@ public class UserRegisteredEvent extends ApplicationEvent {
 
     private final String lastName;
 
+    private final String photo;
+
     public UserRegisteredEvent(
-        Object source,
-        List<Role> roles,
-        Long userId,
-        String firstName,
-        String lastName
+            Object source,
+            List<Role> roles,
+            Long userId,
+            String firstName,
+            String lastName, String photo
     ) {
         super(source);
         this.roles = roles;
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.photo = photo;
     }
 }

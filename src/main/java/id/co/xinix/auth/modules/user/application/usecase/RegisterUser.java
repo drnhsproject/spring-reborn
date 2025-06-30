@@ -1,5 +1,7 @@
 package id.co.xinix.auth.modules.user.application.usecase;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import id.co.xinix.auth.exception.DomainException;
 import id.co.xinix.auth.modules.role.domain.Role;
 import id.co.xinix.auth.modules.role.domain.RoleRepository;
@@ -30,7 +32,7 @@ public class RegisterUser {
 
     private final ApplicationEventPublisher eventPublisher;
 
-    public UserRegisteredResult handle(UserCommand command) {
+    public UserRegisteredResult handle(UserCommand command) throws JsonProcessingException {
         String encodedPassword = passwordEncoder.encode(command.getPassword());
 
         List<Role> roles = roleRepository.findByCodeIn(command.getRole());
@@ -46,8 +48,17 @@ public class RegisterUser {
 
         validateUserExistence(user);
 
+        String photoProfile = getStringPhotoProfile(command);
+
         User savedUser = userRepository.save(user);
-        eventPublisher.publishEvent(new UserRegisteredEvent(this, roles, savedUser.getId(), command.getFirst_name(), command.getLast_name()));
+        eventPublisher.publishEvent(new UserRegisteredEvent(
+                this,
+                roles,
+                savedUser.getId(),
+                command.getFirst_name(),
+                command.getLast_name(),
+                photoProfile
+        ));
 
         return new UserRegisteredResult(
                 savedUser.getId(),
@@ -55,6 +66,14 @@ public class RegisterUser {
                 savedUser.getUsername()
         );
     }
+
+    private String getStringPhotoProfile(UserCommand command) throws JsonProcessingException {
+        if (command.getPhoto() != null) {
+            return new ObjectMapper().writeValueAsString(command.getPhoto());
+        }
+        return null;
+    }
+
 
     private void validateUserExistence(User user) {
         if (userRepository.existsByUsername(user.getUsername())) {

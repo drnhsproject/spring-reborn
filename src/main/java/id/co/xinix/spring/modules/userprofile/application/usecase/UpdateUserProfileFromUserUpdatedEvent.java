@@ -13,7 +13,7 @@ public class UpdateUserProfileFromUserUpdatedEvent {
 
     private final UserProfileRepository userProfileRepository;
 
-    public void handle(Long userId, String firstName, String lastName) {
+    public void handle(Long userId, String firstName, String lastName, String photo) {
         UserProfile userProfile = userProfileRepository.findByUserId(userId)
             .orElseGet(() -> {
                 UserProfile profile = new UserProfile();
@@ -24,6 +24,7 @@ public class UpdateUserProfileFromUserUpdatedEvent {
 
         userProfile.setFirstName(firstName);
         userProfile.setLastName(lastName);
+        userProfile.setPhoto(photo);
 
         userProfileRepository.save(userProfile);
     }

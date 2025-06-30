@@ -9,5 +9,6 @@ public record UserDetailResult(
     String username,
     String email,
     List<String> role,
-    Integer status
+    Integer status,
+    PhotoProfile photo
 ) {}
