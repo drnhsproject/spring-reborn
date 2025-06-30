@@ -14,16 +14,7 @@ public class CreateUserProfile {
     private final UserProfileRepository userProfileRepository;
 
     public UserProfileCreatedResult handle(UserProfileCommand command) {
-        UserProfile userProfile = new UserProfile();
-        userProfile.setId(command.getId());
-        userProfile.setCode(command.getCode());
-        userProfile.setFirstName(command.getFirstName());
-        userProfile.setLastName(command.getLastName());
-        userProfile.setIdentityNumber(command.getIdentityNumber());
-        userProfile.setPhoneNumber(command.getPhoneNumber());
-        userProfile.setPhoto(command.getPhoto());
-        userProfile.setAddress(command.getAddress());
-        userProfile.setUserId(command.getUserId());
+        UserProfile userProfile = mapUserProfile(command);
 
         UserProfile savedUserProfile = userProfileRepository.save(userProfile);
 
@@ -38,5 +29,19 @@ public class CreateUserProfile {
             savedUserProfile.getAddress(),
             savedUserProfile.getUserId()
         );
+    }
+
+    private UserProfile mapUserProfile(UserProfileCommand command) {
+        UserProfile userProfile = new UserProfile();
+        userProfile.setId(command.getId());
+        userProfile.setCode(command.getCode());
+        userProfile.setFirstName(command.getFirstName());
+        userProfile.setLastName(command.getLastName());
+        userProfile.setIdentityNumber(command.getIdentityNumber());
+        userProfile.setPhoneNumber(command.getPhoneNumber());
+        userProfile.setPhoto(command.getPhoto());
+        userProfile.setAddress(command.getAddress());
+        userProfile.setUserId(command.getUserId());
+        return userProfile;
     }
 }
