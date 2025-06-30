@@ -9,13 +9,18 @@ import lombok.AllArgsConstructor;
 
 @UseCase
 @AllArgsConstructor
-public class CreateUserProfileFromUserRegisteredEvent {
+public class UpdateUserProfileFromUserUpdatedEvent {
 
     private final UserProfileRepository userProfileRepository;
 
     public void handle(Long userId, String firstName, String lastName) {
         UserProfile userProfile = userProfileRepository.findByUserId(userId)
-            .orElseThrow(() -> new NotFoundException("user profile not found"));
+            .orElseGet(() -> {
+                UserProfile profile = new UserProfile();
+                profile.setUserId(userId);
+                profile.setCode(generateCode());
+                return profile;
+            });
 
         userProfile.setFirstName(firstName);
         userProfile.setLastName(lastName);

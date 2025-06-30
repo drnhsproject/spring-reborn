@@ -33,7 +33,7 @@ public class GetUserDetailById {
         Set<UserRole> userRoles = userRoleRepository.findByUserId(user.getId());
 
         UserProfile userProfile = userProfileRepository.findByUserId(user.getId())
-            .orElseThrow(() -> new NotFoundException("user profile not found"));
+            .orElse(null);
 
         if (userRoles.isEmpty()) {
             throw new NotFoundException("user roles not found");
@@ -48,10 +48,13 @@ public class GetUserDetailById {
     }
 
     private UserDetailResult mapToDto(User user, List<String> roleIds, UserProfile userProfile) {
+        String firstName = userProfile != null ? userProfile.getFirstName() : "";
+        String lastName = userProfile != null ? userProfile.getLastName() : "";
+
         return new UserDetailResult(
                 user.getId(),
-                userProfile.getFirstName(),
-                userProfile.getLastName(),
+                firstName,
+                lastName,
                 user.getUsername(),
                 user.getEmail(),
                 roleIds,

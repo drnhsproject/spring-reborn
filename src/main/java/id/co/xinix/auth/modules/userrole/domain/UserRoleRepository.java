@@ -12,4 +12,5 @@ import java.util.Set;
 @RepositoryRestResource(exported = false)
 public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
     Set<UserRole> findByUserId(Long userId);
+    void deleteByUserId(Long userId);
 }
