@@ -7,7 +7,6 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import id.co.xinix.spring.framework.Field;
 import id.co.xinix.spring.framework.SqlTypeMapper;
-import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -17,14 +16,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Service
 public class EntityGeneratorService {
 
-    private final Configuration cfg;
+    private final String outputBaseDir;
+    private final String changelogDir;
+    private final String masterFile;
 
+    private final Configuration cfg;
     private final FormatterString formatterString;
 
-    public EntityGeneratorService() {
+    public EntityGeneratorService(String outputBaseDir, String changelogDir, String masterFile) {
+        this.outputBaseDir = outputBaseDir;
+        this.changelogDir = changelogDir;
+        this.masterFile = masterFile;
         cfg = new Configuration(Configuration.VERSION_2_3_32);
         cfg.setClassLoaderForTemplateLoading(
                 Thread.currentThread().getContextClassLoader(), "/templates/framework"
@@ -108,13 +112,13 @@ public class EntityGeneratorService {
 
         // Generate Changelog
         String changelogName = timestamp + "_added_entity_" + entitySchema.getName() + ".xml";
-        String changelogOutputPath = "src/main/resources/config/liquibase/changelog/" + changelogName;
+        String changelogOutputPath = changelogDir + changelogName;
         generateFile(changelogTemplate, data, changelogOutputPath);
         appendChangelogToMaster(changelogName);
     }
 
     private String getBaseDirModule(String entityNameLower) {
-        String baseDir = "src/main/java/id/co/xinix/spring/modules/" + entityNameLower + "/";
+        String baseDir = outputBaseDir + entityNameLower + "/";
 
         // structure folder
         String[] subFolders = {
@@ -151,7 +155,7 @@ public class EntityGeneratorService {
     }
 
     private void appendChangelogToMaster(String changelogFilename) throws IOException {
-        String masterPath = "src/main/resources/config/liquibase/master.xml";
+        String masterPath = masterFile;
         File masterFile = new File(masterPath);
 
         List<String> lines = Files.readAllLines(masterFile.toPath());

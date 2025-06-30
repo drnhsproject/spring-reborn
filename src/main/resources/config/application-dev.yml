@@ -21,6 +21,17 @@ springdoc:
   api-docs:
     path: /v3/api-docs
 
+generator:
+  schemaPath: schema/
+  contexts:
+    auth: src/main/java/id/co/xinix/auth/modules/
+    media: src/main/java/id/co/xinix/media/modules/
+    spring: src/main/java/id/co/xinix/spring/modules/
+  liquibase:
+    changelogDir: src/main/resources/config/liquibase/changelog/
+    masterFile: src/main/resources/config/liquibase/master.xml
+
+
 spring:
   devtools:
     restart:
