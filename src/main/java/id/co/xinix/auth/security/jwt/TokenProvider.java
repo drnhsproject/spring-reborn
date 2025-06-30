@@ -1,6 +1,5 @@
 package id.co.xinix.auth.security.jwt;
 
-import id.co.xinix.auth.exception.UnauthorizedException;
 import id.co.xinix.auth.management.SecurityMetersService;
 import id.co.xinix.auth.modules.authenticate.domain.UserDetail;
 import id.co.xinix.auth.modules.user.domain.User;
