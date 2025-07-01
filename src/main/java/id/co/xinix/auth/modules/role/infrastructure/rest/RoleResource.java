@@ -44,6 +44,8 @@ public class RoleResource {
 
     private final RemoveRole removeRole;
 
+    private final RestoreRole restoreRole;
+
     @Operation(summary = "Create Role", description = "Create new role")
     @PostMapping("")
     public ResponseEntity<SingleResponse<RoleCreatedResult>> createRole(
@@ -92,6 +94,13 @@ public class RoleResource {
     @PutMapping("/{id}/delete")
     public ResponseEntity<Void> softDeleteRole(@PathVariable("id") Long id) {
         archiveRole.handle(id);
+        return ResponseEntity.noContent()
+            .build();
+    }
+
+    @PutMapping("/{id}/restore")
+    public ResponseEntity<Void> restoreRole(@PathVariable("id") Long id) {
+        restoreRole.handle(id);
         return ResponseEntity.noContent()
             .build();
     }
