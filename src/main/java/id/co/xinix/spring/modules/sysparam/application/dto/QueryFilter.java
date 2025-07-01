@@ -23,7 +23,7 @@ public class QueryFilter {
     private SqlQuoter quoter;
 
     public String buildWhereClause() {
-        StringJoiner whereClause = new StringJoiner("", " WHERE is_active is true", "");
+        StringJoiner whereClause = new StringJoiner("", " WHERE 1=1", "");
 
         if (search != null && !search.isEmpty()) {
             String like = likeOperator.get();

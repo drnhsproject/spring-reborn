@@ -17,7 +17,7 @@ public class QueryFilter {
     private Integer status;
 
     public String buildWhereClause() {
-        StringJoiner whereClause = new StringJoiner("", " WHERE is_active is true", "");
+        StringJoiner whereClause = new StringJoiner("", " WHERE 1=1", "");
 
         if (search != null && !search.isEmpty()) {
             whereClause.add(" AND (module LIKE :search OR submodule LIKE :search OR ordering LIKE :search OR action LIKE :search OR method LIKE :search OR uri LIKE :search)");
