@@ -47,6 +47,8 @@ public class PrivilegeResource {
 
     private final RemovePrivilege removePrivilege;
 
+    private final RestorePrivilege restorePrivilege;
+
     private final GetPrivilegesFormatted getPrivilegesFormatted;
 
     @Operation(summary = "Create Privilege", description = "Create new privilege")
@@ -97,6 +99,13 @@ public class PrivilegeResource {
     @PutMapping("/{id}/delete")
     public ResponseEntity<Void> softDeletePrivilege(@PathVariable("id") Long id) {
         archivePrivilege.handle(id);
+        return ResponseEntity.noContent()
+            .build();
+    }
+
+    @PutMapping("/{id}/restore")
+    public ResponseEntity<Void> restorePrivilege(@PathVariable("id") Long id) {
+        restorePrivilege.handle(id);
         return ResponseEntity.noContent()
             .build();
     }
