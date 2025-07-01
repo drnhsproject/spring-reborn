@@ -130,6 +130,104 @@ mvn exec:java -Dexec.args="Book.json library"
 
 ---
 
+# 🔐 Authorization Guide (Spring Security)
+
+Aplikasi ini menggunakan **Spring Security** dengan pendekatan otorisasi berbasis **role** dan **ownership** menggunakan anotasi `@PreAuthorize`.
+
+## ✅ Akses Berdasarkan Role (Role-Based Access Control)
+
+JWT token yang digunakan menyimpan informasi `role`, dan dapat digunakan dalam anotasi `@PreAuthorize`:
+
+### Contoh Role Tunggal
+
+```java
+@PreAuthorize("hasRole('ADMIN')")
+public ResponseEntity<?> adminOnly() {
+    // hanya pengguna dengan role ADMIN yang bisa mengakses
+}
+```
+
+### Contoh Beberapa Role
+
+```java
+@PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
+public ResponseEntity<?> adminOrSuperadmin() {
+    // bisa diakses oleh ADMIN atau SUPERADMIN
+}
+```
+
+> Catatan: `hasRole('X')` secara otomatis mencari authority `ROLE_X`.  
+> Jika kamu menggunakan authority tanpa prefix `ROLE_`, gunakan `hasAuthority('x')`.
+
+### Contoh Authority Langsung
+
+```java
+@PreAuthorize("hasAuthority('superadmin')")
+```
+
+---
+
+## 🧑 Ownership-Based Access Control
+
+Fitur ini membatasi akses agar hanya pemilik data yang dapat melakukan operasi tertentu.
+
+### Contoh Dasar
+
+```java
+@PreAuthorize("@ownershipGuard.isOwner('example', #id)")
+public ResponseEntity<?> updateExample(@PathVariable Long id) {
+    // hanya pemilik resource example dengan id yang dimaksud yang dapat mengakses
+}
+```
+
+### Parameter
+
+- `'example'`: nama entitas atau nama bean repository (`ExampleRepository`)
+- `#id`: ID dari resource yang akan dicek
+
+### Penamaan Entitas Lain
+
+Kamu bisa menggunakan entitas lain seperti:
+
+```java
+@PreAuthorize("@ownershipGuard.isOwner('userProfile', #id)")
+@PreAuthorize("@ownershipGuard.isOwner('userPremiumInformation', #id)")
+```
+
+Pastikan kamu memiliki repository dengan nama `UserProfileRepository`, `UserPremiumInformationRepository`, dll.
+
+---
+
+## 🔁 Kombinasi Role + Ownership
+
+```java
+@PreAuthorize("hasRole('ADMIN') or @ownershipGuard.isOwner('userProfile', #id)")
+public ResponseEntity<?> updateOrAdminAccess(@PathVariable Long id) {
+    // ADMIN bisa akses semua, selain itu hanya pemilik yang bisa
+}
+```
+
+---
+
+## ⚠️ Exception Handling
+
+Aplikasi ini telah menangani berbagai jenis error termasuk:
+
+- `AccessDeniedException`: akan menghasilkan response `403 Forbidden` dengan pesan yang jelas
+- `MethodArgumentNotValidException`: validasi gagal, response `400 Bad Request`
+- `DomainException` dan `HttpException`: untuk error custom yang kamu definisikan sendiri
+
+### Contoh Response JSON ketika akses ditolak
+
+```json
+{
+  "code": 403,
+  "message": "Access denied"
+}
+```
+
+---
+
 ## 🙋 FAQ
 
 ### Apakah file `.env` wajib dibuat?

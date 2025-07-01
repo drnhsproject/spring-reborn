@@ -3,7 +3,6 @@ package id.co.xinix.spring.modules.example.infrastructure.rest;
 import id.co.xinix.spring.modules.example.application.dto.*;
 import id.co.xinix.spring.modules.example.application.usecase.*;
 import id.co.xinix.spring.modules.example.domain.ExampleRepository;
-import id.co.xinix.spring.services.DataResponse;
 import id.co.xinix.spring.services.IdValidationService;
 import id.co.xinix.spring.services.ListResponse;
 import id.co.xinix.spring.services.SingleResponse;
