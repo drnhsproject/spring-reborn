@@ -228,6 +228,27 @@ Aplikasi ini telah menangani berbagai jenis error termasuk:
 
 ---
 
+## 🔍 API Documentation (Swagger)
+
+Aplikasi ini dilengkapi dengan dokumentasi API menggunakan Swagger UI.
+Setelah aplikasi berjalan, Swagger dapat diakses di URL berikut:
+
+**Sesuaikan dengan url server kalian:**
+
+```text
+http://localhost:8080/swagger-ui/index.html
+```
+
+Jika menggunakan konteks path, pastikan sesuaikan misalnya:
+
+```text
+http://localhost:8080/api/swagger-ui/index.html
+```
+
+Swagger ini membantu dalam mengeksplorasi dan menguji endpoint REST API secara langsung dari browser.
+
+---
+
 ## 🙋 FAQ
 
 ### Apakah file `.env` wajib dibuat?
