@@ -21,14 +21,16 @@ public class EntityGeneratorService {
     private final String outputBaseDir;
     private final String changelogDir;
     private final String masterFile;
+    private final String context;
 
     private final Configuration cfg;
     private final FormatterString formatterString;
 
-    public EntityGeneratorService(String outputBaseDir, String changelogDir, String masterFile) {
+    public EntityGeneratorService(String outputBaseDir, String changelogDir, String masterFile, String context) {
         this.outputBaseDir = outputBaseDir;
         this.changelogDir = changelogDir;
         this.masterFile = masterFile;
+        this.context = context;
         cfg = new Configuration(Configuration.VERSION_2_3_32);
         cfg.setClassLoaderForTemplateLoading(
                 Thread.currentThread().getContextClassLoader(), "/templates/framework"
@@ -52,7 +54,9 @@ public class EntityGeneratorService {
 
         String entityNameLower = entitySchema.getName().toLowerCase();
         String basePackage = Application.class.getPackage().getName();
-        String modulePackage = basePackage + ".modules." + entityNameLower;
+        String boundedBasePackage = basePackage.replaceFirst("\\bspring\\b", context);
+
+        String modulePackage = boundedBasePackage + ".modules." + entityNameLower;
 
         Map<String, Object> data = new HashMap<>();
         data.put("entity", entitySchema);

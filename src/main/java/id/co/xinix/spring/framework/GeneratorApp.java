@@ -45,7 +45,7 @@ public class GeneratorApp {
         Entity entitySchema = objectMapper.readValue(jsonFile, Entity.class);
 
         EntityGeneratorService generatorService = new EntityGeneratorService(
-                outputBaseDir, changelogDir, masterFile
+                outputBaseDir, changelogDir, masterFile, context
         );
 
         generatorService.generate(entitySchema);

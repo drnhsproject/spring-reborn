@@ -18,7 +18,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 @RestController
-@RequestMapping("/api/v1/${entityKebabCase}s")
+@RequestMapping("/api/${entityKebabCase}s")
 @RequiredArgsConstructor
 public class ${entity.name}Resource {
 

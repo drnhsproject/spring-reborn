@@ -33,17 +33,17 @@ public class ${entity.name}DTO implements Serializable {
     @NotNull
     </#if>
     <#if field.validations.minLength?? && field.validations.maxLength??>
-    @Size(min = ${field.validations.minLength}, max = ${field.validations.maxLength})
+    @Size(min = ${field.validations.minLength?c}, max = ${field.validations.maxLength?c})
     <#elseif field.validations.minLength??>
-    @Size(min = ${field.validations.minLength})
+    @Size(min = ${field.validations.minLength?c})
     <#elseif field.validations.maxLength??>
-    @Size(max = ${field.validations.maxLength})
+    @Size(max = ${field.validations.maxLength?c})
     </#if>
     <#if field.validations.min??>
-    @Min(value = ${field.validations.min})
+    @Min(value = ${field.validations.min?c})
     </#if>
     <#if field.validations.max??>
-    @Max(value = ${field.validations.max})
+    @Max(value = ${field.validations.max?c})
     </#if>
     </#if>
     <#-- Field Declaration -->
