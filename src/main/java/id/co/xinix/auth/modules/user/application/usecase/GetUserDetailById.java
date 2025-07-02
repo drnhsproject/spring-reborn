@@ -36,10 +36,6 @@ public class GetUserDetailById {
         UserProfile userProfile = userProfileRepository.findByUserId(user.getId())
             .orElse(null);
 
-        if (userRoles.isEmpty()) {
-            throw new NotFoundException("user roles not found");
-        }
-
         List<String> roleIds = userRoles
                 .stream()
                 .map(UserRole::getRoleCode)
