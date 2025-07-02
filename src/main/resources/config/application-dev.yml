@@ -30,7 +30,7 @@ generator:
   liquibase:
     changelogDir: src/main/resources/config/liquibase/changelog/
     masterFile: src/main/resources/config/liquibase/master.xml
-
+  dbType: mysql
 
 spring:
   devtools:

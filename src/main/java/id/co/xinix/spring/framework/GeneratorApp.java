@@ -32,7 +32,7 @@ public class GeneratorApp {
         Map<String, Object> liquibase = (Map<String, Object>) config.get("liquibase");
         String changelogDir = (String) liquibase.get("changelogDir");
         String masterFile = (String) liquibase.get("masterFile");
-
+        String dbType = (String) config.get("dbType");
         String inputFile = schemaFile.startsWith("/") ? schemaFile : schemaPath + schemaFile;
 
         File jsonFile = new File(inputFile);
@@ -45,7 +45,7 @@ public class GeneratorApp {
         Entity entitySchema = objectMapper.readValue(jsonFile, Entity.class);
 
         EntityGeneratorService generatorService = new EntityGeneratorService(
-                outputBaseDir, changelogDir, masterFile, context
+                outputBaseDir, changelogDir, masterFile, context, dbType
         );
 
         generatorService.generate(entitySchema);

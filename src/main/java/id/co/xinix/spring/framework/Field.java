@@ -12,6 +12,7 @@ public class Field {
     private String type;
     private Boolean primaryKey = false;
     private Boolean autoIncrement;
+    private Boolean searchable;
     private Object defaultValue;
     private FieldsValidation validations;
     private String sqlType;

@@ -1,0 +1,57 @@
+{
+  "name": "ExampleSchema",
+  "tableName": "example_schema",
+  "fields": [
+    {
+      "name": "id",
+      "type": "Long",
+      "primaryKey": true,
+      "autoIncrement": true
+    },
+    {
+      "name": "code",
+      "type": "String",
+      "searchable": true,
+      "validations": {
+        "required": true,
+        "unique": true,
+        "maxLength": 255
+      }
+    },
+    {
+      "name": "firstName",
+      "type": "String",
+      "searchable": true,
+      "validations": {
+        "required": true,
+        "maxLength": 5000
+      }
+    },
+    {
+      "name": "lastName",
+      "type": "String"
+    },
+    {
+      "name": "gender",
+      "type": "String"
+    },
+    {
+      "name": "phoneNumber",
+      "type": "String",
+      "validations": {
+        "required": true
+      }
+    },
+    {
+      "name": "birthDate",
+      "type": "LocalDate",
+      "validations": {
+        "required": true
+      }
+    },
+    {
+      "name": "age",
+      "type": "Integer"
+    }
+  ]
+}

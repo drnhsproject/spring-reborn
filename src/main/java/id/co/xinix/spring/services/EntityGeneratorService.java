@@ -15,6 +15,7 @@ import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class EntityGeneratorService {
 
@@ -22,15 +23,17 @@ public class EntityGeneratorService {
     private final String changelogDir;
     private final String masterFile;
     private final String context;
+    private final String dbType;
 
     private final Configuration cfg;
     private final FormatterString formatterString;
 
-    public EntityGeneratorService(String outputBaseDir, String changelogDir, String masterFile, String context) {
+    public EntityGeneratorService(String outputBaseDir, String changelogDir, String masterFile, String context, String dbType) {
         this.outputBaseDir = outputBaseDir;
         this.changelogDir = changelogDir;
         this.masterFile = masterFile;
         this.context = context;
+        this.dbType = dbType;
         cfg = new Configuration(Configuration.VERSION_2_3_32);
         cfg.setClassLoaderForTemplateLoading(
                 Thread.currentThread().getContextClassLoader(), "/templates/framework"
@@ -45,26 +48,64 @@ public class EntityGeneratorService {
         // Load templates
         Template entityTemplate = cfg.getTemplate("Entity.ftl");
         Template repositoryTemplate = cfg.getTemplate("Repository.ftl");
+
         Template dtoTemplate = cfg.getTemplate("Dto.ftl");
-        Template resourceTemplate = cfg.getTemplate("Resource.ftl");
-        Template createdResultTemplate = cfg.getTemplate("Created-result.ftl");
         Template commandTemplate = cfg.getTemplate("Command.ftl");
+        Template queryFilterTemplate = cfg.getTemplate("QueryFilter.ftl");
+        Template pagedResultTemplate = cfg.getTemplate("PagedResult.ftl");
+        Template createdResultTemplate = cfg.getTemplate("Created-result.ftl");
+        Template updatedResultTemplate = cfg.getTemplate("UpdatedResult.ftl");
+        Template detailResultTemplate = cfg.getTemplate("DetailResult.ftl");
         Template useCaseCreateTemplate = cfg.getTemplate("UseCase-create.ftl");
+        Template useCaseChangeDetailTemplate = cfg.getTemplate("ChangeDetail.ftl");
+        Template useCaseGetDetailTemplate = cfg.getTemplate("GetDetailById.ftl");
+        Template useCaseArchiveTemplate = cfg.getTemplate("Archive.ftl");
+        Template useCaseRemoveTemplate = cfg.getTemplate("Remove.ftl");
+        Template baseQueryResultTemplate = cfg.getTemplate("BaseQueryResult.ftl");
+        Template baseQueryGetListTemplate = cfg.getTemplate("BaseQueryGetList.ftl");
+        Template getListTemplate = cfg.getTemplate("GetList.ftl");
+
         Template changelogTemplate = cfg.getTemplate("Liquibase-changelog.ftl");
+        Template resourceTemplate = cfg.getTemplate("Resource.ftl");
 
         String entityNameLower = entitySchema.getName().toLowerCase();
         String basePackage = Application.class.getPackage().getName();
         String boundedBasePackage = basePackage.replaceFirst("\\bspring\\b", context);
-
         String modulePackage = boundedBasePackage + ".modules." + entityNameLower;
+
+        LikeOperatorResolver likeOperatorResolver= new LikeOperatorResolver(dbType);
+        String like = likeOperatorResolver.get();
+
+        String searchableFields = entitySchema.getFields().stream()
+                .filter(field -> Boolean.TRUE.equals(field.getSearchable()))
+                .filter(field -> field.getType().equals("String"))
+                .map(field -> formatterString.toSnakeCase(field.getName()) + " " + like + " :search")
+                .collect(Collectors.joining(" OR "));
+
+        List<String> columnMappings = entitySchema.getFields().stream()
+                .map(field -> {
+                    String snakeCase = formatterString.toSnakeCase(field.getName());
+                    String camelCase = field.getName();
+                    return snakeCase.equals(camelCase)
+                            ? " " + snakeCase
+                            : " " + snakeCase + " AS \"" + camelCase + "\"";
+                })
+                .collect(Collectors.toList());
+
+        String fieldColumns = String.join(",", columnMappings);
 
         Map<String, Object> data = new HashMap<>();
         data.put("entity", entitySchema);
         data.put("basePackage", basePackage);
         data.put("modulePackage", modulePackage);
+        data.put("boundedBasePackage", boundedBasePackage);
         data.put("changelogId", timestamp + "-1");
+        data.put("searchableFields", searchableFields);
         data.put("entityKebabCase", formatterString.toKebabCase(entitySchema.getName()));
+        data.put("entityCamelCase", formatterString.toCamelCase(entitySchema.getName()));
         data.put("entitySpacedLower", formatterString.toSpacedLowerCase(entitySchema.getName()));
+        data.put("entitySpaced", formatterString.toSpaced(entitySchema.getName()));
+        data.put("fieldColumns", fieldColumns);
 
         String baseDir = getBaseDirModule(entityNameLower);
 
@@ -84,28 +125,67 @@ public class EntityGeneratorService {
         String dtoOutputPath = baseDir + "application/dto/" + entitySchema.getName() + "DTO.java";
         generateFile(dtoTemplate, data, dtoOutputPath);
 
-        // Generate Resource
-        String resourceOutputPath = baseDir + "infrastructure/rest/" + entitySchema.getName() + "Resource.java";
-        generateFile(resourceTemplate, data, resourceOutputPath);
-
         // Generate Created Result
         String createdResultOutputPath = baseDir + "application/dto/" + entitySchema.getName() + "CreatedResult.java";
         generateFile(createdResultTemplate, data, createdResultOutputPath);
+
+        // Generate Updated Result
+        String updatedResultOutputPath = baseDir + "application/dto/" + entitySchema.getName() + "UpdatedResult.java";
+        generateFile(updatedResultTemplate, data, updatedResultOutputPath);
+
+        // Generate Updated Result
+        String detailResultOutputPath = baseDir + "application/dto/" + entitySchema.getName() + "DetailResult.java";
+        generateFile(detailResultTemplate, data, detailResultOutputPath);
 
         // Generate Command
         String commandOutputPath = baseDir + "application/dto/" + entitySchema.getName() + "Command.java";
         generateFile(commandTemplate, data, commandOutputPath);
 
-        // Generate Command
+        // Generate QueryFilter
+        String queryFilterOutputPath = baseDir + "application/dto/QueryFilter.java";
+        generateFile(queryFilterTemplate, data, queryFilterOutputPath);
+
+        // Generate PagedResult
+        String pagedResultOutputPath = baseDir + "application/dto/PagedResult.java";
+        generateFile(pagedResultTemplate, data, pagedResultOutputPath);
+
+        // Generate BaseQueryResult
+        String baseQueryResultOutputPath = baseDir + "application/dto/BaseQueryResult.java";
+        generateFile(baseQueryResultTemplate, data, baseQueryResultOutputPath);
+
+        // Generate UseCase
         String useCasePath = "application/usecase/";
         String useCaseCreateOutputPath = baseDir + useCasePath + "Create" + entitySchema.getName() + ".java";
         generateFile(useCaseCreateTemplate, data, useCaseCreateOutputPath);
+
+        String useCaseGetListOutputPath = baseDir + useCasePath + "Get" + entitySchema.getName() + "List.java";
+        generateFile(getListTemplate, data, useCaseGetListOutputPath);
+
+        String useCaseChangeDetailOutputPath = baseDir + useCasePath + "Change" + entitySchema.getName() + "Detail.java";
+        generateFile(useCaseChangeDetailTemplate, data, useCaseChangeDetailOutputPath);
+
+        String useCaseGetDetailDetailOutputPath = baseDir + useCasePath + "Get" + entitySchema.getName() + "DetailById.java";
+        generateFile(useCaseGetDetailTemplate, data, useCaseGetDetailDetailOutputPath);
+
+        String useCaseArchiveOutputPath = baseDir + useCasePath + "Archive" + entitySchema.getName() + ".java";
+        generateFile(useCaseArchiveTemplate, data, useCaseArchiveOutputPath);
+
+        String useCaseRemoveOutputPath = baseDir + useCasePath + "Remove" + entitySchema.getName() + ".java";
+        generateFile(useCaseRemoveTemplate, data, useCaseRemoveOutputPath);
+
+        // Generate Resource
+        String resourceOutputPath = baseDir + "infrastructure/rest/" + entitySchema.getName() + "Resource.java";
+        generateFile(resourceTemplate, data, resourceOutputPath);
+
+        // Generate BaseQueryGetList
+        String baseQueryGetListOutputPath = baseDir + "infrastructure/persistence/BaseQueryGetList.java";
+        generateFile(baseQueryGetListTemplate, data, baseQueryGetListOutputPath);
 
         for (Field field : entitySchema.getFields()) {
             String snakeCaseName = formatterString.toSnakeCase(field.getName());
             field.setName(snakeCaseName);
 
-            String sqlType = SqlTypeMapper.map(field.getType(), "mysql");
+            String sqlType = SqlTypeMapper.map(field.getType(), dbType);
             field.setSqlType(sqlType);
 
             if ("id".equalsIgnoreCase(snakeCaseName) && "Long".equals(field.getType())) {
