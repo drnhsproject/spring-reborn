@@ -12,7 +12,7 @@
 
 spring:
   application:
-    name: "spring project"
+    name: springProject
   profiles:
     active: '@spring.profiles.active@'
   jpa:
@@ -27,6 +27,7 @@ spring:
         type:
           preferred_instant_jdbc_type: TIMESTAMP
   liquibase:
+    contexts: test
     change-log: classpath:/config/liquibase/master.xml
   thymeleaf:
     mode: HTML

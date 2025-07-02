@@ -37,6 +37,11 @@
 		<hibernate.dialect>${env.HIBERNATE_DIALECT}</hibernate.dialect>
 		<!--suppress UnresolvedMavenProperty -->
 		<entity.package>${env.ENTITY_PACKAGE}</entity.package>
+		<profile.api-docs/>
+		<profile.e2e/>
+		<profile.no-liquibase/>
+		<profile.test/>
+		<profile.tls/>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -343,13 +348,19 @@
 
 	<profiles>
 		<profile>
+			<id>api-docs</id>
+			<properties>
+				<profile.api-docs>,api-docs</profile.api-docs>
+			</properties>
+		</profile>
+		<profile>
 			<id>dev</id>
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<properties>
 				<!-- default Spring profiles -->
-				<spring.profiles.active>dev</spring.profiles.active>
+				<spring.profiles.active>dev${profile.tls}${profile.no-liquibase}</spring.profiles.active>
 				<profile.test>test-dev</profile.test>
 				<!--suppress UnresolvedMavenProperty -->
 				<liquibase-plugin.url>${spring.datasource.url}</liquibase-plugin.url>
@@ -391,16 +402,29 @@
 			</build>
 		</profile>
 		<profile>
+			<id>no-liquibase</id>
+			<properties>
+				<profile.no-liquibase>,no-liquibase</profile.no-liquibase>
+			</properties>
+		</profile>
+		<profile>
 			<id>prod</id>
 			<properties>
 				<!-- default Spring profiles -->
-				<spring.profiles.active>prod</spring.profiles.active>
+				<spring.profiles.active>prod${profile.api-docs}${profile.tls}${profile.e2e}${profile.no-liquibase}</spring.profiles.active>
+				<profile.test>test-prod</profile.test>
 				<!--suppress UnresolvedMavenProperty -->
 				<liquibase-plugin.url>${spring.datasource.url}</liquibase-plugin.url>
 				<!--suppress UnresolvedMavenProperty -->
 				<liquibase-plugin.username>${spring.datasource.username}</liquibase-plugin.username>
 				<!--suppress UnresolvedMavenProperty -->
 				<liquibase-plugin.password>${spring.datasource.password}</liquibase-plugin.password>
+			</properties>
+		</profile>
+		<profile>
+			<id>tls</id>
+			<properties>
+				<profile.tls>,tls</profile.tls>
 			</properties>
 		</profile>
 	</profiles>
