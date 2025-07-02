@@ -43,6 +43,8 @@ public class ${entity.name}Resource {
         @Valid @RequestBody ${entity.name}Command command
     ) throws URISyntaxException
     {
+        idValidationService.validateNotNull(command.getId());
+
         ${entity.name}CreatedResult result = create.handle(command);
         SingleResponse<${entity.name}CreatedResult> response = new SingleResponse<>("${entitySpacedLower} created", result);
 
