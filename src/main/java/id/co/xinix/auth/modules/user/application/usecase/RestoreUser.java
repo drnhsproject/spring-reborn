@@ -14,7 +14,7 @@ import java.util.Set;
 
 @UseCase
 @AllArgsConstructor
-public class ArchiveUser {
+public class RestoreUser {
 
     private final UserRepository userRepository;
 
@@ -26,15 +26,15 @@ public class ArchiveUser {
         User user = userRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("user not found"));
 
-        user.setIsActive(false);
-        user.setStatus(0);
+        user.setIsActive(true);
+        user.setStatus(1);
 
         userRepository.save(user);
 
         Set<UserRole> userRoles = userRoleRepository.findByUserId(user.getId());
         for (UserRole userRole : userRoles) {
-            userRole.setIsActive(false);
-            userRole.setStatus(0);
+            userRole.setIsActive(true);
+            userRole.setStatus(1);
             userRoleRepository.save(userRole);
         }
 
@@ -42,8 +42,8 @@ public class ArchiveUser {
             .orElse(null);
 
         if (userProfile != null) {
-            userProfile.setIsActive(false);
-            userProfile.setStatus(0);
+            userProfile.setIsActive(true);
+            userProfile.setStatus(1);
             userProfileRepository.save(userProfile);
         }
     }
