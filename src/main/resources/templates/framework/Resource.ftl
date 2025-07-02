@@ -36,6 +36,7 @@ public class ${entity.name}Resource {
     private final Get${entity.name}DetailById get${entity.name}DetailById;
     private final Archive${entity.name} archive${entity.name};
     private final Remove${entity.name} remove${entity.name};
+    private final Restore${entity.name} restore${entity.name};
 
     @Operation(summary = "Create ${entitySpacedLower}", description = "Create new ${entitySpacedLower}")
     @PostMapping("")
@@ -90,6 +91,13 @@ public class ${entity.name}Resource {
     @PutMapping("/{id}/delete")
     public ResponseEntity<Void> softDelete${entity.name}(@PathVariable("id") Long id) {
         archive${entity.name}.handle(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Restore ${entitySpacedLower}", description = "Restore a delete ${entitySpacedLower} by ID")
+    @PutMapping("/{id}/restore")
+    public ResponseEntity<Void> restore${entity.name}(@PathVariable("id") Long id) {
+        restore${entity.name}.handle(id);
         return ResponseEntity.noContent().build();
     }
 

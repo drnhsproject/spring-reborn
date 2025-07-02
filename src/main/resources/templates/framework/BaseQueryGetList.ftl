@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import lombok.AllArgsConstructor;
 
-@Repository
+@Repository("${entityCamelCase}BaseQueryGetList")
 @AllArgsConstructor
 public class BaseQueryGetList {
 

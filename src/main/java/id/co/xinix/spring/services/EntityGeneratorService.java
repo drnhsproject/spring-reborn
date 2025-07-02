@@ -61,6 +61,7 @@ public class EntityGeneratorService {
         Template useCaseGetDetailTemplate = cfg.getTemplate("GetDetailById.ftl");
         Template useCaseArchiveTemplate = cfg.getTemplate("Archive.ftl");
         Template useCaseRemoveTemplate = cfg.getTemplate("Remove.ftl");
+        Template useCaseRestoreTemplate = cfg.getTemplate("Restore.ftl");
         Template baseQueryResultTemplate = cfg.getTemplate("BaseQueryResult.ftl");
         Template baseQueryGetListTemplate = cfg.getTemplate("BaseQueryGetList.ftl");
         Template getListTemplate = cfg.getTemplate("GetList.ftl");
@@ -172,6 +173,9 @@ public class EntityGeneratorService {
 
         String useCaseRemoveOutputPath = baseDir + useCasePath + "Remove" + entitySchema.getName() + ".java";
         generateFile(useCaseRemoveTemplate, data, useCaseRemoveOutputPath);
+
+        String useCaseRestoreOutputPath = baseDir + useCasePath + "Restore" + entitySchema.getName() + ".java";
+        generateFile(useCaseRestoreTemplate, data, useCaseRestoreOutputPath);
 
         // Generate Resource
         String resourceOutputPath = baseDir + "infrastructure/rest/" + entitySchema.getName() + "Resource.java";
