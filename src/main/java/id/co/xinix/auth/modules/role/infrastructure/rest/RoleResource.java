@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/roles")
@@ -72,11 +73,10 @@ public class RoleResource {
 
     @GetMapping("")
     public ResponseEntity<ListResponse<PagedResult>> getAllRole(
-        @RequestParam(value = "!search", required = false) String search,
-        @ModelAttribute QueryFilter queryFilter,
+        @RequestParam Map<String, String> params,
         Pageable pageable
     ) {
-        queryFilter.setSearch(search);
+        QueryFilter queryFilter = new QueryFilter(params);
         Page<PagedResult> results = getListRole.handle(queryFilter, pageable);
         ListResponse<PagedResult> response = ListResponse.fromPage("role retrieved", results);
 
