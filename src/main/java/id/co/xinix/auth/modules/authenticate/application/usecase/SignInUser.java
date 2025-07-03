@@ -2,6 +2,7 @@ package id.co.xinix.auth.modules.authenticate.application.usecase;
 
 import id.co.xinix.auth.UseCase;
 import id.co.xinix.auth.exception.BadRequestException;
+import id.co.xinix.auth.exception.DomainException;
 import id.co.xinix.auth.exception.NotFoundException;
 import id.co.xinix.auth.exception.UnauthorizedException;
 import id.co.xinix.auth.modules.authenticate.application.dto.SignInCommand;
@@ -52,6 +53,8 @@ public class SignInUser {
     private final UserProfileRepository userProfileRepository;
 
     public SignInResult handle(SignInCommand command) {
+        validationIsBlankUsernameAndPassword(command);
+
         var user = userRepository.findByUsername(command.getUsername())
                 .orElseThrow(() -> new UnauthorizedException("username or password is incorrect"));
 
@@ -112,6 +115,16 @@ public class SignInUser {
         signInResult.setAccessToken(jwt);
 
         return signInResult;
+    }
+
+    private void validationIsBlankUsernameAndPassword(SignInCommand command) {
+        if (isBlank(command.getUsername()) || isBlank(command.getPassword())) {
+            throw new DomainException("username or password can't be null");
+        }
+    }
+
+    private boolean isBlank(String value) {
+        return value == null || value.trim().isEmpty();
     }
 
     private Authentication authenticateUser(SignInCommand command) {
