@@ -15,6 +15,8 @@ logging:
     ROOT: INFO
 
 springdoc:
+  swagger:
+    server-url: https://reactjava.xinix.co.id/backend
   swagger-ui:
     enabled: true
     path: /swagger-ui.html
