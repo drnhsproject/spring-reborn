@@ -59,11 +59,11 @@ spring:
         token-validity-in-seconds: 43200
         token-validity-in-seconds-for-remember-me: 2592000
         cors:
-          allowed-origins: '*'
+          allowed-origins: 'https://reactjava.xinix.co.id/backend,https://reactjava.xinix.co.id'
           allowed-methods: '*'
           allowed-headers: '*'
           exposed-headers: 'Authorization,Link,X-Total-Count,X-${spring.application.name}-alert,X-${spring.application.name}-error,X-${spring.application.name}-params'
-          allow-credentials: false
+          allow-credentials: true
           max-age: 1800
 
 server:
