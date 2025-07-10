@@ -92,23 +92,26 @@ public class UserResource {
     }
 
     @PutMapping("/{id}/delete")
-    public ResponseEntity<Void> softDeleteUser(@PathVariable("id") Long id) {
-        archiveUser.handle(id);
-        return ResponseEntity.noContent()
-            .build();
+    public ResponseEntity<SingleResponse<UserResult>> softDeleteUser(@PathVariable("id") Long id) {
+        UserResult result = archiveUser.handle(id);
+        SingleResponse<UserResult> response = new SingleResponse<>("user archived", result);
+
+        return ResponseEntity.ok().body(response);
     }
 
     @PutMapping("/{id}/restore")
-    public ResponseEntity<Void> restoreUser(@PathVariable("id") Long id) {
-        restoreUser.handle(id);
-        return ResponseEntity.noContent()
-            .build();
+    public ResponseEntity<SingleResponse<UserResult>> restoreUser(@PathVariable("id") Long id) {
+        UserResult result = restoreUser.handle(id);
+        SingleResponse<UserResult> response = new SingleResponse<>("user restored", result);
+
+        return ResponseEntity.ok().body(response);
     }
 
     @DeleteMapping("/{id}/destroy")
-    public ResponseEntity<Void> deleteUser(@PathVariable("id") Long id) {
-        removeUser.handle(id);
-        return ResponseEntity.noContent()
-            .build();
+    public ResponseEntity<SingleResponse<UserResult>> deleteUser(@PathVariable("id") Long id) {
+        UserResult result = removeUser.handle(id);
+        SingleResponse<UserResult> response = new SingleResponse<>("user destroyed", result);
+
+        return ResponseEntity.ok().body(response);
     }
 }

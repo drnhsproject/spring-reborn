@@ -2,6 +2,7 @@ package id.co.xinix.auth.modules.user.application.usecase;
 
 import id.co.xinix.auth.UseCase;
 import id.co.xinix.auth.exception.NotFoundException;
+import id.co.xinix.auth.modules.user.application.dto.UserResult;
 import id.co.xinix.auth.modules.user.domain.User;
 import id.co.xinix.auth.modules.user.domain.UserRepository;
 import id.co.xinix.auth.modules.userprofile.domain.UserProfile;
@@ -22,7 +23,7 @@ public class ArchiveUser {
 
     private final UserProfileRepository userProfileRepository;
 
-    public void handle(Long id) {
+    public UserResult handle(Long id) {
         User user = userRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("user not found"));
 
@@ -46,5 +47,17 @@ public class ArchiveUser {
             userProfile.setStatus(0);
             userProfileRepository.save(userProfile);
         }
+
+        String firstName = userProfile == null ? "" : userProfile.getFirstName();
+        String lastName = userProfile == null ? "" : userProfile.getLastName();
+
+        return new UserResult(
+                user.getId(),
+                firstName,
+                lastName,
+                user.getUsername(),
+                user.getEmail(),
+                user.getStatus()
+        );
     }
 }
