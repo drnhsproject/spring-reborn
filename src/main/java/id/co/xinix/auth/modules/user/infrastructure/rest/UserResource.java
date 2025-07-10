@@ -59,7 +59,7 @@ public class UserResource {
     @PutMapping("/{id}")
     public ResponseEntity<SingleResponse<UserUpdatedResult>> updateUser(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody UserUpdateCommand command
+        @Valid @RequestBody UserUpdateCommand command
     ) throws JsonProcessingException {
         command.setId(id);
         idValidationService.validateIdForUpdate(userRepository, id, command.getId(), "user");

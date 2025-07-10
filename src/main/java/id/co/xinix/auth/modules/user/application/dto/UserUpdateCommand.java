@@ -2,6 +2,7 @@ package id.co.xinix.auth.modules.user.application.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,7 +30,9 @@ public class UserUpdateCommand {
     @NotNull(message = "must be not null")
     private String username;
 
-    private List<String> role;
+    @NotNull(message = "role must not be null")
+    @Size(min = 1, message = "role must not be empty")
+    private List<@NotBlank(message = "role item must not be blank") String> role;
 
     private PhotoDTO photo;
 
