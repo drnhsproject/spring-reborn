@@ -2,6 +2,7 @@ package id.co.xinix.auth.modules.role.application.usecase;
 
 import id.co.xinix.auth.UseCase;
 import id.co.xinix.auth.exception.NotFoundException;
+import id.co.xinix.auth.modules.role.application.dto.RoleResult;
 import id.co.xinix.auth.modules.role.domain.Role;
 import id.co.xinix.auth.modules.role.domain.RoleRepository;
 import id.co.xinix.auth.modules.roleprivilege.domain.RolePrivilege;
@@ -18,9 +19,16 @@ public class RemoveRole {
 
     private final RolePrivilegeRepository rolePrivilegeRepository;
 
-    public void handle(Long id) {
+    public RoleResult handle(Long id) {
         Role role = roleRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("role not found"));
+
+        RoleResult result = new RoleResult(
+            role.getId(),
+            role.getCode(),
+            role.getName(),
+            role.getStatus()
+        );
 
         List<RolePrivilege> rolePrivileges = rolePrivilegeRepository.findByRoleCode(role.getCode());
         for (RolePrivilege privilege : rolePrivileges) {
@@ -28,5 +36,7 @@ public class RemoveRole {
         }
 
         roleRepository.delete(role);
+
+        return result;
     }
 }

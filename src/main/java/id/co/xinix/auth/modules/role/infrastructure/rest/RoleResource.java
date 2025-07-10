@@ -30,24 +30,16 @@ import java.util.Map;
 public class RoleResource {
 
     private final CreateRole createRole;
-
     private final GetListRole getListRole;
-
     private final GetRoleDetailById getRoleDetailById;
-
     private final IdValidationService idValidationService;
-
     private final RoleRepository roleRepository;
-
     private final ChangeRoleDetail changeRoleDetail;
-
     private final ArchiveRole archiveRole;
-
     private final RemoveRole removeRole;
-
     private final RestoreRole restoreRole;
 
-    @Operation(summary = "Create Role", description = "Create new role")
+    @Operation(summary = "Create Role", description = "create new role")
     @PostMapping("")
     public ResponseEntity<SingleResponse<RoleCreatedResult>> createRole(
         @Valid @RequestBody RoleCommand command
@@ -58,6 +50,7 @@ public class RoleResource {
         return ResponseEntity.created(new URI("/api/roles/")).body(response);
     }
 
+    @Operation(summary = "Change Role", description = "change detail role")
     @PutMapping("/{id}")
     public ResponseEntity<SingleResponse<RoleUpdatedResult>> updateRole(
         @PathVariable(value = "id", required = false) final Long id,
@@ -71,6 +64,7 @@ public class RoleResource {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "List Role", description = "get all data role")
     @GetMapping("")
     public ResponseEntity<ListResponse<PagedResult>> getAllRole(
         @RequestParam Map<String, String> params,
@@ -83,6 +77,7 @@ public class RoleResource {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "Detail Role", description = "get detail role by id")
     @GetMapping("/{id}")
     public ResponseEntity<SingleResponse<RoleDetailResult>> getRoleDetail(@PathVariable("id") Long id) {
         RoleDetailResult result = getRoleDetailById.handle(id);
@@ -91,24 +86,30 @@ public class RoleResource {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "Soft delete/archive Role", description = "archive role")
     @PutMapping("/{id}/delete")
-    public ResponseEntity<Void> softDeleteRole(@PathVariable("id") Long id) {
-        archiveRole.handle(id);
-        return ResponseEntity.noContent()
-            .build();
+    public ResponseEntity<SingleResponse<RoleResult>> softDeleteRole(@PathVariable("id") Long id) {
+        RoleResult result = archiveRole.handle(id);
+        SingleResponse<RoleResult> response = new SingleResponse<>("role archived", result);
+
+        return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "Restore Role", description = "restore role")
     @PutMapping("/{id}/restore")
-    public ResponseEntity<Void> restoreRole(@PathVariable("id") Long id) {
-        restoreRole.handle(id);
-        return ResponseEntity.noContent()
-            .build();
+    public ResponseEntity<SingleResponse<RoleResult>> restoreRole(@PathVariable("id") Long id) {
+        RoleResult result = restoreRole.handle(id);
+        SingleResponse<RoleResult> response = new SingleResponse<>("role restored", result);
+
+        return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "Permanent delete/destroy Role", description = "remove role")
     @DeleteMapping("/{id}/destroy")
-    public ResponseEntity<Void> deleteRole(@PathVariable("id") Long id) {
-        removeRole.handle(id);
-        return ResponseEntity.noContent()
-            .build();
+    public ResponseEntity<SingleResponse<RoleResult>> deleteRole(@PathVariable("id") Long id) {
+        RoleResult result = removeRole.handle(id);
+        SingleResponse<RoleResult> response = new SingleResponse<>("role removed", result);
+
+        return ResponseEntity.ok().body(response);
     }
 }

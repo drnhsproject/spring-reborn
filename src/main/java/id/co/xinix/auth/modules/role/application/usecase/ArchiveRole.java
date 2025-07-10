@@ -2,6 +2,7 @@ package id.co.xinix.auth.modules.role.application.usecase;
 
 import id.co.xinix.auth.UseCase;
 import id.co.xinix.auth.exception.NotFoundException;
+import id.co.xinix.auth.modules.role.application.dto.RoleResult;
 import id.co.xinix.auth.modules.role.domain.Role;
 import id.co.xinix.auth.modules.role.domain.RoleRepository;
 import id.co.xinix.auth.modules.roleprivilege.domain.RolePrivilege;
@@ -18,7 +19,7 @@ public class ArchiveRole {
 
     private final RolePrivilegeRepository rolePrivilegeRepository;
 
-    public void handle(Long id) {
+    public RoleResult handle(Long id) {
         Role role = roleRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("role not found"));
 
@@ -33,5 +34,12 @@ public class ArchiveRole {
             privilege.setStatus(0);
             rolePrivilegeRepository.save(privilege);
         }
+
+        return new RoleResult(
+            role.getId(),
+            role.getCode(),
+            role.getName(),
+            role.getStatus()
+        );
     }
 }
