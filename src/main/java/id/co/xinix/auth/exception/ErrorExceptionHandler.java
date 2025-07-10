@@ -2,6 +2,7 @@ package id.co.xinix.auth.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,6 +23,15 @@ public class ErrorExceptionHandler {
     @ExceptionHandler(DomainException.class)
     public ResponseEntity<ErrorExceptionResponse> handleDomainException(DomainException ex) {
         return new ResponseEntity<>(new ErrorExceptionResponse(ex), ex.getStatus());
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorExceptionResponse> handleAccessDeniedException(AccessDeniedException ex) {
+        ErrorExceptionResponse errorResponse = new ErrorExceptionResponse(
+                HttpStatus.FORBIDDEN.value(),
+                ex.getMessage() != null ? ex.getMessage() : "Access denied"
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

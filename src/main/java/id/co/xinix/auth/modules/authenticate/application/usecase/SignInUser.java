@@ -7,10 +7,7 @@ import id.co.xinix.auth.exception.NotFoundException;
 import id.co.xinix.auth.exception.UnauthorizedException;
 import id.co.xinix.auth.modules.authenticate.application.dto.SignInCommand;
 import id.co.xinix.auth.modules.authenticate.application.dto.SignInResult;
-import id.co.xinix.auth.modules.authenticate.domain.PrivilegeDetail;
-import id.co.xinix.auth.modules.authenticate.domain.RoleDetail;
-import id.co.xinix.auth.modules.authenticate.domain.RolePrivilegeDetail;
-import id.co.xinix.auth.modules.authenticate.domain.UserDetail;
+import id.co.xinix.auth.modules.authenticate.domain.*;
 import id.co.xinix.auth.modules.role.domain.Role;
 import id.co.xinix.auth.modules.role.domain.RoleRepository;
 import id.co.xinix.auth.modules.roleprivilege.domain.RolePrivilege;
@@ -29,6 +26,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -66,6 +64,31 @@ public class SignInUser {
                 .findByUserId(user.getId())
                 .orElseThrow(() -> new NotFoundException("user not found"));
 
+        List<String> rolesUserDetail = List.of(user.getRoleCode());
+
+        Set<UserRole> userRolesForUserDetail = userRoleRepository.findByUserId(user.getId());
+
+        List<UserRoleSignIn> userRoleSignIns = userRolesForUserDetail.stream()
+                .map(userRole -> {
+                    Role role = roleRepository.findByCode(userRole.getRoleCode())
+                            .orElseThrow(() -> new NotFoundException("role not found for code: " + userRole.getRoleCode()));
+
+                    RoleSignIn roleSignIn = new RoleSignIn(
+                            role.getId(),
+                            role.getCode(),
+                            role.getName(),
+                            role.getStatus()
+                    );
+
+                    return new UserRoleSignIn(
+                            userRole.getId(),
+                            userRole.getUserId(),
+                            roleSignIn,
+                            userRole.getStatus()
+                    );
+                })
+                .toList();
+
         UserDetail userDetail = new UserDetail(
                 user.getId(),
                 user.getUsername(),
@@ -73,11 +96,13 @@ public class SignInUser {
                 user.getStatus(),
                 userProfile.getFirstName(),
                 userProfile.getLastName(),
-                userProfile.getPhoto()
+                userProfile.getPhoto(),
+                rolesUserDetail,
+                userRoleSignIns
         );
 
         Authentication authentication = authenticateUser(command);
-        String jwt = tokenProvider.generateToken(authentication, command.getRememberMe(), userDetail);
+        String jwt = tokenProvider.generateToken(authentication, command.getRememberMe(), userDetail.username());
 
         Set<UserRole> userRoles = userRoleRepository.findByUserId(userDetail.id());
 

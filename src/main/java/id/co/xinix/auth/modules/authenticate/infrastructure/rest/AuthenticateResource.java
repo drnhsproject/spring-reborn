@@ -7,7 +7,6 @@ import id.co.xinix.auth.modules.authenticate.application.dto.SignInResult;
 import id.co.xinix.auth.modules.authenticate.application.usecase.SignInUser;
 import id.co.xinix.auth.security.jwt.TokenProvider;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

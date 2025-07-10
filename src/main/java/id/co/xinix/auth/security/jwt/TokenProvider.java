@@ -1,8 +1,8 @@
 package id.co.xinix.auth.security.jwt;
 
 import id.co.xinix.auth.exception.NotFoundException;
+import id.co.xinix.auth.exception.UnauthorizedException;
 import id.co.xinix.auth.management.SecurityMetersService;
-import id.co.xinix.auth.modules.authenticate.domain.UserDetail;
 import id.co.xinix.auth.modules.user.domain.User;
 import id.co.xinix.auth.modules.user.domain.UserRepository;
 import id.co.xinix.auth.modules.userprofile.domain.UserProfile;
@@ -63,14 +63,14 @@ public class TokenProvider {
         this.tokenValidityInMillisecondsForRememberMe = jwtProperties.getTokenValidityInSecondsForRememberMe();
     }
 
-    public String generateToken(Authentication authentication, boolean rememberMe, UserDetail userDetail) {
+    public String generateToken(Authentication authentication, boolean rememberMe, String username) {
         String authorities = authentication.getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
         User user = userRepository
-                .findByUsername(userDetail.username())
+                .findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("user not found"));
 
         String userRole = userRoleRepository
@@ -94,10 +94,10 @@ public class TokenProvider {
                 .expiresAt(validity)
                 .subject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)
-                .claim("id", userDetail.id())
-                .claim("username", userDetail.username())
-                .claim("email", userDetail.email())
-                .claim("status", userDetail.status())
+                .claim("id", user.getId())
+                .claim("username", user.getUsername())
+                .claim("email", user.getEmail())
+                .claim("status", user.getStatus())
                 .claim("role", userRole)
                 .claim("first_name", userProfile.getFirstName() != null ? userProfile.getFirstName() : "")
                 .claim("last_name", userProfile.getLastName() != null ? userProfile.getLastName() : "")
@@ -117,22 +117,14 @@ public class TokenProvider {
     }
 
     public String getRefreshToken(String token) {
-        Jwt jwt = jwtDecoder.decode(token);
+        try {
+            Jwt jwt = jwtDecoder.decode(token);
+            String username = jwt.getClaimAsString("sub");
 
-        Long id = Long.parseLong(jwt.getClaimAsString("id"));
-        Integer status = ((Long) jwt.getClaim("status")).intValue();
-
-        UserDetail userDetail = new UserDetail(
-                id,
-                jwt.getClaimAsString("username"),
-                jwt.getClaimAsString("email"),
-                status,
-                jwt.getClaimAsString("first_name"),
-                jwt.getClaimAsString("last_name"),
-                jwt.getClaimAsString("photo")
-        );
-
-        return generateToken(getAuthentication(token), false, userDetail);
+            return generateToken(getAuthentication(token), false, username);
+        } catch (JwtException e) {
+            throw new UnauthorizedException("invalid or expired token");
+        }
     }
 
     public boolean validateToken(String token) {
@@ -142,7 +134,7 @@ public class TokenProvider {
         } catch (JwtException e) {
             log.warn("JWT validation failed: {}", e.getMessage());
             securityMetersService.trackTokenMalformed();
-            return false;
+            throw new UnauthorizedException("Invalid token: " + e.getMessage());
         }
     }
 
