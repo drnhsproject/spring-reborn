@@ -56,6 +56,7 @@ public class UserResource {
         return ResponseEntity.created(new URI("/api/users/")).body(response);
     }
 
+    @Operation(summary = "Change detail data user", description = "using for change detail user")
     @PutMapping("/{id}")
     public ResponseEntity<SingleResponse<UserUpdatedResult>> updateUser(
         @PathVariable(value = "id", required = false) final Long id,
@@ -70,6 +71,7 @@ public class UserResource {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "List user", description = "get all data user")
     @GetMapping("")
     public ResponseEntity<ListResponse<PagedResult>> getAllUser(
         @RequestParam(value = "!search", required = false) String search,
@@ -83,6 +85,7 @@ public class UserResource {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "Detail user", description = "get detail user by id")
     @GetMapping("/{id}")
     public ResponseEntity<SingleResponse<UserDetailResult>> getUserDetail(@PathVariable("id") Long id) throws JsonProcessingException {
         UserDetailResult result = getUserDetailById.handle(id);
@@ -91,6 +94,7 @@ public class UserResource {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "Soft delete/archive", description = "archive the user")
     @PutMapping("/{id}/delete")
     public ResponseEntity<SingleResponse<UserResult>> softDeleteUser(@PathVariable("id") Long id) {
         UserResult result = archiveUser.handle(id);
@@ -99,6 +103,7 @@ public class UserResource {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "Restore", description = "restore data archive user")
     @PutMapping("/{id}/restore")
     public ResponseEntity<SingleResponse<UserResult>> restoreUser(@PathVariable("id") Long id) {
         UserResult result = restoreUser.handle(id);
@@ -107,6 +112,7 @@ public class UserResource {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "Permanent delete/destroy", description = "destroy data user")
     @DeleteMapping("/{id}/destroy")
     public ResponseEntity<SingleResponse<UserResult>> deleteUser(@PathVariable("id") Long id) {
         UserResult result = removeUser.handle(id);
