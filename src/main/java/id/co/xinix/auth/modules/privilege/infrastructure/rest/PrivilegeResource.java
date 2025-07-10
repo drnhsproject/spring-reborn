@@ -51,7 +51,7 @@ public class PrivilegeResource {
 
     private final GetPrivilegesFormatted getPrivilegesFormatted;
 
-    @Operation(summary = "Create Privilege", description = "Create new privilege")
+    @Operation(summary = "Create Privilege", description = "create new privilege")
     @PostMapping("")
     public ResponseEntity<SingleResponse<PrivilegeCreatedResult>> createPrivilege(
         @Valid @RequestBody PrivilegeCommand command
@@ -62,6 +62,7 @@ public class PrivilegeResource {
         return ResponseEntity.created(new URI("/api/privileges/")).body(response);
     }
 
+    @Operation(summary = "Change Privilege", description = "change detail privilege")
     @PutMapping("/{id}")
     public ResponseEntity<SingleResponse<PrivilegeUpdatedResult>> updatePrivilege(
         @PathVariable(value = "id", required = false) final Long id,
@@ -75,6 +76,7 @@ public class PrivilegeResource {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "List Privilege", description = "get all data privilege")
     @GetMapping("")
     public ResponseEntity<ListResponse<PagedResult>> getAllPrivilege(
         @RequestParam(value = "!search", required = false) String search,
@@ -88,6 +90,7 @@ public class PrivilegeResource {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "Detail Privilege", description = "get detail privilege by id")
     @GetMapping("/{id}")
     public ResponseEntity<SingleResponse<PrivilegeDetailResult>> getUserDetail(@PathVariable("id") Long id) {
         PrivilegeDetailResult result = getPrivilegeDetailById.handle(id);
@@ -96,25 +99,31 @@ public class PrivilegeResource {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "Soft delete/archive privilege", description = "archive data privilege")
     @PutMapping("/{id}/delete")
-    public ResponseEntity<Void> softDeletePrivilege(@PathVariable("id") Long id) {
-        archivePrivilege.handle(id);
-        return ResponseEntity.noContent()
-            .build();
+    public ResponseEntity<SingleResponse<PrivilegeResult>> softDeletePrivilege(@PathVariable("id") Long id) {
+        PrivilegeResult result = archivePrivilege.handle(id);
+        SingleResponse<PrivilegeResult> response = new SingleResponse<>("privilege archived", result);
+
+        return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "Restore privilege", description = "restore data privilege")
     @PutMapping("/{id}/restore")
-    public ResponseEntity<Void> restorePrivilege(@PathVariable("id") Long id) {
-        restorePrivilege.handle(id);
-        return ResponseEntity.noContent()
-            .build();
+    public ResponseEntity<SingleResponse<PrivilegeResult>> restorePrivilege(@PathVariable("id") Long id) {
+        PrivilegeResult result = restorePrivilege.handle(id);
+        SingleResponse<PrivilegeResult> response = new SingleResponse<>("privilege restored", result);
+
+        return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "Permanent delete/destroy privilege", description = "destroy data privilege")
     @DeleteMapping("/{id}/destroy")
-    public ResponseEntity<Void> deletePrivilege(@PathVariable("id") Long id) {
-        removePrivilege.handle(id);
-        return ResponseEntity.noContent()
-            .build();
+    public ResponseEntity<SingleResponse<PrivilegeResult>> deletePrivilege(@PathVariable("id") Long id) {
+        PrivilegeResult result = removePrivilege.handle(id);
+        SingleResponse<PrivilegeResult> response = new SingleResponse<>("privilege destroyed", result);
+
+        return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/fetch/format")
