@@ -1,18 +1,36 @@
 package id.co.xinix.spring.modules.example.application.usecase;
 
+import id.co.xinix.auth.exception.NotFoundException;
 import id.co.xinix.spring.UseCase;
-import id.co.xinix.spring.modules.example.domain.service.ExampleService;
+import id.co.xinix.spring.modules.example.application.dto.ExampleResult;
+import id.co.xinix.spring.modules.example.domain.Example;
+import id.co.xinix.spring.modules.example.domain.ExampleRepository;
+import lombok.AllArgsConstructor;
 
 @UseCase
+@AllArgsConstructor
 public class RemoveExample {
 
-    private final ExampleService exampleService;
+    private final ExampleRepository exampleRepository;
 
-    public RemoveExample(ExampleService exampleService) {
-        this.exampleService = exampleService;
-    }
+    public ExampleResult handle(Long id) {
+        if (!exampleRepository.existsById(id)) {
+            throw new NotFoundException("example not found");
+        }
 
-    public void handle(Long id) {
-        exampleService.delete(id);
+        Example example = exampleRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("example not found"));
+
+        ExampleResult result = new ExampleResult(
+            example.getId(),
+            example.getCode(),
+            example.getName(),
+            example.getNik(),
+            example.getStatus()
+        );
+
+        exampleRepository.deleteById(id);
+
+        return result;
     }
 }

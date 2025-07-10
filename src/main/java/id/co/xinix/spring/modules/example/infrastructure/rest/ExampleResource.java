@@ -29,24 +29,17 @@ import java.net.URISyntaxException;
 public class ExampleResource {
 
     private static final Logger log = LoggerFactory.getLogger(ExampleResource.class);
-
     private final ExampleRepository exampleRepository;
-
     private final IdValidationService idValidationService;
-
     private final CreateExample createExample;
-
     private final ChangeExampleDetail changeExampleDetail;
-
     private final GetExampleDetailById getExampleDetailById;
-
     private final GetList getList;
-
     private final ArchiveExample archiveExample;
-
     private final RemoveExample removeExample;
+    private final RestoreExample restoreExample;
 
-    @Operation(summary = "Create Example", description = "Create new example")
+    @Operation(summary = "Create Example", description = "create new example")
     @PostMapping("")
     public ResponseEntity<SingleResponse<ExampleCreatedResult>> createExample(@Valid @RequestBody ExampleCommand command)
             throws URISyntaxException {
@@ -58,6 +51,7 @@ public class ExampleResource {
         return ResponseEntity.created(new URI("/api/assessor-infos/")).body(response);
     }
 
+    @Operation(summary = "Change Example", description = "change detail example")
     @PutMapping("/{id}")
     public ResponseEntity<SingleResponse<ExampleUpdatedResult>> updateExample(
             @PathVariable(value = "id", required = false) final Long id,
@@ -71,6 +65,7 @@ public class ExampleResource {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "List Example", description = "get all data example")
     @GetMapping("")
     public ResponseEntity<ListResponse<PagedResult>> getAllExample(
             @RequestParam(value = "!search", required = false) String search,
@@ -84,6 +79,7 @@ public class ExampleResource {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "Detail Example", description = "detail example by id")
     @GetMapping("/{id}")
     public ResponseEntity<SingleResponse<ExampleDetailResult>> getExampleDetail(@PathVariable("id") Long id) {
         ExampleDetailResult result = getExampleDetailById.handle(id);
@@ -92,17 +88,30 @@ public class ExampleResource {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "Soft delete/archive Example", description = "archive example")
     @PutMapping("/{id}/delete")
-    public ResponseEntity<Void> softDeleteExample(@PathVariable("id") Long id) {
-        archiveExample.handle(id);
-        return ResponseEntity.noContent()
-                .build();
+    public ResponseEntity<SingleResponse<ExampleResult>> softDeleteExample(@PathVariable("id") Long id) {
+        ExampleResult result = archiveExample.handle(id);
+        SingleResponse<ExampleResult> response = new SingleResponse<>("example archived", result);
+
+        return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "Restore Example", description = "restore example")
+    @PutMapping("/{id}/restore")
+    public ResponseEntity<SingleResponse<ExampleResult>> restoreExample(@PathVariable("id") Long id) {
+        ExampleResult result = restoreExample.handle(id);
+        SingleResponse<ExampleResult> response = new SingleResponse<>("example restored", result);
+
+        return ResponseEntity.ok().body(response);
+    }
+
+    @Operation(summary = "Permanent delete/destroy Example", description = "destroy example")
     @DeleteMapping("/{id}/destroy")
-    public ResponseEntity<Void> deleteExample(@PathVariable("id") Long id) {
-        removeExample.handle(id);
-        return ResponseEntity.noContent()
-                .build();
+    public ResponseEntity<SingleResponse<ExampleResult>> deleteExample(@PathVariable("id") Long id) {
+        ExampleResult result = removeExample.handle(id);
+        SingleResponse<ExampleResult> response = new SingleResponse<>("example removed", result);
+
+        return ResponseEntity.ok().body(response);
     }
 }
