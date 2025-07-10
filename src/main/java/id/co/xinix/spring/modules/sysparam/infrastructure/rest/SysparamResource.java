@@ -25,7 +25,7 @@ import java.sql.SQLException;
 @RestController
 @RequestMapping("/api/sysparams")
 @RequiredArgsConstructor
-@Tag(name = "Sysparams", description = "Operation sysparams")
+@Tag(name = "Sysparams API", description = "Operation sysparams")
 @SecurityRequirement(name = "bearerAuth")
 @RepositoryRestResource(exported = false)
 public class SysparamResource {
@@ -60,6 +60,7 @@ public class SysparamResource {
         return ResponseEntity.created(new URI("/api/sysparams/")).body(response);
     }
 
+    @Operation(summary = "Change Sysparams", description = "change detail data sysparams")
     @PutMapping("/{id}")
     public ResponseEntity<SingleResponse<SysparamUpdatedResult>> updateSysparam(
         @PathVariable(value = "id", required = false) final Long id,
@@ -73,6 +74,7 @@ public class SysparamResource {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "List Sysparams", description = "get all data sysparams")
     @GetMapping("")
     public ResponseEntity<ListResponse<PagedResult>> getAllSysparam(
         @RequestParam(value = "!search", required = false) String search,
@@ -86,6 +88,7 @@ public class SysparamResource {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "Detail Sysparams", description = "get detail data sysparams by id")
     @GetMapping("/{id}")
     public ResponseEntity<SingleResponse<SysparamDetailResult>> getSysparamDetail(@PathVariable("id") Long id) {
         SysparamDetailResult result = getSysparamDetailById.handle(id);
@@ -94,23 +97,30 @@ public class SysparamResource {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "Soft delete/archive Sysparams", description = "archive data sysparams")
     @PutMapping("/{id}/delete")
-    public ResponseEntity<Void> softDeleteSysparam(@PathVariable("id") Long id) {
-        archiveSysparam.handle(id);
-        return ResponseEntity.noContent()
-            .build();
+    public ResponseEntity<SingleResponse<SysparamsResult>> softDeleteSysparam(@PathVariable("id") Long id) {
+        SysparamsResult result = archiveSysparam.handle(id);
+        SingleResponse<SysparamsResult> response = new SingleResponse<>("sysparams archived", result);
+
+        return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "Restore Sysparams", description = "restore data sysparams")
     @PutMapping("/{id}/restore")
-    public ResponseEntity<Void> restoreSysparam(@PathVariable("id") Long id) {
-        restoreSysparam.handle(id);
-        return ResponseEntity.noContent()
-            .build();
+    public ResponseEntity<SingleResponse<SysparamsResult>> restoreSysparam(@PathVariable("id") Long id) {
+        SysparamsResult result = restoreSysparam.handle(id);
+        SingleResponse<SysparamsResult> response = new SingleResponse<>("sysparams restored", result);
+
+        return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "Permanent delete/destroy Sysparams", description = "destroy data sysparams")
     @DeleteMapping("/{id}/destroy")
-    public ResponseEntity<Void> deleteSysparam(@PathVariable("id") Long id) {
-        removeSysparam.handle(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<SingleResponse<SysparamsResult>> deleteSysparam(@PathVariable("id") Long id) {
+        SysparamsResult result = removeSysparam.handle(id);
+        SingleResponse<SysparamsResult> response = new SingleResponse<>("sysparams destroyed", result);
+
+        return ResponseEntity.ok().body(response);
     }
 }
