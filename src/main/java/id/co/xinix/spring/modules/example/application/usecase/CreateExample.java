@@ -24,6 +24,10 @@ public class CreateExample {
         Example example = buildExampleFromCommand(command);
         Example savedExample = exampleRepository.save(example);
 
+        if (savedExample == null) {
+            throw new IllegalStateException("repository returned null");
+        }
+
         return buildResultFromExample(savedExample);
     }
 

@@ -1,5 +1,7 @@
 package id.co.xinix.auth.modules.authenticate.infrastructure.rest;
 
+import id.co.xinix.auth.exception.ForbiddenException;
+import id.co.xinix.auth.exception.UnauthorizedException;
 import id.co.xinix.auth.modules.authenticate.application.dto.RefreshTokenCommand;
 import id.co.xinix.auth.modules.authenticate.application.dto.RefreshTokenResult;
 import id.co.xinix.auth.modules.authenticate.application.dto.SignInCommand;
@@ -14,10 +16,8 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -39,12 +39,19 @@ public class AuthenticateResource {
         return new ResponseEntity<>(result, httpHeaders, HttpStatus.OK);
     }
 
-    @Operation(summary = "Refresh Token", description = "to refresh token")
+    @Operation(summary = "Refresh Token", description = "To refresh token")
     @PostMapping("/refresh")
     public ResponseEntity<RefreshTokenResult> refreshAuthentication(
-            @Valid @RequestBody RefreshTokenCommand command
+            @RequestHeader(value = "Authorization", required = false) String authHeader
     ) {
-        String refreshedToken = tokenProvider.getRefreshToken(command.access_token());
-        return ResponseEntity.ok().body(new RefreshTokenResult(refreshedToken));
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new UnauthorizedException("unauthorized");
+        }
+
+        String accessToken = authHeader.substring(7);
+        String refreshedToken = tokenProvider.getRefreshToken(accessToken);
+
+        return ResponseEntity.ok(new RefreshTokenResult(refreshedToken));
     }
+
 }

@@ -18,6 +18,7 @@ import id.co.xinix.auth.modules.userprofile.domain.UserProfileRepository;
 import id.co.xinix.auth.modules.userrole.domain.UserRole;
 import id.co.xinix.auth.modules.userrole.domain.UserRoleRepository;
 import id.co.xinix.auth.security.jwt.TokenProvider;
+import id.co.xinix.spring.services.GenerateRandomCode;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -62,7 +63,14 @@ public class SignInUser {
 
         UserProfile userProfile = userProfileRepository
                 .findByUserId(user.getId())
-                .orElseThrow(() -> new NotFoundException("user not found"));
+                .orElseGet(() -> {
+                    UserProfile newProfile = new UserProfile();
+                    newProfile.setUserId(user.getId());
+                    newProfile.setCode(generateCode());
+                    newProfile.setFirstName(user.getUsername());
+
+                    return userProfileRepository.save(newProfile);
+                });
 
         List<String> rolesUserDetail = List.of(user.getRoleCode());
 
@@ -140,6 +148,10 @@ public class SignInUser {
         signInResult.setAccessToken(jwt);
 
         return signInResult;
+    }
+
+    private String generateCode() {
+        return new GenerateRandomCode().generate("USR_");
     }
 
     private void validationIsBlankUsernameAndPassword(SignInCommand command) {
