@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,14 +77,18 @@ public class MediaResource {
         try {
             Resource resource = fileStorage.download(bucket, path, filename, originalFilename);
 
+            String contentType = Files.probeContentType(Path.of(originalFilename));
+            if (contentType == null) {
+                contentType = "application/octet-stream";
+            }
+
             return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + originalFilename + "\"")
-                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + originalFilename + "\"")
+                    .contentType(MediaType.parseMediaType(contentType))
                     .contentLength(resource.contentLength())
                     .body(resource);
         } catch (Exception e) {
             throw new RuntimeException("Failed to download file", e);
         }
     }
-
 }

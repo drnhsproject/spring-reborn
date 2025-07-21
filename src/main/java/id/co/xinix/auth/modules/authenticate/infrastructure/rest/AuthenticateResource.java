@@ -1,8 +1,6 @@
 package id.co.xinix.auth.modules.authenticate.infrastructure.rest;
 
-import id.co.xinix.auth.exception.ForbiddenException;
 import id.co.xinix.auth.exception.UnauthorizedException;
-import id.co.xinix.auth.modules.authenticate.application.dto.RefreshTokenCommand;
 import id.co.xinix.auth.modules.authenticate.application.dto.RefreshTokenResult;
 import id.co.xinix.auth.modules.authenticate.application.dto.SignInCommand;
 import id.co.xinix.auth.modules.authenticate.application.dto.SignInResult;
@@ -16,7 +14,6 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
